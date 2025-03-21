@@ -1,0 +1,29 @@
+Game :
+    - Invaders are headed to your planet,you get three chances to protect it by defeating the enemy waves. 
+    You Win : complete level
+    You Lose : 0 lifes or enemy inters your zone
+
+Controlls :
+    - arrows to move arround and avoid enemy attacks
+    - space to attack
+    - 
+
+Game Buffs :
+    - Gain movement and attack speed.
+    - Gain chield that blocks attacks.
+
+
+Levels :
+    - level1 : 3 swarm waves and a boss Wave
+    ...
+
+
+We need : 
+    - Enemy Ships
+    - Player Ship
+    - Objects for buffs
+    - Projectiles
+    - Effects (Ship destructions)
+    - Ui
+    - Background
+    - ??
