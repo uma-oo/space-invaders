@@ -6,24 +6,42 @@ Game :
 Controlls :
     - arrows to move arround and avoid enemy attacks
     - space to attack
-    - 
 
 Game Buffs :
     - Gain movement and attack speed.
     - Gain chield that blocks attacks.
 
-
 Levels :
     - level1 : 3 swarm waves and a boss Wave
     ...
 
-
 We need : 
-    - Enemy Ships
-    - Player Ship
+
+    + UserInput :
+        - record user keydowns and keyups
+    + Enemy Ships:
+        - basic aliens in multiple rows
+        - different point values
+        - varied movement patterns
+        - descending formation
+    + Player Ship:
+        - fixed horizantal movement at bottom
+        - shoot bullets
+        - 3 lives
+        - collision detection with enemy bullet
+    + Projectiles :
+        - Player Bullets:
+            . fiered when pressing 'space'
+            . collesion detection with enemies
+        - Aliens Bullets:
+            . fiered randomely in intervals
+            . collesion detection with Player
+    + Ui :
+        - timer, health displat.
+        - game menu (pause/restart).
+        - game messages (win / lose / level complete).
+
     - Objects for buffs
-    - Projectiles
     - Effects (Ship destructions)
-    - Ui
     - Background
     - ??
