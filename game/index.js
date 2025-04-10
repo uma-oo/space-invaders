@@ -16,11 +16,7 @@ class UserInput {
                 ) && this.game.keys.indexOf(e.key) === -1) {
                     this.game.keys.push(e.key)
                 } else if (e.key === " ") {
-                    if (canShoot) {
-                        this.game.player.shoot();
-                        canShoot = false
-                        setTimeout(() => canShoot = true, 400)
-                    }
+                    this.game.keys.push(e.key)
                 }
             })
         window.addEventListener('keyup', e => {
@@ -67,6 +63,7 @@ class Projectile {
 
 class Player {
     constructor(game) {
+        this.canShoot = true
         this.game = game,
             this.width = 48,
             this.height = 48,
@@ -85,10 +82,10 @@ class Player {
     }
 
     update(deltaTime) {
-
         if (this.game.keys.includes('ArrowRight')) this.x += this.speed * deltaTime * 0.1;
         else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed * deltaTime * 0.1;
-        else this.maxSpeed = 0
+        else this.maxSpeed = 0;
+        if (this.game.keys.includes(' ')) this.shoot(); 
         if (this.x + this.width > this.game.width) this.x = this.game.width - this.width
         this.projectiles.forEach(projectile => {
             projectile.update()
@@ -108,7 +105,11 @@ class Player {
     }
 
     shoot() {
-        this.projectiles.push(new Projectile(this.game, this.x + this.width / 2, this.y - this.height))
+        if (this.canShoot) {
+            this.canShoot = false
+            setTimeout(() => this.canShoot = true, 400)
+            this.projectiles.push(new Projectile(this.game, this.x + this.width / 2, this.y - this.height))
+        }
     }
 }
 
