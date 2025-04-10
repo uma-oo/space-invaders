@@ -18,6 +18,8 @@ body {
     max-width: 100%;
     max-height: calc(100vh);
     background-color: rgb(66, 0, 66);
+    background-color: transparent;
+    border: dashed red;
     /* overflow: hidden; */
     position: relative;
 }

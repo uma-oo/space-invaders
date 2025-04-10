@@ -1,6 +1,6 @@
 let canvas = document.getElementById('canvas')
-let canvasWidth = 300
-let canvasHeight = 500
+let canvasWidth = 400
+let canvasHeight = 600
 
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
@@ -13,7 +13,6 @@ class UserInput {
                 if (((e.key === "ArrowRight") ||
                     (e.key === "ArrowLeft")
                 ) && this.game.keys.indexOf(e.key) === -1) {
-                    console.log(e.key)
                     this.game.keys.push(e.key)
                 } else if (e.key === " ") {
                     this.game.player.shoot();
@@ -29,104 +28,102 @@ class UserInput {
 
 class Projectile {
     constructor(game, x, y) {
-        this.game = game;
-        this.x = x;
-        this.y = y;
-        this.width = 10
-        this.height = 3
-        this.speed = 3;
-        this.markedForDeletion = false;
-        this.image = document.getElementById('projectile');
+        this.game = game,
+            this.x = x,
+            this.y = y,
+            this.height = 20,
+            this.width = 10,
+            this.speed = 3,
+            this.markedForDeletion = false,
+            this.imgHolder = document.createElement('div')
     }
     update() {
-        this.x += this.speed;
-        if (this.x > this.game.height) this.markedForDeletion = true;
+        this.y -= this.speed;
+        if (this.y < this.game.height) {
+            this.markedForDeletion = true
+            // this.imgHolder.remove()
+        };
     }
-    draw(context) {
-        context.drawImage(this.image, this.x, this.y)
+    draw(canvas) { 
+        console.log('drawing bullet', this.imgHolder)
+        this.imgHolder.style.backgroundColor = 'red';
+        this.imgHolder.style.position = 'absolute'
+        this.imgHolder.style.zIndex = '100'
+        this.imgHolder.style.width = `${this.width}px`;
+        this.imgHolder.style.height = `${this.height}px`;
+        this.imgHolder.style.border = 'solid red';
+        this.imgHolder.style.transform = `translate(${this.x}px, ${this.y}px)`
+        console.log(this.x, this.y)
+        canvas.append(this.imgHolder)
     }
 }
 
 class Player {
     constructor(game) {
         this.game = game,
-            this.width = 64,
-            this.height = 64,
+            this.width = 48,
+            this.height = 48,
             this.x = (this.game.width - this.width) / 2,
             this.y = (this.game.height) - 20,
             this.isDestructed = false,
             this.isRevived = false,
             this.imgHolder = document.createElement('div'),
-            // this.img = document.createElement('img'),
+            // this.imgHolder.style.opacity = 0
             this.imgBase = './game/assets/Player/ships/Fighter.png',
             this.spriteFrame = 0,
-            this.destrctionSprite = './game/assets/Player/Destruction/Nautolan Ship - Fighter.png',
-            this.shieldSprite = './game/assets/Player/Shields/Nautolan Ship - Fighter - Shield.png',
-            this.attckSprite = './game/assets/Player/Weapons/Nautolan Ship - Fighter - Weapons.png',
-            this.engineEffect = './game/assets/Player/engineEffects/fighter.png'
-            // this.img.src = this.imgBase,
-            this.speed = 3
+            this.engineEffect = './game/assets/Player/engineEffects/fighter.png',
+            this.speed = 3,
+            this.center = { x: this.x + this.width / 2, y: this.x + this.y + this.height / 2 },
+            this.projectiles = []
     }
 
     update(deltaTime) {
         if (this.game.keys.includes('ArrowRight')) this.x += this.speed * deltaTime * 0.1;
         else if (this.game.keys.includes('ArrowLeft')) this.x -= this.speed * deltaTime * 0.1;
         else this.maxSpeed = 0
-        
+
         if (this.x > this.game.width - this.width * 0.5) this.x = this.game.width - this.width * 0.5
-            else if (this.x < -this.width * 0.5) this.x = -this.width * 0.5                                                           
+        else if (this.x < -this.width * 0.5) this.x = -this.width * 0.5
+
+        this.projectiles.forEach(projectile => {
+            projectile.update()
+        })
+        this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion)
     }
 
     draw(canvas) {
-        this.imgHolder.innerHTML = ''
+        this.projectiles.forEach(projectile => {
+            projectile.draw(canvas)
+        })
+        // if (this.game.)
+        // this.imgHolder.innerHTML = ''
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
-        drawImage(canvas, this.imgHolder, this.imgBase, -this.width/2, -this.height/2, this.x, this.y, this.width, this.height)
-        // console.log(this.imgHolder)
+        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x, this.y, this.width, this.height)
     }
 
-    shoot(){
-
-    } 
+    shoot() {
+        console.log(this.center)
+        this.projectiles.push(new Projectile(this.game, this.center.x , this.center.y))
+    }
 }
 
 class Layer {
-    constructor(game, image, speedModifier) {
-        this.game = game;
-        this.image = image;
-        this.speedModifier = speedModifier;
-        this.width = 1768;
-        this.height = 500;
-        this.x = 0;
-        this.y = 0;
+    constructor(game, image, speed) {
+        this.game = game
     }
     update() {
-        if (this.x <= -this.width) this.x = 0;
-        else this.x -= this.game.speed * this.speedModifier;
     }
     draw(context) {
-        context.drawImage(this.image, this.x, this.y)
-        context.drawImage(this.image, this.x + this.width, this.y)
     }
 }
 
 class Background {
     constructor(game) {
         this.game = game;
-        this.image1 = document.getElementById('layer1');
-        this.image2 = document.getElementById('layer2');
-        this.image3 = document.getElementById('layer3');
-        this.image4 = document.getElementById('layer4');
-        this.layer1 = new Layer(this.game, this.image1, .2);
-        this.layer2 = new Layer(this.game, this.image2, .4);
-        this.layer3 = new Layer(this.game, this.image3, 1);
-        this.layer4 = new Layer(this.game, this.image4, 1.5);
-        this.layers = [this.layer1, this.layer2, this.layer3]
     }
     update() {
-        this.layers.forEach(layer => layer.update())
     }
     draw(context) {
-        this.layers.forEach(layer => layer.draw(context))
     }
 }
 
@@ -149,16 +146,14 @@ class Game {
     }
 }
 
-function drawImage(canvas,imgHolder, imgSrc, ...arg) {
+function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let img = document.createElement('img');
     img.src = imgSrc;
     let [sx, sy, dx, dy, dw, dh] = arg;
     imgHolder.style.width = `${dw}px`;
     imgHolder.style.height = `${dh}px`;
     imgHolder.style.border = 'solid red 1px';
-    imgHolder.style.position = 'absolute';
-    imgHolder.style.top = `${dy - dw}px`;
-    imgHolder.style.left = `${dx}px`;
+    imgHolder.style.transform = `translate(${dx}px, ${dy - dw}px)`
 
     img.style.height = '200%'
     img.style.objectfit = 'cover'
@@ -171,12 +166,12 @@ function drawImage(canvas,imgHolder, imgSrc, ...arg) {
 let game = new Game(canvasWidth, canvasHeight)
 let lastTime = 0
 
-function gameLoop(currentTime) {
-    let deltaTime = currentTime - lastTime
-    lastTime = currentTime
+function gameLoop(timeStamp) {
+    let deltaTime = timeStamp - lastTime
+    lastTime = timeStamp
     game.draw(canvas)
     game.update(deltaTime)
-    
+
     requestAnimationFrame(gameLoop)
 }
 
