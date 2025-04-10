@@ -8,7 +8,6 @@ canvas.style.height = canvasHeight + 'px';
 
 class UserInput {
     constructor(game) {
-        let canShoot = true
         this.game = game,
             window.addEventListener('keydown', e => {
                 if (((e.key === "ArrowRight") ||
