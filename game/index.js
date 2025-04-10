@@ -85,19 +85,14 @@ class Player {
     }
 
     update(deltaTime) {
-        if (this.game.keys.includes('ArrowRight')) this.x += this.speed * deltaTime * 0.1;
-        else if (this.game.keys.includes('ArrowLeft')) this.x -= this.speed * deltaTime * 0.1;
+        if (this.game.keys.includes('ArrowRight') && this.x + this.width < this.game.width) this.x += this.speed * deltaTime * 0.1;
+        else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed * deltaTime * 0.1;
         else this.maxSpeed = 0
-
-        if (this.x > this.game.width - this.width * 0.5) this.x = this.game.width - this.width * 0.5
-        else if (this.x < -this.width * 0.5) this.x = -this.width * 0.5
-
 
         this.projectiles.forEach(projectile => {
             projectile.update()
         })
         this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion)
-        console.log(this.x);
 
     }
 
