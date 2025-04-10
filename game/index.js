@@ -8,6 +8,7 @@ canvas.style.height = canvasHeight + 'px';
 
 class UserInput {
     constructor(game) {
+        let canShoot = true
         this.game = game,
             window.addEventListener('keydown', e => {
                 if (((e.key === "ArrowRight") ||
@@ -15,7 +16,11 @@ class UserInput {
                 ) && this.game.keys.indexOf(e.key) === -1) {
                     this.game.keys.push(e.key)
                 } else if (e.key === " ") {
-                    this.game.player.shoot();
+                    if (canShoot) {
+                        this.game.player.shoot();
+                        canShoot = false
+                        setTimeout(() => canShoot = true, 400)
+                    }
                 }
             })
         window.addEventListener('keyup', e => {
@@ -33,26 +38,28 @@ class Projectile {
             this.y = y,
             this.height = 20,
             this.width = 10,
-            this.speed = 3,
+            this.speed = 5,
             this.markedForDeletion = false,
             this.imgHolder = document.createElement('div')
     }
     update() {
         this.y -= this.speed;
-        if (this.y < this.game.height) {
+        console.log(this.y);
+
+        if (this.y < 0) {
             this.markedForDeletion = true
-            // this.imgHolder.remove()
+            this.imgHolder.remove()
         };
     }
-    draw(canvas) { 
+    draw(canvas) {
         console.log('drawing bullet', this.imgHolder)
         this.imgHolder.style.backgroundColor = 'red';
         this.imgHolder.style.position = 'absolute'
-        this.imgHolder.style.zIndex = '100'
+        this.imgHolder.style.zIndex = '0'
         this.imgHolder.style.width = `${this.width}px`;
         this.imgHolder.style.height = `${this.height}px`;
         this.imgHolder.style.border = 'solid red';
-        this.imgHolder.style.transform = `translate(${this.x}px, ${this.y}px)`
+        this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${this.y}px)`
         console.log(this.x, this.y)
         canvas.append(this.imgHolder)
     }
@@ -85,10 +92,13 @@ class Player {
         if (this.x > this.game.width - this.width * 0.5) this.x = this.game.width - this.width * 0.5
         else if (this.x < -this.width * 0.5) this.x = -this.width * 0.5
 
+
         this.projectiles.forEach(projectile => {
             projectile.update()
         })
         this.projectiles = this.projectiles.filter(projectile => !projectile.markedForDeletion)
+        console.log(this.x);
+
     }
 
     draw(canvas) {
@@ -96,14 +106,13 @@ class Player {
             projectile.draw(canvas)
         })
         // if (this.game.)
-        // this.imgHolder.innerHTML = ''
+        this.imgHolder.innerHTML = ''
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
         drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x, this.y, this.width, this.height)
     }
 
     shoot() {
-        console.log(this.center)
-        this.projectiles.push(new Projectile(this.game, this.center.x , this.center.y))
+        this.projectiles.push(new Projectile(this.game, this.x + this.width / 2, this.y - this.height))
     }
 }
 
