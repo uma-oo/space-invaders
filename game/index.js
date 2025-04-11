@@ -66,6 +66,8 @@ class Player {
         this.game = game,
             this.width = 48,
             this.height = 48,
+            this.spriteWidth = 64,
+            this.spriteheight = 64,
             this.x = (this.game.width - this.width) / 2,
             this.y = (this.game.height) - 20,
             this.isDestructed = false,
@@ -99,8 +101,12 @@ class Player {
         })
         // if (this.game.)
         this.imgHolder.innerHTML = ''
+        this.imgHolder.style.display = 'flex'
+        this.imgHolder.style.alignItems = 'center'
+        this.imgHolder.style.justifyContent = 'center'
+
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
-        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x, this.y, this.width, this.height)
+        drawImage(canvas, this.imgHolder, this.imgBase, 0, 0,this.spriteWidth, this.spriteheight, this.x, this.y, this.width, this.height)
     }
 
     shoot() {
@@ -161,15 +167,16 @@ class Game {
 function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let img = document.createElement('img');
     img.src = imgSrc;
-    let [sx, sy, dx, dy, dw, dh] = arg;
+    let [sx, sy, sw, sh, dx, dy, dw, dh] = arg;
     imgHolder.style.width = `${dw}px`;
     imgHolder.style.height = `${dh}px`;
-    // imgHolder.style.border = 'solid red 1px';
+    imgHolder.style.border = 'solid red 1px';
     imgHolder.style.transform = `translate(${dx}px, ${dy - dw}px)`
 
-    img.style.height = '200%'
+    img.style.height = `${sh}px`
+    img.style.width = `${sw}px`
     img.style.objectfit = 'cover'
-    // img.style.border = 'solid'
+    img.style.border = 'solid green 1px'
     img.style.transform = `translate(${sx}px, ${sy}px)`
     imgHolder.append(img)
     canvas.append(imgHolder)
