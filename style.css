@@ -31,13 +31,14 @@ body {
 .layer1 {
     z-index: -3;
 }
-.layer1 {
+.layer2 {
     z-index: -2;
 }
-
+.layer3 {
+    z-index: -1;
+}
 
 .layer1 .img1 {
-    z-index: -3;
     position: absolute;
     top: 0;
     left: 0;
@@ -52,19 +53,32 @@ body {
     animation: 40s linear infinite  moveDown2;
 }
 .layer2 .img1 {
-    z-index: -2;
     position: absolute;
     top: 0;
     left: 0;
     transform: translateY(0%);
-    animation: 30s linear infinite  moveDown1;
+    animation: 20s linear infinite  moveDown1;
 }
 .layer2 .img2 {
     top: 0;
     left: 0;
     position: absolute;
     transform: translateY(-100%);
-    animation: 30s linear infinite  moveDown2;
+    animation: 20s linear infinite  moveDown2;
+}
+.layer3 .img1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(0%);
+    animation: 10s linear infinite  moveDown1;
+}
+.layer3 .img2 {
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translateY(-100%);
+    animation: 10s linear infinite  moveDown2;
 }
 
 
@@ -78,4 +92,8 @@ body {
     to {
         transform: translateY(100%);
     }
+}
+
+.enemy{
+    position: absolute;
 }

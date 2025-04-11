@@ -64,8 +64,8 @@ class Player {
     constructor(game) {
         this.canShoot = true
         this.game = game,
-            this.width = 48,
-            this.height = 48,
+            this.width = 32,
+            this.height = 27,
             this.spriteWidth = 64,
             this.spriteheight = 64,
             this.x = (this.game.width - this.width) / 2,
@@ -136,7 +136,6 @@ class Game {
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
-
         this.enemies.forEach((enemy)=>enemy.slide(timeStamp))
         this.player.update(deltaTime)
     }
@@ -152,8 +151,8 @@ function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let [sx, sy, sw, sh, dx, dy, dw, dh] = arg;
     imgHolder.style.width = `${dw}px`;
     imgHolder.style.height = `${dh}px`;
-    // imgHolder.style.border = 'solid red 1px';
-    imgHolder.style.transform = `translate(${dx}px, ${dy}px)`
+    imgHolder.style.border = 'solid red 1px';
+    imgHolder.style.transform = `translate(${dx}px, ${dy - dw}px)`
 
     img.style.height = `${sh}px`
     img.style.width = `${sw}px`
