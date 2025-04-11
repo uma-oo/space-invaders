@@ -100,7 +100,7 @@ class Player {
         // if (this.game.)
         this.imgHolder.innerHTML = ''
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
-        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x,
+        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2,this.width, this.height, this.x,
             this.y - this.height, this.width, this.height)
     }
 
@@ -122,17 +122,14 @@ class Game {
             this.height = height,
             this.input = new UserInput(this),
             this.player = new Player(this),
-            this.Background = new Background(this)
             this.keys = []
     }
 
     update(deltaTime) {
-        this.Background.update()
         this.player.update(deltaTime)
     }
 
     draw(canavas) {
-        this.Background.draw(canavas)
         this.player.draw(canavas)
     }
 }
@@ -162,7 +159,7 @@ let lastTime = 0
 function gameLoop(timeStamp) {
     let deltaTime = timeStamp - lastTime
     lastTime = timeStamp
-    canvas.innerHTML = ''
+    // canvas.innerHTML = ''
     game.draw(canvas)
     game.update(deltaTime)
     requestAnimationFrame(gameLoop)

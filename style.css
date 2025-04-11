@@ -19,28 +19,63 @@ body {
     max-height: calc(100vh);
     background-color: rgb(66, 0, 66);
     background-color: transparent;
-    /* border: dashed red; */
-    /* overflow: hidden; */
+    border: dashed red 1px;
+    overflow: hidden;
     position: relative;
 }
 
 .layer {
-    z-index: -1;
+    position: absolute;
 }
 
 .layer1 {
-    transform: translateY(100px);
-    animation: 3s ease-in 1s infinite reverse both running moveDown;
+    z-index: -3;
+}
+.layer1 {
+    z-index: -2;
 }
 
 
-@keyframes moveDown {
-    from {
-       transform: translateY(0);
-    }
+.layer1 .img1 {
+    z-index: -3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(0%);
+    animation: 40s linear infinite  moveDown1;
+}
+.layer1 .img2 {
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translateY(-100%);
+    animation: 40s linear infinite  moveDown2;
+}
+.layer2 .img1 {
+    z-index: -2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(0%);
+    animation: 30s linear infinite  moveDown1;
+}
+.layer2 .img2 {
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translateY(-100%);
+    animation: 30s linear infinite  moveDown2;
+}
 
+
+@keyframes moveDown2 {
     to {
-       transform: translateY(100%);
+        transform: translateY(0%);
+    }
+}
 
+@keyframes moveDown1 {
+    to {
+        transform: translateY(100%);
     }
 }
