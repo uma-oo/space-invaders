@@ -1,4 +1,4 @@
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -14,12 +14,33 @@ body {
 }
 
 #canvas {
-    overflow: hidden;
+    /* overflow: hidden; */
     max-width: 100%;
     max-height: calc(100vh);
     background-color: rgb(66, 0, 66);
     background-color: transparent;
-    border: dashed red;
+    /* border: dashed red; */
     /* overflow: hidden; */
     position: relative;
+}
+
+.layer {
+    z-index: -1;
+}
+
+.layer1 {
+    transform: translateY(100px);
+    animation: 3s ease-in 1s infinite reverse both running moveDown;
+}
+
+
+@keyframes moveDown {
+    from {
+       transform: translateY(0);
+    }
+
+    to {
+       transform: translateY(100%);
+
+    }
 }

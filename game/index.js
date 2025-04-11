@@ -84,7 +84,7 @@ class Player {
         if (this.game.keys.includes('ArrowRight')) this.x += this.speed * deltaTime * 0.1;
         else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed * deltaTime * 0.1;
         else this.maxSpeed = 0;
-        if (this.game.keys.includes(' ')) this.shoot(); 
+        if (this.game.keys.includes(' ')) this.shoot();
         if (this.x + this.width > this.game.width) this.x = this.game.width - this.width
         this.projectiles.forEach(projectile => {
             projectile.update()
@@ -100,37 +100,20 @@ class Player {
         // if (this.game.)
         this.imgHolder.innerHTML = ''
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
-        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x, this.y, this.width, this.height)
+        drawImage(canvas, this.imgHolder, this.imgBase, -this.width / 2, -this.height / 2, this.x,
+            this.y - this.height, this.width, this.height)
     }
 
     shoot() {
         if (this.canShoot) {
             this.canShoot = false
             setTimeout(() => this.canShoot = true, 400)
-            this.projectiles.push(new Projectile(this.game, this.x + this.width / 2, this.y - this.height))
+            this.projectiles.push(new Projectile(this.game, this.x + this.width / 2,
+                this.y - this.height))
         }
     }
 }
 
-class Layer {
-    constructor(game, image, speed) {
-        this.game = game
-    }
-    update() {
-    }
-    draw(context) {
-    }
-}
-
-class Background {
-    constructor(game) {
-        this.game = game;
-    }
-    update() {
-    }
-    draw(context) {
-    }
-}
 
 
 class Game {
@@ -139,14 +122,17 @@ class Game {
             this.height = height,
             this.input = new UserInput(this),
             this.player = new Player(this),
+            this.Background = new Background(this)
             this.keys = []
     }
 
     update(deltaTime) {
+        this.Background.update()
         this.player.update(deltaTime)
     }
 
     draw(canavas) {
+        this.Background.draw(canavas)
         this.player.draw(canavas)
     }
 }
@@ -154,13 +140,15 @@ class Game {
 function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let img = document.createElement('img');
     img.src = imgSrc;
-    let [sx, sy, dx, dy, dw, dh] = arg;
+    let [sx, sy, sw, sh, dx, dy, dw, dh] = arg;
+    imgHolder.style.position = 'absolute'
     imgHolder.style.width = `${dw}px`;
     imgHolder.style.height = `${dh}px`;
-    imgHolder.style.border = 'solid red 1px';
-    imgHolder.style.transform = `translate(${dx}px, ${dy - dw}px)`
+    // imgHolder.style.border = 'solid red 1px';
+    imgHolder.style.transform = `translate(${dx}px, ${dy}px)`
 
-    img.style.height = '200%'
+    img.style.height = `${sh}px`
+    img.style.width = `${sw}px`
     img.style.objectfit = 'cover'
     img.style.border = 'solid'
     img.style.transform = `translate(${sx}px, ${sy}px)`
@@ -174,9 +162,9 @@ let lastTime = 0
 function gameLoop(timeStamp) {
     let deltaTime = timeStamp - lastTime
     lastTime = timeStamp
+    canvas.innerHTML = ''
     game.draw(canvas)
     game.update(deltaTime)
-
     requestAnimationFrame(gameLoop)
 }
 
