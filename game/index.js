@@ -1,10 +1,11 @@
+import { Enemy } from "./enemy.js";
+
 let canvas = document.getElementById('canvas')
 let canvasWidth = 400
 let canvasHeight = 600
-
+const TORPEDO_SPRITE = "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png"
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
-
 
 class UserInput {
     constructor(game) {
@@ -53,7 +54,7 @@ class Projectile {
         this.imgHolder.style.zIndex = '0'
         this.imgHolder.style.width = `${this.width}px`;
         this.imgHolder.style.height = `${this.height}px`;
-        this.imgHolder.style.border = 'solid red';
+        // this.imgHolder.style.border = 'solid red';
         this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${this.y}px)`
         console.log(this.x, this.y)
         canvas.append(this.imgHolder)
@@ -140,9 +141,16 @@ class Game {
             this.input = new UserInput(this),
             this.player = new Player(this),
             this.keys = []
+            const torpedo = new Enemy(TORPEDO_SPRITE, {totalFrames: 12})
+            this.enemies = [torpedo]
+            this.enemies.forEach((enemy)=>canvas.append(enemy.element))
     }
 
-    update(deltaTime) {
+    update(timeStamp) {
+        let deltaTime = timeStamp - lastTime
+        lastTime = timeStamp
+
+        this.enemies.forEach((enemy)=>enemy.animate(timeStamp))
         this.player.update(deltaTime)
     }
 
@@ -157,25 +165,23 @@ function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let [sx, sy, dx, dy, dw, dh] = arg;
     imgHolder.style.width = `${dw}px`;
     imgHolder.style.height = `${dh}px`;
-    imgHolder.style.border = 'solid red 1px';
+    // imgHolder.style.border = 'solid red 1px';
     imgHolder.style.transform = `translate(${dx}px, ${dy - dw}px)`
 
     img.style.height = '200%'
     img.style.objectfit = 'cover'
-    img.style.border = 'solid'
+    // img.style.border = 'solid'
     img.style.transform = `translate(${sx}px, ${sy}px)`
     imgHolder.append(img)
     canvas.append(imgHolder)
 }
 
-let game = new Game(canvasWidth, canvasHeight)
+export let game = new Game(canvasWidth, canvasHeight)
 let lastTime = 0
 
 function gameLoop(timeStamp) {
-    let deltaTime = timeStamp - lastTime
-    lastTime = timeStamp
     game.draw(canvas)
-    game.update(deltaTime)
+    game.update(timeStamp)
 
     requestAnimationFrame(gameLoop)
 }
