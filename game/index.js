@@ -1,9 +1,8 @@
-import { Enemy } from "./enemy.js";
+import { Torpedo } from "./torpedo.js";
 
 let canvas = document.getElementById('canvas')
 let canvasWidth = 400
 let canvasHeight = 600
-const TORPEDO_SPRITE = "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png"
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
 
@@ -141,7 +140,7 @@ class Game {
             this.input = new UserInput(this),
             this.player = new Player(this),
             this.keys = []
-            const torpedo = new Enemy(TORPEDO_SPRITE, {totalFrames: 12})
+            const torpedo = new Torpedo({start: 0, end: this.width})
             this.enemies = [torpedo]
             this.enemies.forEach((enemy)=>canvas.append(enemy.element))
     }
@@ -150,7 +149,7 @@ class Game {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
 
-        this.enemies.forEach((enemy)=>enemy.animate(timeStamp))
+        this.enemies.forEach((enemy)=>enemy.slide(timeStamp))
         this.player.update(deltaTime)
     }
 
