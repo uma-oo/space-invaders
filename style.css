@@ -28,7 +28,7 @@ body {
     position: absolute;
 }
 
-.layer1 {
+/* .layer1 {
     z-index: -3;
 }
 .layer2 {
@@ -36,49 +36,40 @@ body {
 }
 .layer3 {
     z-index: -1;
-}
+} */
 
 .layer1 .img1 {
+    left : -25%;
     position: absolute;
-    top: 0;
-    left: 0;
+    left: -50%;
     transform: translateY(0%);
     animation: 40s linear infinite  moveDown1;
 }
 .layer1 .img2 {
-    top: 0;
-    left: 0;
+    left : -25%;
     position: absolute;
     transform: translateY(-100%);
     animation: 40s linear infinite  moveDown2;
 }
 .layer2 .img1 {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: absolute; 
     transform: translateY(0%);
-    animation: 20s linear infinite  moveDown1;
+    animation: 4s linear infinite  moveDown1;
 }
 .layer2 .img2 {
-    top: 0;
-    left: 0;
     position: absolute;
     transform: translateY(-100%);
-    animation: 20s linear infinite  moveDown2;
+    animation: 4s linear infinite  moveDown2;
 }
 .layer3 .img1 {
     position: absolute;
-    top: 0;
-    left: 0;
     transform: translateY(0%);
-    animation: 10s linear infinite  moveDown1;
+    animation: 5s linear infinite  moveDown1;
 }
 .layer3 .img2 {
-    top: 0;
-    left: 0;
     position: absolute;
     transform: translateY(-100%);
-    animation: 10s linear infinite  moveDown2;
+    animation: 5s linear infinite  moveDown2;
 }
 
 

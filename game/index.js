@@ -1,4 +1,5 @@
 import { Torpedo } from "./torpedo.js";
+let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
 let canvasWidth = 400
@@ -39,7 +40,6 @@ class Projectile {
     }
     update() {
         this.y -= this.speed;
-        console.log(this.y);
 
         if (this.y < 0) {
             this.markedForDeletion = true
@@ -47,7 +47,6 @@ class Projectile {
         };
     }
     draw(canvas) {
-        console.log('drawing bullet', this.imgHolder)
         this.imgHolder.style.backgroundColor = 'red';
         this.imgHolder.style.position = 'absolute'
         this.imgHolder.style.zIndex = '0'
@@ -55,7 +54,6 @@ class Projectile {
         this.imgHolder.style.height = `${this.height}px`;
         // this.imgHolder.style.border = 'solid red';
         this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${this.y}px)`
-        console.log(this.x, this.y)
         canvas.append(this.imgHolder)
     }
 }
@@ -106,10 +104,11 @@ class Player {
         this.imgHolder.style.justifyContent = 'center'
 
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
-        drawImage(canvas, this.imgHolder, this.imgBase, 0, 0,this.spriteWidth, this.spriteheight, this.x, this.y, this.width, this.height)
+        drawImage(canvas, this.imgHolder, this.imgBase, 0, 0, this.spriteWidth, this.spriteheight, this.x, this.y, this.width, this.height)
     }
 
     shoot() {
+        layzerBulletSound.play()
         if (this.canShoot) {
             this.canShoot = false
             setTimeout(() => this.canShoot = true, 400)
@@ -128,15 +127,15 @@ class Game {
             this.input = new UserInput(this),
             this.player = new Player(this),
             this.keys = []
-            const torpedo = new Torpedo({start: 0, end: this.width})
-            this.enemies = [torpedo]
-            this.enemies.forEach((enemy)=>canvas.append(enemy.element))
+        const torpedo = new Torpedo({ start: 0, end: this.width })
+        this.enemies = [torpedo]
+        this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
 
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
-        this.enemies.forEach((enemy)=>enemy.slide(timeStamp))
+        this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         this.player.update(deltaTime)
     }
 
