@@ -36,9 +36,10 @@ export class AlienShip extends Enemy {
     };
     const size = { width: 42, height: 42 };
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
-    this.x = size.width * col + 20
-    this.y = size.height * row + 20
+    this.x = size.width * col 
+    this.y = size.height * row +20
     this.element.style.top = `${this.y}px`
     this.element.style.left = `${this.x}px`
+    this.element.style.border ="solid 2px yellow"
   }
 }

@@ -6,9 +6,8 @@ let canvasWidth = 400
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
-console.log()
-let [canvasLeft,canvasRight] = [canvas.getBoundingClientRect().x,canvas.getBoundingClientRect().right]
-console.log(canvasLeft,canvasRight)
+let [canvasLeft, canvasRight] = [canvas.getBoundingClientRect().x, canvas.getBoundingClientRect().right]
+console.log(canvasLeft, canvasRight)
 
 class UserInput {
     constructor(game) {
@@ -143,10 +142,10 @@ class Game {
             this.player = new Player(this),
             this.keys = []
         const torpedo = new Torpedo(50, 0, { start: 0, end: this.width })
-        this.enemies = [torpedo, ]
-        for (let row = 3; row < 6; row++) {
-            for (let col = 0; col < 4; col++) {
-                this.enemies.push(new AlienShip(row, col, { start: - row * 42, end: this.width - row * 42 }))
+        this.enemies = [torpedo,]
+        for (let row = 1; row < 3; row++) {
+            for (let col = 0; col < 3; col++) {
+                this.enemies.push(new AlienShip(row, col, { start: row - col * 42, end: this.width - col * 42 }))
             }
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
@@ -159,7 +158,13 @@ class Game {
         this.player.update()
         this.enemies.forEach((enemy) => {
             if (enemy instanceof AlienShip) {
-                // if (touchEdge(enemy,this.x))
+                console.log(touchEdge(enemy, canvasLeft, canvasRight));
+                if (touchEdge(enemy, canvasLeft, canvasRight)) {
+                    console.log("hna  hhhhhhh");
+                    enemy.y += 5
+                    enemy.direction *= -1
+                
+                }
             }
             this.player.projectiles.forEach((projectile) => {
                 if (detectCollision(enemy.element, projectile.imgHolder)) {
@@ -178,7 +183,7 @@ class Game {
 }
 
 function touchEdge(enemy, left, right) {
-    return (enemy.x == left || enemy.x + enemy.size.width == right)
+    return (enemy.x === left || enemy.x + enemy.size.width === right)
 }
 
 
