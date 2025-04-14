@@ -2,7 +2,7 @@ import { Torpedo } from "./torpedo.js";
 let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
-let canvasWidth = 500
+let canvasWidth = 400
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
@@ -11,7 +11,6 @@ class UserInput {
     constructor(game) {
         this.game = game,
             window.addEventListener('keydown', e => {
-                
                 if (((e.key === "ArrowRight") ||
                     (e.key === "ArrowLeft") || (e.key === " ")
                 ) && this.game.keys.indexOf(e.key) === -1) {
@@ -126,7 +125,6 @@ class Player {
 
 
 function detectCollision(elementA, elementB) {
-    // element A is the target 
     let [boundariesA, boundariesB] = [elementA.getBoundingClientRect(), elementB.getBoundingClientRect()]
     let [lbA, rbA, bbA] = [boundariesA.x, boundariesA.right, boundariesA.bottom]
     let [lbB, rbB, btB] = [boundariesB.x, boundariesB.right, boundariesB.y]
@@ -153,8 +151,8 @@ class Game {
 
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
+        console.log(deltaTime)
         lastTime = timeStamp
-
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         this.player.update(deltaTime)
         this.enemies.forEach((enemy) => {
@@ -163,19 +161,14 @@ class Game {
                     projectile.markedForDeletion = true
                     enemy.element.remove()
                 }
-
             })
         })
-
     }
 
     draw(canavas) {
         // console.log(this.keys)
         this.player.draw(canavas)
     }
-
-
-
 }
 
 function drawImage(canvas, imgHolder, imgSrc, ...arg) {
