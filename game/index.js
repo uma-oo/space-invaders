@@ -2,7 +2,7 @@ import { Torpedo } from "./torpedo.js";
 let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
-let canvasWidth = 400
+let canvasWidth = 500
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
@@ -11,11 +11,10 @@ class UserInput {
     constructor(game) {
         this.game = game,
             window.addEventListener('keydown', e => {
+                
                 if (((e.key === "ArrowRight") ||
-                    (e.key === "ArrowLeft")
+                    (e.key === "ArrowLeft") || (e.key === " ")
                 ) && this.game.keys.indexOf(e.key) === -1) {
-                    this.game.keys.push(e.key)
-                } else if (e.key === " ") {
                     this.game.keys.push(e.key)
                 }
             })
@@ -34,7 +33,7 @@ class Projectile {
             this.y = y,
             this.height = 20,
             this.width = 10,
-            this.speed = 5,
+            this.speed = 10,
             this.markedForDeletion = false,
             this.imgHolder = document.createElement('div')
     }
@@ -43,8 +42,12 @@ class Projectile {
 
         if (this.y < 0) {
             this.markedForDeletion = true
-            this.imgHolder.remove()
+
         };
+
+        if (this.markedForDeletion) {
+            this.imgHolder.remove()
+        }
     }
     draw(canvas) {
         this.imgHolder.style.backgroundColor = 'red';
@@ -60,12 +63,12 @@ class Projectile {
 
 class Player {
     constructor(game) {
-        this.canShoot = true
         this.game = game,
-            this.width = 64,
-            this.height = 54,
+            this.canShoot = true,
             this.spriteWidth = 64,
             this.spriteheight = 54,
+            this.width = 64,
+            this.height = 54,
             this.x = (this.game.width - this.width) / 2,
             this.y = (this.game.height) - 20,
             this.isDestructed = false,
@@ -99,25 +102,38 @@ class Player {
         })
         // if (this.game.)
         this.imgHolder.innerHTML = ''
-        this.imgHolder.style.display = 'flex'
-        this.imgHolder.style.alignItems = 'center'
-        this.imgHolder.style.justifyContent = 'center'
+        // this.imgHolder.style.display = 'flex'
+        // this.imgHolder.style.alignItems = 'center'
+        // this.imgHolder.style.justifyContent = 'center'
 
         // drawImage(canvas, this.imgHolder, this.engineEffect, (-this.width *1) , -this.height/2, this.x, this.y, this.width, this.height)
         drawImage(canvas, this.imgHolder, this.imgBase, 0, 0, this.spriteWidth, this.spriteheight, this.x, this.y, this.width, this.height)
     }
 
     shoot() {
-        layzerBulletSound.play()
+        // layzerBulletSound.play()
         if (this.canShoot) {
             this.canShoot = false
-            setTimeout(() => this.canShoot = true, 400)
+            setTimeout(() => this.canShoot = true, 200)
             this.projectiles.push(new Projectile(this.game, this.x + this.width / 2,
                 this.y - this.height))
         }
     }
 }
 
+
+
+
+
+function detectCollision(elementA, elementB) {
+    // element A is the target 
+    let [boundariesA, boundariesB] = [elementA.getBoundingClientRect(), elementB.getBoundingClientRect()]
+    let [lbA, rbA, bbA] = [boundariesA.x, boundariesA.right, boundariesA.bottom]
+    let [lbB, rbB, btB] = [boundariesB.x, boundariesB.right, boundariesB.y]
+    console.log('A: ', lbA, rbA, bbA)
+    console.log('B: ', lbB, rbB, btB)
+    return (((lbB >= lbA && lbB <= rbA) || (rbB >= lbA && rbB <= rbA)) && btB <= bbA)
+}
 
 
 class Game {
@@ -128,20 +144,38 @@ class Game {
             this.player = new Player(this),
             this.keys = []
         const torpedo = new Torpedo({ start: 0, end: this.width })
+        const aliens = document.querySelectorAll(".alien")
+
         this.enemies = [torpedo]
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
+
     }
 
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
+
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
-        this.player.update(timeStamp)
+        this.player.update(deltaTime)
+        this.enemies.forEach((enemy) => {
+            this.player.projectiles.forEach((projectile) => {
+                if (detectCollision(enemy.element, projectile.imgHolder)) {
+                    projectile.markedForDeletion = true
+                    enemy.element.remove()
+                }
+
+            })
+        })
+
     }
 
     draw(canavas) {
+        // console.log(this.keys)
         this.player.draw(canavas)
     }
+
+
+
 }
 
 function drawImage(canvas, imgHolder, imgSrc, ...arg) {

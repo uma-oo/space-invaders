@@ -31,6 +31,7 @@ export class Enemy {
     this.direction = 1;
     this.currentFrame = 0;
     this.lastAnimated = 1;
+    console.log(this.size, this.frames, this.moveArea)
   }
   onEdge(step) {
     this.direction *= -1;
