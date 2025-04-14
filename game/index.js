@@ -1,4 +1,4 @@
-import { Torpedo } from "./torpedo.js";
+import { AlienShip, Torpedo } from "./torpedo.js";
 let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
@@ -6,6 +6,9 @@ let canvasWidth = 400
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
+console.log()
+let [canvasLeft,canvasRight] = [canvas.getBoundingClientRect().x,canvas.getBoundingClientRect().right]
+console.log(canvasLeft,canvasRight)
 
 class UserInput {
     constructor(game) {
@@ -139,26 +142,29 @@ class Game {
             this.input = new UserInput(this),
             this.player = new Player(this),
             this.keys = []
-        const torpedo = new Torpedo({ start: 0, end: this.width })
-        const aliens = document.querySelectorAll(".alien")
-        this.enemies = [torpedo]
+        const torpedo = new Torpedo(50, 0, { start: 0, end: this.width })
+        this.enemies = [torpedo, ]
+        for (let row = 3; row < 6; row++) {
+            for (let col = 0; col < 4; col++) {
+                this.enemies.push(new AlienShip(row, col, { start: - row * 42, end: this.width - row * 42 }))
+            }
+        }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
-
     }
 
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
-        console.log(deltaTime)
         lastTime = timeStamp
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         this.player.update()
         this.enemies.forEach((enemy) => {
+            if (enemy instanceof AlienShip) {
+                // if (touchEdge(enemy,this.x))
+            }
             this.player.projectiles.forEach((projectile) => {
                 if (detectCollision(enemy.element, projectile.imgHolder)) {
-                    console.log("hna");
                     projectile.markedForDeletion = true
-                    enemy.element.remove()
-
+                    enemy.destroy()
                 }
             })
         })
@@ -166,9 +172,15 @@ class Game {
 
     draw(canavas) {
         // console.log(this.keys)
+
         this.player.draw(canavas)
     }
 }
+
+function touchEdge(enemy, left, right) {
+    return (enemy.x == left || enemy.x + enemy.size.width == right)
+}
+
 
 function drawImage(canvas, imgHolder, imgSrc, ...arg) {
     let img = document.createElement('img');

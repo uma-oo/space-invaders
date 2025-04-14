@@ -23,7 +23,7 @@ body {
     background-color: rgb(66, 0, 66);
     background-color: transparent;
     border: dashed red 1px;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
 }
 

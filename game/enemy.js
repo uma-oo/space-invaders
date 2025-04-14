@@ -25,8 +25,6 @@ export class Enemy {
     this.stepDelay = 300;
     this.animationDelay = 400;
     this.lastSlide = 0;
-    this.x = 0;
-    this.y = 0;
     this.pxPerStep = 40;
     this.direction = 1;
     this.currentFrame = 0;
@@ -85,13 +83,10 @@ export class Enemy {
   destroy() {
     if (this.#destroyed) return;
     this.#destroyed = true;
-
     this.element.remove();
-
     this.freeze(); 
     this.slide = () => {};
     this.animate = () => {}; 
-
     this.element = null;
   }
 }
