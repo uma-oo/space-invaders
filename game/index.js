@@ -78,15 +78,14 @@ class Player {
             this.imgBase = './game/assets/Player/ships/Fighter.svg',
             this.spriteFrame = 0,
             this.engineEffect = './game/assets/Player/engineEffects/fighter.png',
-            this.speed = 3,
+            this.speed = 5,
             this.center = { x: this.x + this.width / 2, y: this.x + this.y + this.height / 2 },
             this.projectiles = []
     }
 
-    update(deltaTime) {
-        if (this.game.keys.includes('ArrowRight')) this.x += this.speed * deltaTime * 0.1;
-        else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed * deltaTime * 0.1;
-        else this.maxSpeed = 0;
+    update() {
+        if (this.game.keys.includes('ArrowRight')) this.x += this.speed;
+        else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed;
         if (this.game.keys.includes(' ')) this.shoot();
         if (this.x + this.width > this.game.width) this.x = this.game.width - this.width
         this.projectiles.forEach(projectile => {
@@ -127,11 +126,9 @@ class Player {
 
 function detectCollision(elementA, elementB) {
     // element A is the target 
-    let [boundariesA, boundariesB] = [elementA.getBoundingClientRect(), elementB.getBoundingClientRect()]
-    let [lbA, rbA, bbA] = [boundariesA.x, boundariesA.right, boundariesA.bottom]
-    let [lbB, rbB, btB] = [boundariesB.x, boundariesB.right, boundariesB.y]
-    console.log('A: ', lbA, rbA, bbA)
-    console.log('B: ', lbB, rbB, btB)
+    let [boundariesA, boundariesB] = [elementA?.getBoundingClientRect(), elementB?.getBoundingClientRect()]
+    let [lbA, rbA, bbA] = [boundariesA?.x, boundariesA?.right, boundariesA?.bottom]
+    let [lbB, rbB, btB] = [boundariesB?.x, boundariesB?.right, boundariesB?.y]
     return (((lbB >= lbA && lbB <= rbA) || (rbB >= lbA && rbB <= rbA)) && btB <= bbA)
 }
 
@@ -145,7 +142,6 @@ class Game {
             this.keys = []
         const torpedo = new Torpedo({ start: 0, end: this.width })
         const aliens = document.querySelectorAll(".alien")
-
         this.enemies = [torpedo]
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
 
@@ -156,12 +152,14 @@ class Game {
         lastTime = timeStamp
 
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
-        this.player.update(deltaTime)
+        this.player.update()
         this.enemies.forEach((enemy) => {
             this.player.projectiles.forEach((projectile) => {
                 if (detectCollision(enemy.element, projectile.imgHolder)) {
+                    console.log("hna");
                     projectile.markedForDeletion = true
                     enemy.element.remove()
+
                 }
 
             })
