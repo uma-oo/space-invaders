@@ -62,17 +62,17 @@ class Player {
     constructor(game) {
         this.canShoot = true
         this.game = game,
-            this.width = 32,
-            this.height = 27,
+            this.width = 64,
+            this.height = 54,
             this.spriteWidth = 64,
-            this.spriteheight = 64,
+            this.spriteheight = 54,
             this.x = (this.game.width - this.width) / 2,
             this.y = (this.game.height) - 20,
             this.isDestructed = false,
             this.isRevived = false,
             this.imgHolder = document.createElement('div'),
             // this.imgHolder.style.opacity = 0
-            this.imgBase = './game/assets/Player/ships/Fighter.png',
+            this.imgBase = './game/assets/Player/ships/Fighter.svg',
             this.spriteFrame = 0,
             this.engineEffect = './game/assets/Player/engineEffects/fighter.png',
             this.speed = 3,
@@ -136,7 +136,7 @@ class Game {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
-        this.player.update(deltaTime)
+        this.player.update(timeStamp)
     }
 
     draw(canavas) {
