@@ -30,18 +30,20 @@ export class AlienShip extends Enemy {
   constructor(row,col,moveArea) {
     const frames = {
       totalFrames: 1,
-      frameSize: 64,
+      frameSize: 42,
       // onLastFrame: () => {
       //   this.hide();
       //   this.freeze();
       // },
     };
     const size = { width: 42, height: 42 };
+    
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
-    this.x = size.width * col 
-    this.y = size.height * row +20
-    this.element.style.top = `${this.y}px`
-    this.element.style.left = `${this.x}px`
+    this.x = (size.width +10) * col 
+    this.y = (size.height+10) * row
+    // this.element.style.top = `${this.y}px`
+    // this.element.style.left = `${this.x}px`
+    this.element.style.transform = `tramslate(${this.x}, ${this.y})`
     this.element.style.border ="solid 2px yellow"
   }
 
@@ -50,7 +52,6 @@ export class AlienShip extends Enemy {
   slide(time) {
     const { start, end } = this.moveArea;
     const style = this.element.style;
-    const elapsed = time - this.lastSlide;
     const step =
       this.speed *
       this.direction
@@ -59,7 +60,6 @@ export class AlienShip extends Enemy {
     if (this.x < start || this.x + parseInt(style.width) > end) {
       this.onEdge(step);
     }
-    this.lastSlide = time;
     style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
     this.animate(time);
   }

@@ -144,8 +144,8 @@ class Game {
         const torpedo = new Torpedo(50, 0, { start: -50, end: this.width-50 })
         this.enemies = [torpedo,]
         for (let row = 1; row < 3; row++) {
-            for (let col = 0; col < 3; col++) {
-                this.enemies.push(new AlienShip(row, col, { start: -col * 42, end: this.width - col * 42 }))
+            for (let col = 0; col <= 3; col++) {
+                this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
             }
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
@@ -154,12 +154,9 @@ class Game {
     update(timeStamp) {
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
-        this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         this.player.update()
+        this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         this.enemies.forEach((enemy) => {
-            if (enemy instanceof AlienShip) {
-                console.log(touchEdge(enemy, canvasLeft, canvasRight));
-            }
             this.player.projectiles.forEach((projectile) => {
                 if (detectCollision(enemy.element, projectile.imgHolder)) {
                     projectile.markedForDeletion = true
