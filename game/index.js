@@ -2,7 +2,7 @@ import { AlienShip, Torpedo } from "./torpedo.js";
 let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
-let canvasWidth = 400
+let canvasWidth = 320
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
@@ -143,9 +143,9 @@ class Game {
             this.keys = []
         const torpedo = new Torpedo(50, 0, { start: 0, end: this.width })
         this.enemies = [torpedo,]
-        for (let row = 1; row < 3; row++) {
+        for (let row = 1; row < 4; row++) {
             for (let col = 0; col < 3; col++) {
-                this.enemies.push(new AlienShip(row, col, { start: row - col * 42, end: this.width - col * 42 }))
+                this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
             }
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
@@ -158,12 +158,10 @@ class Game {
         this.player.update()
         this.enemies.forEach((enemy) => {
             if (enemy instanceof AlienShip) {
-                console.log(touchEdge(enemy, canvasLeft, canvasRight));
-                if (touchEdge(enemy, canvasLeft, canvasRight)) {
-                    console.log("hna  hhhhhhh");
+                console.log(enemy.x, enemy.x+enemy.size.width);
+                if (enemy.x == 0 || enemy.x+enemy.size.width == this.width) {
                     enemy.y += 5
                     enemy.direction *= -1
-                
                 }
             }
             this.player.projectiles.forEach((projectile) => {
@@ -183,6 +181,7 @@ class Game {
 }
 
 function touchEdge(enemy, left, right) {
+    console.log(enemy.x, left, right)
     return (enemy.x === left || enemy.x + enemy.size.width === right)
 }
 

@@ -29,7 +29,6 @@ export class Enemy {
     this.direction = 1;
     this.currentFrame = 0;
     this.lastAnimated = 1;
-    console.log(this.size, this.frames, this.moveArea)
   }
   onEdge(step) {
     this.direction *= -1;
@@ -50,7 +49,7 @@ export class Enemy {
       this.onEdge(step);
     }
     this.lastSlide = time;
-    style.transform = `rotate(180deg) translate(${-this.x}px)`;
+    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
     this.animate(time);
   }
   animate(time) {
