@@ -6,19 +6,39 @@ let canvasWidth = 400
 let canvasHeight = 600
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
-let [canvasLeft, canvasRight] = [canvas.getBoundingClientRect().x, canvas.getBoundingClientRect().right]
-console.log(canvasLeft, canvasRight)
+
+
 
 class UserInput {
     constructor(game) {
         this.game = game,
-            window.addEventListener('keydown', e => {
-                if (((e.key === "ArrowRight") ||
-                    (e.key === "ArrowLeft") || (e.key === " ")
-                ) && this.game.keys.indexOf(e.key) === -1) {
-                    this.game.keys.push(e.key)
-                }
-            })
+            this.continue = document.querySelector('.continue'),
+            this.restart = document.querySelector(".restart"),
+            this.gameConstructor = game.constructor
+        window.addEventListener('keydown', e => {
+            if (((e.key === "ArrowRight") ||
+                (e.key === "ArrowLeft") || (e.key === " ")) &&
+                this.game.keys.indexOf(e.key) === -1) {
+                this.game.keys.push(e.key)
+            }
+
+            if (e.key === "Escape") {
+                this.game.pausedGame = !this.game.pausedGame
+            }
+
+        })
+
+
+        this.continue.addEventListener("click", () => {
+            this.game.pausedGame = false
+        })
+        this.restart.addEventListener("click", () => {
+            this.game.pausedGame = false
+            // canvas.innerHTML = ""
+            this.game.reset()
+        })
+
+
         window.addEventListener('keyup', e => {
             if (this.game.keys.indexOf(e.key) > -1) {
                 this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
@@ -26,6 +46,8 @@ class UserInput {
         })
     }
 }
+
+
 
 class Projectile {
     constructor(game, x, y) {
@@ -84,6 +106,8 @@ class Player {
             this.projectiles = []
     }
 
+
+
     update() {
         if (this.game.keys.includes('ArrowRight')) this.x += this.speed;
         else if (this.game.keys.includes('ArrowLeft') && this.x > 0) this.x -= this.speed;
@@ -136,12 +160,22 @@ function detectCollision(elementA, elementB) {
 
 class Game {
     constructor(width, height) {
+        this.init(width, height);
+
+    }
+
+    init(width, height) {
         this.width = width,
             this.height = height,
             this.input = new UserInput(this),
             this.player = new Player(this),
-            this.keys = []
-        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width-50 })
+            this.pausedGame = false,
+
+            this.startMin = 0,
+            this.startSec = 0,
+            this.menu = document.querySelector(".menu")
+        this.keys = []
+        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
         this.enemies = [torpedo,]
         for (let row = 1; row < 4; row++) {
             for (let col = 1; col < 5; col++) {
@@ -151,16 +185,36 @@ class Game {
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
 
+
+    hideMenu() {
+        this.menu.style.display = "none"
+    }
+
+    showMenu() {
+        this.menu.style.display = "block"
+
+    }
+
+    reset() {
+        
+        this.init()
+    }
+
     update(timeStamp) {
+        if (this.pausedGame) {
+            this.showMenu()
+            return
+        }
+        this.hideMenu()
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
         this.player.update()
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         const ALIENS_SHIPS = this.enemies.filter(enemy => enemy instanceof AlienShip)
-        if (ALIENS_SHIPS.some(ship => ship instanceof AlienShip &&( ship.x + ship.size.width == this.width || ship.x == 0) )) {
+        if (ALIENS_SHIPS.some(ship => ship instanceof AlienShip && (ship.x + ship.size.width == this.width || ship.x == 0))) {
             ALIENS_SHIPS.forEach(ship => {
                 ship.y += 20
-                ship.direction *=-1
+                ship.direction *= -1
             })
         }
 
@@ -175,9 +229,12 @@ class Game {
     }
 
     draw(canavas) {
-        // console.log(this.keys)
-
         this.player.draw(canavas)
+    }
+    continue() {
+        delete this.game
+        console.log("hhhhhh");
+        this.pausedGame = false
     }
 }
 

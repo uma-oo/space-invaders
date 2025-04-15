@@ -17,7 +17,6 @@ body {
 }
 
 #canvas {
-    /* overflow: hidden; */
     max-width: 100%;
     max-height: 100%;
     background-color: rgb(66, 0, 66);
@@ -25,12 +24,38 @@ body {
     border: dashed red 1px;
     overflow: hidden;
     position: relative;
+    margin: auto;
 }
 
 .layer {
     position: absolute;
     width: 100%;
 }
+
+.info {
+    display: flex;
+    margin: auto;
+}
+
+.menu {
+    display: none;
+    width: 30%;
+    padding: 25px;
+    background-color: purple;
+    color: white;
+    font-size: 25px;
+    display: none;
+}
+
+button {
+    width: fit-content;
+    padding: 10px;
+    border: 2px black solid;
+
+}
+
+
+
 
 /* .layer1 {
     z-index: -3;
@@ -43,37 +68,42 @@ body {
 } */
 
 .layer1 .img1 {
-    left : -25%;
+    left: -25%;
     position: absolute;
     left: -50%;
     transform: translateY(0%);
-    animation: 40s linear infinite  moveDown1;
+    animation: 40s linear infinite moveDown1;
 }
+
 .layer1 .img2 {
-    left : -25%;
+    left: -25%;
     position: absolute;
     transform: translateY(-100%);
-    animation: 40s linear infinite  moveDown2;
+    animation: 40s linear infinite moveDown2;
 }
+
 .layer2 .img1 {
-    position: absolute; 
+    position: absolute;
     transform: translateY(0%);
-    animation: 4s linear infinite  moveDown1;
+    animation: 4s linear infinite moveDown1;
 }
+
 .layer2 .img2 {
     position: absolute;
     transform: translateY(-100%);
-    animation: 4s linear infinite  moveDown2;
+    animation: 4s linear infinite moveDown2;
 }
+
 .layer3 .img1 {
     position: absolute;
     transform: translateY(0%);
-    animation: 5s linear infinite  moveDown1;
+    animation: 5s linear infinite moveDown1;
 }
+
 .layer3 .img2 {
     position: absolute;
     transform: translateY(-100%);
-    animation: 5s linear infinite  moveDown2;
+    animation: 5s linear infinite moveDown2;
 }
 
 
@@ -89,15 +119,15 @@ body {
     }
 }
 
-.enemy{
+.enemy {
     position: absolute;
 }
 
-.enemyWave{
+.enemyWave {
     /* border: solid red 1px; */
     position: absolute;
     width: 100%;
-    
+
     top: 80px;
     left: 0px;
     display: flex;
@@ -106,8 +136,8 @@ body {
     gap: 10px;
 }
 
-.alien{
-    width : calc((100%) / 5);
+.alien {
+    width: calc((100%) / 5);
     max-width: 42px;
     height: 42px;
     border: solid 1px red;
@@ -122,13 +152,15 @@ body {
     width: 100%;
     z-index: 10;
     display: flex;
+    flex-direction: column;
+    gap: 50px;
     justify-content: space-between;
     /* padding: .5rem 1rem; */
 }
 
 
 @media screen and (max-width: 600px) {
-    .canvas{
+    .canvas {
         display: none;
     }
-  }
+}
