@@ -10,10 +10,10 @@ export class Torpedo extends Enemy {
       
       totalFrames: 12,
       frameSize: 64,
-      // onLastFrame: () => {
-      //   this.hide();
-      //   this.freeze();
-      // },
+      onLastFrame: () => {
+        this.hide();
+        this.freeze();
+      },
     };
     const size = { width: 58.5, height: 47 };
     super(TORPEDO_SPRITE, frames, size, moveArea);
@@ -22,6 +22,8 @@ export class Torpedo extends Enemy {
     this.element.style.top = `${y}px`
     this.element.style.left = `${x}px`
   }
+
+  
 }
 
 export class AlienShip extends Enemy {
@@ -36,21 +38,29 @@ export class AlienShip extends Enemy {
     };
     const size = { width: 42, height: 42 };
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
-    this.x = (size.width) * col
-    this.y = (size.height) * row
-    // this.element.style.top = `${this.y}px`
-    // this.element.style.left = `${this.x}px`
-    this.element.style.transform = `translate(${this.x},${-100}px)`
-    this.element.style.border = "solid 2px yellow"
-    this.speed = 0.5
-
+    this.x = size.width * col 
+    this.y = size.height * row +20
+    this.element.style.top = `${this.y}px`
+    this.element.style.left = `${this.x}px`
+    this.element.style.border ="solid 2px yellow"
   }
-  onEdge(step) {
-    this.direction *= -1;
-    this.x -= step;
-    if (this.x != 0) {
-      this.y += this.size.width /2
-      // this.speed = 0
+
+
+
+  slide(time) {
+    const { start, end } = this.moveArea;
+    const style = this.element.style;
+    const elapsed = time - this.lastSlide;
+    const step =
+      this.speed *
+      this.direction
+
+    this.x += step;
+    if (this.x < start || this.x + parseInt(style.width) > end) {
+      this.onEdge(step);
     }
+    this.lastSlide = time;
+    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
+    this.animate(time);
   }
 }
