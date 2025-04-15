@@ -44,7 +44,8 @@ export class AlienShip extends Enemy {
     // this.element.style.top = `${this.y}px`
     // this.element.style.left = `${this.x}px`
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`
-    this.element.style.border ="solid 2px yellow"
+    // this.element.style.border ="solid 2px yellow"
+    
   }
 
 
@@ -56,11 +57,10 @@ export class AlienShip extends Enemy {
       this.speed *
       this.direction
 
-    this.x += step;
-    if (this.x < start || this.x + parseInt(style.width) > end) {
-      this.onEdge(step);
-    }
-    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
-    this.animate(time);
+      if (this.x < start || this.x + parseInt(style.width) > end) {
+        this.onEdge(step);
+      }        
+      this.x += step;
+    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px`;
   }
 }

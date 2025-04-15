@@ -32,8 +32,8 @@ class Projectile {
         this.game = game,
             this.x = x,
             this.y = y,
-            this.height = 20,
-            this.width = 10,
+            this.height = 5,
+            this.width = 5,
             this.speed = 10,
             this.markedForDeletion = false,
             this.imgHolder = document.createElement('div')
@@ -130,7 +130,7 @@ function detectCollision(elementA, elementB) {
     let [boundariesA, boundariesB] = [elementA?.getBoundingClientRect(), elementB?.getBoundingClientRect()]
     let [lbA, rbA, bbA] = [boundariesA?.x, boundariesA?.right, boundariesA?.bottom]
     let [lbB, rbB, btB] = [boundariesB?.x, boundariesB?.right, boundariesB?.y]
-    return (((lbB >= lbA && lbB <= rbA) || (rbB >= lbA && rbB <= rbA)) && btB <= bbA)
+    return (((lbB > lbA && lbB < rbA) || (rbB >= lbA && rbB <= rbA)) && btB <= bbA)
 }
 
 
@@ -143,8 +143,8 @@ class Game {
             this.keys = []
         const torpedo = new Torpedo(50, 0, { start: -50, end: this.width-50 })
         this.enemies = [torpedo,]
-        for (let row = 1; row < 3; row++) {
-            for (let col = 0; col <= 3; col++) {
+        for (let row = 1; row < 4; row++) {
+            for (let col = 1; col < 5; col++) {
                 this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
             }
         }
@@ -156,6 +156,14 @@ class Game {
         lastTime = timeStamp
         this.player.update()
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
+        const ALIENS_SHIPS = this.enemies.filter(enemy => enemy instanceof AlienShip)
+        if (ALIENS_SHIPS.some(ship => ship instanceof AlienShip &&( ship.x + ship.size.width == this.width || ship.x == 0) )) {
+            ALIENS_SHIPS.forEach(ship => {
+                ship.y += 20
+                ship.direction *=-1
+            })
+        }
+
         this.enemies.forEach((enemy) => {
             this.player.projectiles.forEach((projectile) => {
                 if (detectCollision(enemy.element, projectile.imgHolder)) {
@@ -171,10 +179,6 @@ class Game {
 
         this.player.draw(canavas)
     }
-}
-
-function touchEdge(enemy, left, right) {
-    return (enemy.x === left || enemy.x + enemy.size.width === right)
 }
 
 
