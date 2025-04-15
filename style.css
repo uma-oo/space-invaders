@@ -43,34 +43,43 @@ body {
 } */
 
 .layer1 .img1 {
-    left : -25%;
+    width: 100%;
+    left : 0;
     position: absolute;
-    left: -50%;
     transform: translateY(0%);
     animation: 40s linear infinite  moveDown1;
 }
 .layer1 .img2 {
-    left : -25%;
+    width: 100%;
+    left : 0;
     position: absolute;
     transform: translateY(-100%);
     animation: 40s linear infinite  moveDown2;
 }
 .layer2 .img1 {
+    width: 100%;
+    left : 0;
     position: absolute; 
     transform: translateY(0%);
     animation: 4s linear infinite  moveDown1;
 }
 .layer2 .img2 {
+    width: 100%;
+    left : 0;
     position: absolute;
     transform: translateY(-100%);
     animation: 4s linear infinite  moveDown2;
 }
 .layer3 .img1 {
+    width: 100%;
+    left : 0;
     position: absolute;
     transform: translateY(0%);
     animation: 5s linear infinite  moveDown1;
 }
 .layer3 .img2 {
+    width: 100%;
+    left : 0;
     position: absolute;
     transform: translateY(-100%);
     animation: 5s linear infinite  moveDown2;

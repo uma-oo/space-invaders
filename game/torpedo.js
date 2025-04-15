@@ -1,13 +1,13 @@
 import { Enemy } from "./enemy.js";
 const TORPEDO_SPRITE =
   "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
-  const ALIEN_SHIP_SPRITE =
+const ALIEN_SHIP_SPRITE =
   "game/assets/Enemy/chips/Frigate.png";
 
 export class Torpedo extends Enemy {
-  constructor(x,y,moveArea) {
+  constructor(x, y, moveArea) {
     const frames = {
-      
+
       totalFrames: 12,
       frameSize: 64,
       onLastFrame: () => {
@@ -18,16 +18,16 @@ export class Torpedo extends Enemy {
     const size = { width: 58.5, height: 47 };
     super(TORPEDO_SPRITE, frames, size, moveArea);
     this.x = x;
-    this.y = y;  
+    this.y = y;
     this.element.style.top = `${y}px`
     this.element.style.left = `${x}px`
   }
 
-  
+
 }
 
 export class AlienShip extends Enemy {
-  constructor(row,col,moveArea) {
+  constructor(row, col, moveArea) {
     const frames = {
       totalFrames: 1,
       frameSize: 42,
@@ -37,15 +37,16 @@ export class AlienShip extends Enemy {
       // },
     };
     const size = { width: 42, height: 42 };
-    
+
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
-    this.x = (size.width +10) * col 
-    this.y = (size.height+10) * row
-    // this.element.style.top = `${this.y}px`
-    // this.element.style.left = `${this.x}px`
+    this.x = (size.width + 20) * col
+    this.y = (size.height + 10) * row
+    this.speed = 0.5,
+    this.element.style.zIndex = '2'
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`
-    // this.element.style.border ="solid 2px yellow"
-    
+    this.element.style.border = `solid red 1px`
+    this.width = size.width,
+    this.height = size.height
   }
 
 
@@ -53,14 +54,16 @@ export class AlienShip extends Enemy {
   slide(time) {
     const { start, end } = this.moveArea;
     const style = this.element.style;
-    const step =
-      this.speed *
-      this.direction
+    const step =this.speed * this.direction
 
-      if (this.x < start || this.x + parseInt(style.width) > end) {
-        this.onEdge(step);
-      }        
-      this.x += step;
+    if (this.x < start || this.x + parseInt(style.width) > end) {
+      this.onEdge(step);
+    }
+    this.x += step;
     style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px`;
+  }
+
+  shoot(){
+
   }
 }
