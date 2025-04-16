@@ -24,6 +24,7 @@ class UserInput {
 
             if (e.key === "Escape") {
                 this.game.pausedGame = !this.game.pausedGame
+
             }
 
         })
@@ -34,10 +35,8 @@ class UserInput {
         })
         this.restart.addEventListener("click", () => {
             this.game.pausedGame = false
-            // canvas.innerHTML = ""
             this.game.reset()
         })
-
 
         window.addEventListener('keyup', e => {
             if (this.game.keys.indexOf(e.key) > -1) {
@@ -143,6 +142,12 @@ class Player {
                 this.y - this.height))
         }
     }
+
+
+    reset(){
+        this.projectiles.forEach(projectile => projectile.imgHolder.remove())
+        this.projectiles = []
+    }
 }
 
 
@@ -170,7 +175,6 @@ class Game {
             this.input = new UserInput(this),
             this.player = new Player(this),
             this.pausedGame = false,
-
             this.startMin = 0,
             this.startSec = 0,
             this.menu = document.querySelector(".menu")
@@ -184,6 +188,27 @@ class Game {
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
+     
+    reset(){
+        this.player.reset()
+        this.player.imgHolder.remove()
+        delete this.player
+        this.player = new Player(this)
+        this.startMin = 0
+        this.startSec = 0
+        let enemies  = document.querySelectorAll(".enemy")
+        enemies.forEach(enemy=> enemy.remove())
+        this.keys = []
+        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
+        this.enemies = [torpedo,]
+        for (let row = 1; row < 4; row++) {
+            for (let col = 1; col < 5; col++) {
+                this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
+            }
+        }
+        this.enemies.forEach((enemy) => canvas.append(enemy.element))
+    }
+
 
 
     hideMenu() {
@@ -195,10 +220,6 @@ class Game {
 
     }
 
-    reset() {
-        
-        this.init()
-    }
 
     update(timeStamp) {
         if (this.pausedGame) {
@@ -261,6 +282,7 @@ export let game = new Game(canvasWidth, canvasHeight)
 let lastTime = 0
 
 function gameLoop(timeStamp) {
+
     game.draw(canvas)
     game.update(timeStamp)
 
