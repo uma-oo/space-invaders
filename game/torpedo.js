@@ -1,11 +1,12 @@
 import { Enemy } from "./enemy.js";
+import {Projectile} from './index.js'
 const TORPEDO_SPRITE =
   "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
 const ALIEN_SHIP_SPRITE =
   "game/assets/Enemy/chips/Frigate.png";
 
 export class Torpedo extends Enemy {
-  constructor(x, y, moveArea) {
+  constructor(x, y, moveArea, game) {
     const frames = {
 
       totalFrames: 12,
@@ -23,11 +24,15 @@ export class Torpedo extends Enemy {
     this.element.style.left = `${x}px`
   }
 
+  shoot(){
+    return new Projectile(this.game, this.x + this.width / 2, this.y , 1)
+  }
+
 
 }
 
 export class AlienShip extends Enemy {
-  constructor(row, col, moveArea) {
+  constructor(row, col, moveArea , game ) {
     const frames = {
       totalFrames: 1,
       frameSize: 42,
@@ -37,8 +42,9 @@ export class AlienShip extends Enemy {
       // },
     };
     const size = { width: 42, height: 42 };
-
+   
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
+    this.game = game
     this.x = (size.width + 20) * col
     this.y = (size.height + 10) * row
     this.speed = 0.5,
@@ -64,6 +70,6 @@ export class AlienShip extends Enemy {
   }
 
   shoot(){
-
+    return new Projectile(this.game, this.x, this.y , 1)
   }
 }

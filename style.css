@@ -170,10 +170,8 @@ button {
     width:  600px;
     display: flex;
     font-size: 14px;
-    flex-direction: column;
     gap: 50px;
     justify-content: space-between;
-    /* padding: .5rem 1rem; */
 }
 
 

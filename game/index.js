@@ -20,41 +20,25 @@ class UserInput {
         this.game = game,
             this.continue = document.querySelector('.continue'),
             this.restart = document.querySelector(".restart"),
-            this.gameConstructor = game.constructor
-        window.addEventListener('keydown', e => {
-            if (((e.key === "ArrowRight") ||
-                (e.key === "ArrowLeft") || (e.key === " ")) &&
-                this.game.keys.indexOf(e.key) === -1) {
-                this.game.keys.push(e.key)
-            }
 
-            if (e.key === "Escape") {
-                this.game.pausedGame = !this.game.pausedGame
-
-            }
-
-        })
-
-
-        this.continue.addEventListener("click", () => {
-            this.game.pausedGame = false
-        })
-        this.restart.addEventListener("click", () => {
-            this.game.pausedGame = false
-            this.game.reset()
-        })
-
-        window.addEventListener('keyup', e => {
-            if (this.game.keys.indexOf(e.key) > -1) {
-                this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
-            }
-        })
+            this.continue.addEventListener("click", () => {
+                this.game.pausedGame = false
+            }),
+            this.restart.addEventListener("click", () => {
+                this.game.pausedGame = false
+                this.game.reset()
+            }),
             window.addEventListener('keydown', e => {
                 if (((e.key === "ArrowRight") ||
-                    (e.key === "ArrowLeft") || (e.key === " ")
-                ) && this.game.keys.indexOf(e.key) === -1) {
+                    (e.key === "ArrowLeft") || (e.key === " ")) &&
+                    this.game.keys.indexOf(e.key) === -1) {
                     this.game.keys.push(e.key)
                 }
+                if (e.key === "Escape") {
+                    this.game.pausedGame = !this.game.pausedGame
+
+                }
+
             }),
             window.addEventListener('keyup', e => {
                 if (this.game.keys.indexOf(e.key) > -1) {
@@ -66,7 +50,7 @@ class UserInput {
 
 
 
-class Projectile {
+export class Projectile {
     constructor(game, x, y, direction) {
         this.game = game,
             this.x = x,
@@ -74,7 +58,7 @@ class Projectile {
             this.direction = direction,
             this.height = 10,
             this.width = 5,
-            this.speed = 8,
+            this.speed = 10,
             this.markedForDeletion = false,
             this.imgHolder = document.createElement('div'),
             this.imgHolder.style.backgroundColor = 'red',
@@ -113,11 +97,12 @@ class Player {
             this.element.style.position = 'absolute',
             this.element.style.zIndex = '2',
             this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center no-repeat`,
-            this.element.style.backgroundSize = 'contain'
-            this.element.style.backgroundPosition = 'center'
+            this.element.style.backgroundSize = 'contain',
+            this.element.style.backgroundPosition = 'center',
             this.element.style.width = `${this.width}px`,
             this.element.style.height = `${this.height}px`,
-            this.element.style.border = 'solid red 1px';
+
+            // this.element.style.border = 'solid red 1px',
             this.element.style.transform = `translate(${this.x}px, ${this.y}px)`,
             canvas.append(this.element)
     }
@@ -140,12 +125,12 @@ class Player {
             this.canShoot = false
             setTimeout(() => this.canShoot = true, 600)
             this.projectiles.push(new Projectile(this.game, this.x + this.width / 2,
-                this.y,))
+                this.y, -1))
         }
     }
 
-
-    reset(){
+    reset() {
+        this.element.remove()
         this.projectiles.forEach(projectile => projectile.imgHolder.remove())
         this.projectiles = []
     }
@@ -153,11 +138,6 @@ class Player {
 
 class Game {
     constructor(width, height) {
-        this.init(width, height);
-
-    }
-
-    init(width, height) {
         this.width = width,
             this.height = height,
             this.input = new UserInput(this),
@@ -165,16 +145,30 @@ class Game {
             this.pausedGame = false,
             this.startMin = 0,
             this.startSec = 0,
-            this.menu = document.querySelector(".menu")
-        this.keys = []
+            this.menu = document.querySelector(".menu"),
+            this.keys = [],
+            this.enemies = [],
+            this.shoots = [],
+            this.generateEnemies(), 
+            this.generateBullets()
+    }
+
+
+    generateBullets(){
+        setInterval(()=>{
+            let shoots =Array.from({length: 6}, () => Math.floor(Math.random() * this.enemies.length));
+            console.log(shoots);
+            shoots.forEach((shoot)=>{
+                console.log(shoot);
+                this.generateBullets.push(this.enemies[shoot].shoot())
+                console.log(this.generateBullets);
+            })
+        }, 300)
+    }
+    
+    generateEnemies() {
         const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
-        this.enemies = [torpedo,]
-        for (let row = 1; row < 4; row++) {
-            for (let col = 1; col < 5; col++) {
-            this.keys = []
-        this.enemiesProjectiles = []
-        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
-        this.enemies = [torpedo]
+        this.enemies.push(torpedo)
         for (let row = 1; row < 5; row++) {
             for (let col = 1; col < 10; col++) {
                 this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
@@ -182,28 +176,19 @@ class Game {
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
-     
-    reset(){
+
+    reset() {
         this.player.reset()
-        this.player.imgHolder.remove()
-        delete this.player
         this.player = new Player(this)
         this.startMin = 0
         this.startSec = 0
-        let enemies  = document.querySelectorAll(".enemy")
-        enemies.forEach(enemy=> enemy.remove())
+        this.enemies.forEach(enemy => {
+            enemy.element?.remove() // just in case if the torpedo is gone
+        })
+        this.enemies = []
+        this.generateEnemies()
         this.keys = []
-        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
-        this.enemies = [torpedo,]
-        for (let row = 1; row < 4; row++) {
-            for (let col = 1; col < 5; col++) {
-                this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
-            }
-        }
-        this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
-
-
 
     hideMenu() {
         this.menu.style.display = "none"
@@ -211,9 +196,7 @@ class Game {
 
     showMenu() {
         this.menu.style.display = "block"
-
     }
-
 
     update(timeStamp) {
         if (this.pausedGame) {
@@ -227,24 +210,16 @@ class Game {
         this.enemies.forEach((enemy) => enemy.slide(timeStamp))
         const ALIENS_SHIPS = this.enemies.filter(enemy => enemy instanceof AlienShip)
 
-        // if (this.enemiesProjectiles.length == 0){
-        // let pickedaliens = []
-        // while (picked) {
-        //     let randomAlien = ALIENS_SHIPS[Math.floor(Math.random() * ALIENS_SHIPS.length)]
-        // }
-        // }
-
-
         if (ALIENS_SHIPS.some(ship => ship instanceof AlienShip && (ship.x + ship.size.width == this.width || ship.x == 0))) {
             ALIENS_SHIPS.forEach(ship => {
                 ship.y += 20
-                ship.direction *= -1
                 ship.direction *= -1
             })
         }
 
         //check for collesion
         this.enemies.forEach((enemy, index) => {
+            this.generateBullets()
             this.player.projectiles.forEach((projectile) => {
                 if (this.checkCollision(enemy, projectile)) {
                     projectile.markedForDeletion = true
@@ -263,7 +238,8 @@ class Game {
             rect1.height + rect1.y > rect2.y
         )
     }
-}}
+}
+
 
 
 export let game = new Game(canvasWidth, canvasHeight)
