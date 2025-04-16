@@ -13,9 +13,42 @@ const PLAYER_SHIP_IMAGE = './game/assets/Enemy/chips/Dreadnought.png'
 let [canvasLeft, canvasRight] = [canvas.getBoundingClientRect().x, canvas.getBoundingClientRect().right]
 console.log(canvasLeft, canvasRight)
 
+
+
 class UserInput {
     constructor(game) {
         this.game = game,
+            this.continue = document.querySelector('.continue'),
+            this.restart = document.querySelector(".restart"),
+            this.gameConstructor = game.constructor
+        window.addEventListener('keydown', e => {
+            if (((e.key === "ArrowRight") ||
+                (e.key === "ArrowLeft") || (e.key === " ")) &&
+                this.game.keys.indexOf(e.key) === -1) {
+                this.game.keys.push(e.key)
+            }
+
+            if (e.key === "Escape") {
+                this.game.pausedGame = !this.game.pausedGame
+
+            }
+
+        })
+
+
+        this.continue.addEventListener("click", () => {
+            this.game.pausedGame = false
+        })
+        this.restart.addEventListener("click", () => {
+            this.game.pausedGame = false
+            this.game.reset()
+        })
+
+        window.addEventListener('keyup', e => {
+            if (this.game.keys.indexOf(e.key) > -1) {
+                this.game.keys.splice(this.game.keys.indexOf(e.key), 1)
+            }
+        })
             window.addEventListener('keydown', e => {
                 if (((e.key === "ArrowRight") ||
                     (e.key === "ArrowLeft") || (e.key === " ")
@@ -30,6 +63,8 @@ class UserInput {
             })
     }
 }
+
+
 
 class Projectile {
     constructor(game, x, y, direction) {
@@ -108,14 +143,34 @@ class Player {
                 this.y,))
         }
     }
+
+
+    reset(){
+        this.projectiles.forEach(projectile => projectile.imgHolder.remove())
+        this.projectiles = []
+    }
 }
 
 class Game {
     constructor(width, height) {
+        this.init(width, height);
+
+    }
+
+    init(width, height) {
         this.width = width,
             this.height = height,
             this.input = new UserInput(this),
             this.player = new Player(this),
+            this.pausedGame = false,
+            this.startMin = 0,
+            this.startSec = 0,
+            this.menu = document.querySelector(".menu")
+        this.keys = []
+        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
+        this.enemies = [torpedo,]
+        for (let row = 1; row < 4; row++) {
+            for (let col = 1; col < 5; col++) {
             this.keys = []
         this.enemiesProjectiles = []
         const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
@@ -127,8 +182,45 @@ class Game {
         }
         this.enemies.forEach((enemy) => canvas.append(enemy.element))
     }
+     
+    reset(){
+        this.player.reset()
+        this.player.imgHolder.remove()
+        delete this.player
+        this.player = new Player(this)
+        this.startMin = 0
+        this.startSec = 0
+        let enemies  = document.querySelectorAll(".enemy")
+        enemies.forEach(enemy=> enemy.remove())
+        this.keys = []
+        const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
+        this.enemies = [torpedo,]
+        for (let row = 1; row < 4; row++) {
+            for (let col = 1; col < 5; col++) {
+                this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
+            }
+        }
+        this.enemies.forEach((enemy) => canvas.append(enemy.element))
+    }
+
+
+
+    hideMenu() {
+        this.menu.style.display = "none"
+    }
+
+    showMenu() {
+        this.menu.style.display = "block"
+
+    }
+
 
     update(timeStamp) {
+        if (this.pausedGame) {
+            this.showMenu()
+            return
+        }
+        this.hideMenu()
         let deltaTime = timeStamp - lastTime
         lastTime = timeStamp
         this.player.update()
@@ -146,6 +238,7 @@ class Game {
         if (ALIENS_SHIPS.some(ship => ship instanceof AlienShip && (ship.x + ship.size.width == this.width || ship.x == 0))) {
             ALIENS_SHIPS.forEach(ship => {
                 ship.y += 20
+                ship.direction *= -1
                 ship.direction *= -1
             })
         }
@@ -170,7 +263,7 @@ class Game {
             rect1.height + rect1.y > rect2.y
         )
     }
-}
+}}
 
 
 export let game = new Game(canvasWidth, canvasHeight)
