@@ -10,10 +10,19 @@
 body {
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: black;
     overflow: hidden;
+    gap: 20px;
+    /* background: url('./game/assets/bg/'); */
+    background-repeat: no-repeat;
+    /* top: -50%;
+    left: -50%; */
+    background: url(./game/assets/bg/bg1.png) bottom repeat;
+    /* background-size: cover; */
+    /* transform: rotate(30deg); */
 }
 
 #canvas {
@@ -22,9 +31,9 @@ body {
     max-height: 100%;
     background-color: rgb(66, 0, 66);
     background-color: transparent;
-    border: dashed red 1px;
+    border-bottom: solid rgb(56, 0, 56) 5px;
     overflow: hidden;
-    position: relative;
+    position: relative ;
 }
 
 .layer {
@@ -126,11 +135,11 @@ body {
 }
 
 .gameUi {
-    position: absolute;
+    /* position: absolute; */
     color: white;
-    width: 100%;
-    z-index: 10;
+    width:  600px;
     display: flex;
+    font-size: 14px;
     justify-content: space-between;
     /* padding: .5rem 1rem; */
 }

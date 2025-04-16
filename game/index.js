@@ -2,12 +2,12 @@ import { AlienShip, Torpedo } from "./torpedo.js";
 let layzerBulletSound = document.getElementById('lazerBullet')
 
 let canvas = document.getElementById('canvas')
-let canvasWidth = 500
-let canvasHeight = 600
+let canvasWidth = 1000
+let canvasHeight = 700
 canvas.style.width = canvasWidth + 'px';
 canvas.style.height = canvasHeight + 'px';
 
-const PLAYER_SHIP_IMAGE = './game/assets/Player/ships/Fighter.svg'
+const PLAYER_SHIP_IMAGE = './game/assets/Enemy/chips/Dreadnought.png'
 
 
 let [canvasLeft, canvasRight] = [canvas.getBoundingClientRect().x, canvas.getBoundingClientRect().right]
@@ -68,19 +68,21 @@ class Player {
         this.game = game,
             this.canShoot = true,
             this.width = 64,
-            this.height = 54,
+            this.height = 64,
             this.x = (this.game.width) / 2 - this.width / 2,
-            this.y = (this.game.height) - this.height - 20,
+            this.y = (this.game.height) - this.height - 5,
             // this.imgHolder.style.opacity = 0
             this.speed = 5,
             this.projectiles = [],
             this.element = document.createElement('div'),
             this.element.style.position = 'absolute',
             this.element.style.zIndex = '2',
-            this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center`,
+            this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center no-repeat`,
+            this.element.style.backgroundSize = 'contain'
+            this.element.style.backgroundPosition = 'center'
             this.element.style.width = `${this.width}px`,
             this.element.style.height = `${this.height}px`,
-            // this.element.style.border = 'solid red';,
+            this.element.style.border = 'solid red 1px';
             this.element.style.transform = `translate(${this.x}px, ${this.y}px)`,
             canvas.append(this.element)
     }
@@ -101,9 +103,9 @@ class Player {
         layzerBulletSound.play()
         if (this.canShoot) {
             this.canShoot = false
-            setTimeout(() => this.canShoot = true, 200)
+            setTimeout(() => this.canShoot = true, 600)
             this.projectiles.push(new Projectile(this.game, this.x + this.width / 2,
-                this.y - this.height, -1))
+                this.y,))
         }
     }
 }
@@ -119,7 +121,7 @@ class Game {
         const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 })
         this.enemies = [torpedo]
         for (let row = 1; row < 5; row++) {
-            for (let col = 1; col < 8; col++) {
+            for (let col = 1; col < 10; col++) {
                 this.enemies.push(new AlienShip(row, col, { start: 0, end: this.width }))
             }
         }
@@ -160,11 +162,6 @@ class Game {
         })
     }
 
-    draw(canavas) {
-        // console.log(this.keys)
-        // this.player.draw(canavas)
-    }
-
     checkCollision(rect1, rect2) {
         return (
             rect1.x < rect2.x + rect2.width &&
@@ -178,8 +175,6 @@ class Game {
 
 export let game = new Game(canvasWidth, canvasHeight)
 let lastTime = 0
-
-game.draw(canvas)
 
 function gameLoop(timeStamp) {
     game.update(timeStamp)

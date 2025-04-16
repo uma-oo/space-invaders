@@ -44,7 +44,7 @@ export class AlienShip extends Enemy {
     this.speed = 0.5,
     this.element.style.zIndex = '2'
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`
-    this.element.style.border = `solid red 1px`
+    // this.element.style.border = `solid red 1px`
     this.width = size.width,
     this.height = size.height
   }
