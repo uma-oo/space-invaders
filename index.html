@@ -13,14 +13,14 @@
 <body>
     <audio src="./game/assets/Soundtrack.mp3" autoplay loop="true"></audio>
     <audio src="./game/assets/sounds/lazerBullet.mp3" id="lazerBullet"></audio>
-    <div class="menu">
+    <div class="menu hide">
         <button class="restart">Restart</button>
         <button class="continue">Continue</button>
     </div>
     <div class="gameUi">
         <div class="score">Score: <span>0</span></div>
         <div class="timer">Time: <span>00:00</span></div>
-        <div class="lifes">Lives: <span>❤️ ❤️ ❤️</span></div>
+        <div class="lives">Lives: <span>❤️ ❤️ ❤️</span></div>
     </div>
     <div id="canvas">
         <div class="layer2 layer">
@@ -32,7 +32,10 @@
             <img class="img1" src="./game/assets/bg/layer3img1.png" alt="">
         </div>
     </div>
-
+    <div class="lost">
+        <span>You Lost Try Again</span>
+        <button class="Restart">Restart</button>
+    </div>
 </body>
 
 </html>

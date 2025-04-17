@@ -71,6 +71,6 @@ export class AlienShip extends Enemy {
   }
 
   shoot(){
-    return new Projectile(this.game, this.x, this.y , 1, 5)
+    return new Projectile(this.game, this.x+this.width/2, this.y , 1, 5)
   }
 }

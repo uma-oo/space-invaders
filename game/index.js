@@ -18,29 +18,34 @@ class UserInput {
     (this.game = game),
       (this.continue = document.querySelector(".continue")),
       (this.restart = document.querySelector(".restart")),
+      this.Restart = document.querySelector(".Restart")
       this.continue.addEventListener("click", () => {
         this.game.pausedGame = false;
       }),
       this.restart.addEventListener("click", () => {
-        this.game.pausedGame = false;
-        this.game.reset();
-      }),
-      window.addEventListener("keydown", (e) => {
-        if (
-          (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === " ") &&
-          this.game.keys.indexOf(e.key) === -1
-        ) {
-          this.game.keys.push(e.key);
-        }
-        if (e.key === "Escape") {
-          this.game.pausedGame = !this.game.pausedGame;
-        }
-      }),
-      window.addEventListener("keyup", (e) => {
+        this.game.reset()
+      });
+
+
+    addEventListener("keydown", (e) => {
+      if (
+        (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === " ") &&
+        this.game.keys.indexOf(e.key) === -1
+      ) {
+        this.game.keys.push(e.key);
+      }
+      if (e.key === "Escape") {
+        this.game.pausedGame = !this.game.pausedGame;
+      }
+    }),
+      addEventListener("keyup", (e) => {
         if (this.game.keys.indexOf(e.key) > -1) {
           this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
         }
       });
+
+
+    
   }
 }
 
@@ -52,7 +57,7 @@ export class Projectile {
       (this.direction = direction),
       (this.height = 10),
       (this.width = 5),
-      (this.speed= speed),
+      (this.speed = speed),
       (this.markedForDeletion = false),
       (this.imgHolder = document.createElement("div")),
       (this.imgHolder.style.backgroundColor = "red"),
@@ -60,23 +65,27 @@ export class Projectile {
       (this.imgHolder.style.zIndex = "0"),
       (this.imgHolder.style.width = `${this.width}px`),
       (this.imgHolder.style.height = `${this.height}px`),
-      (this.imgHolder.style.transform = `translate(${
-        this.x - this.width / 2
-      }px, ${this.y}px)`),
+      (this.imgHolder.style.transform = `translate(${this.x - this.width / 2
+        }px, ${this.y}px)`),
       canvas.append(this.imgHolder);
   }
 
   update() {
-    this.y += this.speed * this.direction ;
-    if (this.y < 0) {
-      this.markedForDeletion = true;
+    if (this.direction === -1) {
+      if (this.y < 0) {
+        this.markedForDeletion = true;
+      }
+    } else {
+      if (this.y >= this.game?.height) {
+        this.markedForDeletion = true;
+      }
     }
+    this.y += this.speed * this.direction;
     if (this.markedForDeletion) {
       this.imgHolder.remove();
     }
-    this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${
-      this.y
-    }px)`;
+    this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${this.y
+      }px)`;
   }
 }
 
@@ -150,19 +159,26 @@ class Game {
       (this.lastTime = 0);
     (this.shootInterval = 3000),
       (this.menu = document.querySelector(".menu")),
+      (this.livesDiv = document.querySelector(".lives>span")),
+      (this.lives = 3),
       (this.keys = []),
       (this.enemies = []),
-      (this.enemyProjectiles = []);
-    this.generateEnemies(), this.generateBullets();
+      (this.enemyProjectiles = []),
+      this.generateEnemies();
   }
 
-  generateBullets() {
+  generateBullets(ALIENS_SHIPS) {
     if (this.lastTime >= this.shootInterval) {
-      let shoots = Array.from({ length: 3 }, () =>
-        Math.floor(Math.random() * this.enemies.length)
+      let shoots = new Set(
+        Array.from(
+          { length: ALIENS_SHIPS.length > 4 ? 4 : ALIENS_SHIPS.length },
+          () => Math.floor(Math.random() * ALIENS_SHIPS.length)
+        )
       );
+
+      console.log(shoots, "shoots");
       shoots.forEach((shoot) => {
-        this.enemyProjectiles.push(this.enemies[shoot].shoot());
+        this.enemyProjectiles.push(ALIENS_SHIPS[shoot].shoot());
       });
       this.lastTime = 0;
     }
@@ -174,13 +190,24 @@ class Game {
     for (let row = 1; row < 5; row++) {
       for (let col = 1; col < 10; col++) {
         this.enemies.push(
-          new AlienShip(row, col, { start: 0, end: this.width })
+          new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
       }
     }
     this.enemies.forEach((enemy) => canvas.append(enemy.element));
   }
 
+  checkCollision(rect1, rect2) {
+    return (
+      rect1.x < rect2.x + rect2.width &&
+      rect1.x + rect1.width > rect2.x &&
+      rect1.y < rect2.y + rect2.height &&
+      rect1.height + rect1.y > rect2.y
+    );
+  }
+
+  // reset the game to the default state !!
+  // there is a problem with the torpedo
   reset() {
     this.player.reset();
     this.player = new Player(this);
@@ -192,30 +219,42 @@ class Game {
     this.enemies = [];
     this.generateEnemies();
     this.keys = [];
-  }
-
-  hideMenu() {
-    this.menu.style.display = "none";
-  }
-
-  showMenu() {
-    this.menu.style.display = "block";
+    this.enemyProjectiles.forEach((enemyProjectile) => {
+      enemyProjectile.imgHolder.remove()
+    });
+    this.enemyProjectiles = [],
+    this.lives = 3,
+    this.pausedGame = false
   }
 
   update(deltaTime, timeStamp) {
     if (this.pausedGame) {
-      this.showMenu();
+      if (this.lives === 0) {
+        this.loose();
+        return;
+      }
+      this.menu.style.display = "block";
       return;
     }
+
+    if (this.lives === 0) {
+      this.loose();
+    }
+
     this.lastTime += deltaTime;
-    console.log("last time after update", this.lastTime);
-    this.hideMenu();
+    this.menu.style.display = "none";
     this.player.update();
     this.enemies.forEach((enemy) => enemy.slide(timeStamp));
     const ALIENS_SHIPS = this.enemies.filter(
       (enemy) => enemy instanceof AlienShip
     );
 
+    this.generateBullets(ALIENS_SHIPS);
+    console.log(this.enemyProjectiles);
+    this.enemyProjectiles.forEach((enemyShoot) => {
+      enemyShoot.update();
+    });
+    //check for collision between the player and the corners of the canvas
     if (
       ALIENS_SHIPS.some(
         (ship) =>
@@ -229,8 +268,7 @@ class Game {
       });
     }
 
-    this.generateBullets();
-    //check for collesion
+    // check for collision between the player shoots and the enemies
     this.enemies.forEach((enemy, index) => {
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(enemy, projectile)) {
@@ -240,21 +278,35 @@ class Game {
         }
       });
     });
-   
-    this.enemyProjectiles.forEach((enemyShoot) => {
-        console.log("hunaaaaa");
-      enemyShoot.update(deltaTime);
+
+    // check for collision between the enemy shoots and the player
+    // update the lives
+    // console.log('projectiles',this.enemyProjectiles);
+    this.enemyProjectiles.forEach((enemyProjectile, index) => {
+      if (enemyProjectile.markedForDeletion) {
+        this.enemyProjectiles.splice(index, 1);
+      }
+      if (this.checkCollision(enemyProjectile, this.player)) {
+        // enemyProjectile.imgHolder.remove()
+        enemyProjectile.imgHolder.remove();
+        this.enemyProjectiles.splice(index, 1);
+        this.lives -= 1;
+        this.livesDiv.innerText = `❤️`.repeat(this.lives);
+      }
     });
+    // console.log(this.enemyProjectiles);
   }
 
-  checkCollision(rect1, rect2) {
-    return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.height + rect1.y > rect2.y
-    );
+  loose() {
+    this.pausedGame = true;
+    let lostDiv = document.querySelector(".lost");
+    lostDiv.style.display = block;
   }
+
+  win() { 
+
+  }
+ 
 }
 
 export let game = new Game(canvasWidth, canvasHeight);

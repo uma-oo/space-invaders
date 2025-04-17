@@ -47,13 +47,11 @@ body {
 }
 
 .menu {
-    display: none;
     width: 30%;
     padding: 25px;
     background-color: purple;
     color: white;
     font-size: 25px;
-    display: none;
 }
 
 button {
@@ -64,7 +62,9 @@ button {
 }
 
 
-
+.hide{
+    display: none;
+}
 
 /* .layer1 {
     z-index: -3;
