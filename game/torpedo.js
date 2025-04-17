@@ -20,8 +20,10 @@ export class Torpedo extends Enemy {
     super(TORPEDO_SPRITE, frames, size, moveArea);
     this.x = x;
     this.y = y;
-    this.element.style.top = `${y}px`
-    this.element.style.left = `${x}px`
+    (this.width = size.width),
+    (this.height = size.height),
+    this.score = 500,
+    (this.element.style.transform = `tramslate(${this.x}, ${this.y})`);
   }
 
   shoot(){
@@ -37,10 +39,6 @@ export class AlienShip extends Enemy {
     const frames = {
       totalFrames: 1,
       frameSize: 42,
-      // onLastFrame: () => {
-      //   this.hide();
-      //   this.freeze();
-      // },
     };
     const size = { width: 42, height: 42 };
    
@@ -51,14 +49,15 @@ export class AlienShip extends Enemy {
     this.speed = 0.5,
     this.element.style.zIndex = '2'
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`
-    // this.element.style.border = `solid red 1px`
     this.width = size.width,
     this.height = size.height
+    this.score = 150
+    // this.element.style.border = `solid red 1px`
   }
 
 
 
-  slide(time) {
+  slide() {
     const { start, end } = this.moveArea;
     const style = this.element.style;
     const step =this.speed * this.direction

@@ -154,17 +154,105 @@ class Game {
       (this.input = new UserInput(this)),
       (this.player = new Player(this)),
       (this.pausedGame = false),
-      (this.startMin = 0),
-      (this.startSec = 0),
-      (this.lastTime = 0);
-    (this.shootInterval = 3000),
-      (this.menu = document.querySelector(".menu")),
-      (this.livesDiv = document.querySelector(".lives>span")),
       (this.lives = 3),
+      (this.score = 0),
+      (this.timer = 0),
+      (this.lastTime = 0),
+      (this.shootInterval = 3000),
+      (this.menu = document.querySelector(".menu")),
+      (this.dangerZoneElement = document.querySelector(".dangerZone")),
+      (this.scoreElement = document.querySelector(".score>span")),
+      (this.timerElement = document.querySelector(".timer>span")),
+      (this.livesDiv = document.querySelector(".lives>span")),
       (this.keys = []),
       (this.enemies = []),
       (this.enemyProjectiles = []),
       this.generateEnemies();
+  }
+
+  update(deltaTime, timeStamp) {
+    if (this.pausedGame) {
+      if (this.lives === 0) {
+        this.loose();
+        return;
+      }
+      this.menu.style.display = "block";
+      return;
+    }
+    if (this.lives === 0) {
+      this.loose();
+    }
+
+    this.lastTime += deltaTime;
+    this.menu.style.display = "none";
+
+    // handle 
+    this.handleTimer(deltaTime)
+    this.player.update();
+    this.enemies.forEach((enemy) => enemy.slide(timeStamp));
+
+    // handle enemy wave movement and attack
+    const ALIENS_SHIPS = this.enemies.filter(
+      (enemy) => enemy instanceof AlienShip
+    );
+    this.generateBullets(ALIENS_SHIPS);
+    this.enemyProjectiles.forEach((enemyShoot) => {
+      enemyShoot.update();
+    });
+
+
+    //check for collision between the player and the corners of the canvas
+    if (
+      ALIENS_SHIPS.some(
+        (ship) =>
+          ship instanceof AlienShip &&
+          (ship.x + ship.size.width == this.width || ship.x == 0)
+      )
+    ) {
+      ALIENS_SHIPS.forEach((ship) => {
+        ship.y += 20;
+        ship.direction *= -1;
+      });
+    }
+
+    // check for collision between the player shoots and the enemies
+    this.enemies.forEach((enemy, index) => {
+      this.player.projectiles.forEach((projectile) => {
+        if (this.checkCollision(enemy, projectile)) {
+          this.enemies.splice(index, 1);
+          this.score += enemy.score;
+          this.scoreElement.innerHTML = `${this.score}`;
+          projectile.markedForDeletion = true;
+          enemy.destroy();
+        }
+      });
+    });
+
+    // check for collision between the enemy shoots and the player
+    // update the lives
+    // console.log('projectiles',this.enemyProjectiles);
+    this.enemyProjectiles.forEach((enemyProjectile, index) => {
+      if (enemyProjectile.markedForDeletion) {
+        this.enemyProjectiles.splice(index, 1);
+      }
+      if (this.checkCollision(enemyProjectile, this.player)) {
+        // enemyProjectile.imgHolder.remove()
+        enemyProjectile.imgHolder.remove();
+        this.enemyProjectiles.splice(index, 1);
+        this.lives -= 1;
+        this.livesDiv.innerText = `❤️`.repeat(this.lives);
+      }
+    });
+    // console.log(this.enemyProjectiles);
+  }
+
+
+  handleTimer(deltaTime) {
+    this.timer += deltaTime
+    let seconds = Math.floor(this.timer / 1000) % 60
+    let minutes = Math.floor(this.timer / 60000) 
+    console.log(minutes,seconds)
+    this.timerElement.innerHTML = `${minutes<10 ? '0'+minutes:minutes}:${seconds < 10 ? '0'+seconds:seconds}`
   }
 
   generateBullets(ALIENS_SHIPS) {
@@ -208,6 +296,7 @@ class Game {
 
   // reset the game to the default state !!
   // there is a problem with the torpedo
+
   reset() {
     this.player.reset();
     this.player = new Player(this);
@@ -217,7 +306,6 @@ class Game {
       enemy.element?.remove(); // just in case if the torpedo is gone
     });
     this.enemies = [];
-    this.generateEnemies();
     this.keys = [];
     this.enemyProjectiles.forEach((enemyProjectile) => {
       enemyProjectile.imgHolder.remove()
@@ -225,78 +313,17 @@ class Game {
     this.enemyProjectiles = [],
     this.lives = 3,
     this.pausedGame = false
+    this.scoreElement.innerHTML = 0;
+    this.score = 0;
+    this.enemies.forEach((enemy) => {
+      enemy.element?.remove();
+    });
+    this.generateEnemies();
+    
+    
   }
 
-  update(deltaTime, timeStamp) {
-    if (this.pausedGame) {
-      if (this.lives === 0) {
-        this.loose();
-        return;
-      }
-      this.menu.style.display = "block";
-      return;
-    }
-
-    if (this.lives === 0) {
-      this.loose();
-    }
-
-    this.lastTime += deltaTime;
-    this.menu.style.display = "none";
-    this.player.update();
-    this.enemies.forEach((enemy) => enemy.slide(timeStamp));
-    const ALIENS_SHIPS = this.enemies.filter(
-      (enemy) => enemy instanceof AlienShip
-    );
-
-    this.generateBullets(ALIENS_SHIPS);
-    console.log(this.enemyProjectiles);
-    this.enemyProjectiles.forEach((enemyShoot) => {
-      enemyShoot.update();
-    });
-    //check for collision between the player and the corners of the canvas
-    if (
-      ALIENS_SHIPS.some(
-        (ship) =>
-          ship instanceof AlienShip &&
-          (ship.x + ship.size.width == this.width || ship.x == 0)
-      )
-    ) {
-      ALIENS_SHIPS.forEach((ship) => {
-        ship.y += 20;
-        ship.direction *= -1;
-      });
-    }
-
-    // check for collision between the player shoots and the enemies
-    this.enemies.forEach((enemy, index) => {
-      this.player.projectiles.forEach((projectile) => {
-        if (this.checkCollision(enemy, projectile)) {
-          projectile.markedForDeletion = true;
-          enemy.destroy();
-          this.enemies.splice(index, 1);
-        }
-      });
-    });
-
-    // check for collision between the enemy shoots and the player
-    // update the lives
-    // console.log('projectiles',this.enemyProjectiles);
-    this.enemyProjectiles.forEach((enemyProjectile, index) => {
-      if (enemyProjectile.markedForDeletion) {
-        this.enemyProjectiles.splice(index, 1);
-      }
-      if (this.checkCollision(enemyProjectile, this.player)) {
-        // enemyProjectile.imgHolder.remove()
-        enemyProjectile.imgHolder.remove();
-        this.enemyProjectiles.splice(index, 1);
-        this.lives -= 1;
-        this.livesDiv.innerText = `❤️`.repeat(this.lives);
-      }
-    });
-    // console.log(this.enemyProjectiles);
-  }
-
+  
   loose() {
     this.pausedGame = true;
     let lostDiv = document.querySelector(".lost");
