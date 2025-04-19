@@ -13,16 +13,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: black;
     overflow: hidden;
     gap: 20px;
-    /* background: url('./game/assets/bg/'); */
-    background-repeat: no-repeat;
-    /* top: -50%;
-    left: -50%; */
-    background: url(./game/assets/bg/bg1.png) bottom repeat;
-    /* background-size: cover; */
-    /* transform: rotate(30deg); */
+    /* background-image:url(./game/assets/bg/bg5.png) ; */
+    background-color: black;
+
 }
 
 #canvas {
@@ -53,6 +48,7 @@ body {
     background-color: purple;
     color: white;
     font-size: 25px;
+    z-index: 100;
 }
 
 button {
@@ -62,81 +58,56 @@ button {
 
 }
 
-
 .hide{
     display: none;
 }
-
-/* .layer1 {
-    z-index: -3;
-}
-.layer2 {
-    z-index: -2;
-}
-.layer3 {
-    z-index: -1;
-} */
 
 .layer1 .img1 {
     width: 100%;
     left : 0;
     position: absolute;
     transform: translateY(0%);
-    animation: 40s linear infinite moveDown1;
+    animation: 5s linear infinite moveDown1 ;
 }
 
 .layer1 .img2 {
     width: 100%;
     left : 0;
     position: absolute;
-    transform: translateY(-100%);
-    animation: 40s linear infinite moveDown2;
+    transform: translateY(-100%) ;
+    animation: 5s linear infinite moveDown2 ;
 }
 
-.layer2 .img1 {
-    width: 100%;
-    left : 0;
-    position: absolute; 
-    transform: translateY(0%);
-    animation: 4s linear infinite moveDown1;
-}
-
-.layer2 .img2 {
-    width: 100%;
-    left : 0;
+.middle {
     position: absolute;
-    transform: translateY(-100%);
-    animation: 4s linear infinite moveDown2;
 }
 
-.layer3 .img1 {
-    width: 100%;
-    left : 0;
-    position: absolute;
-    transform: translateY(0%);
-    animation: 5s linear infinite moveDown1;
-}
 
-.layer3 .img2 {
-    width: 100%;
-    left : 0;
-    position: absolute;
-    transform: translateY(-100%);
-    animation: 5s linear infinite moveDown2;
-}
 
 
 @keyframes moveDown2 {
+    from{
+        transform: translateY(-100%) ;
+    }
     to {
         transform: translateY(0%);
     }
 }
 
 @keyframes moveDown1 {
+    from{
+        transform: translateY(0%) ;
+    }
     to {
         transform: translateY(100%);
     }
 }
+
+.popup{
+    background-color: black ;
+    color: white;
+}
+
 
 .enemy {
     position: absolute;
@@ -146,7 +117,6 @@ button {
     /* border: solid red 1px; */
     position: absolute;
     width: 100%;
-
     top: 80px;
     left: 0px;
     display: flex;

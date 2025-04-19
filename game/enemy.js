@@ -88,10 +88,6 @@ export class Enemy {
     this.animate = () => {}; 
     this.element = null;
   }
-   
-  
-   
-  
 }
 
 
