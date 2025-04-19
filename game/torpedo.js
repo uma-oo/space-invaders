@@ -45,7 +45,7 @@ export class AlienShip extends Enemy {
     this.x = (size.width + 20) * col
     this.y = (size.height + 10) * row
     this.speed = 0.5,
-    this.element.style.zIndex = '2'
+    this.element.style.zIndex = '1'
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`,
     (this.element.style.boxShadow) = '-1px 1px 3px 2px black',
     this.width = size.width,
@@ -54,8 +54,6 @@ export class AlienShip extends Enemy {
     this.speed = 1
     // this.element.style.border = `solid red 1px`
   }
-
-
 
   slide() {
     const { start, end } = this.moveArea;

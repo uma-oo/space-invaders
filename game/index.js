@@ -15,29 +15,31 @@ let [canvasLeft, canvasRight] = [
 
 class UserInput {
   constructor(game) {
-    (this.game = game),
-      (this.continue = document.querySelector(".continue")),
-      (this.restarts = document.querySelectorAll(".restart")),
-      (this.Restart = document.querySelector(".Restart")),
-      this.continue.addEventListener("click", () => {
-        this.game.pausedGame = false;
-      }),
-      this.restarts.forEach(restart => {
+    this.game = game
+    this.continue = document.querySelector(".continue")
+    this.restarts = document.querySelectorAll(".restart")
+    this.Restart = document.querySelector(".Restart")
+    this.continue.addEventListener("click", () => {
+      this.game.overLayElement.classList.add('hide')
+      this.game.pausedGame = false;
+    }),
+      this.restarts.forEach((restart) => {
         restart.addEventListener("click", () => {
           this.game.reset();
-        })
-      })
-      addEventListener("keydown", (e) => {
-        if (
-          (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === " ") &&
-          this.game.keys.indexOf(e.key) === -1
-        ) {
-          this.game.keys.push(e.key);
-        }
-        if (e.key === "Escape") {
-          this.game.pausedGame = true;
-        }
-      }),
+        });
+      });
+    addEventListener("keydown", (e) => {
+      if (
+        (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === " ") &&
+        this.game.keys.indexOf(e.key) === -1
+      ) {
+        this.game.keys.push(e.key);
+      }
+      if (e.key === "Escape") {
+        this.game.overLayElement.classList.remove('hide')
+        this.game.pausedGame = true;
+      }
+    }),
       addEventListener("keyup", (e) => {
         if (this.game.keys.indexOf(e.key) > -1) {
           this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
@@ -48,24 +50,24 @@ class UserInput {
 
 export class Projectile {
   constructor(game, x, y, direction, speed) {
-    (this.game = game),
-      (this.x = x),
-      (this.y = y),
-      (this.direction = direction),
-      (this.height = 12),
-      (this.width = 8),
-      (this.speed = speed),
-      (this.markedForDeletion = false),
-      (this.imgHolder = document.createElement("div")),
-      (this.imgHolder.style.backgroundColor = "red"),
-      (this.imgHolder.style.position = "absolute"),
-      (this.imgHolder.style.zIndex = "0"),
-      (this.imgHolder.style.width = `${this.width}px`),
-      (this.imgHolder.style.height = `${this.height}px`),
-      (this.imgHolder.style.transform = `translate(${
+    this.game = game
+    this.x = x
+    this.y = y
+    this.direction = direction
+    this.height = 12
+    this.width = 8
+    this.speed = speed
+    this.markedForDeletion = false
+    this.imgHolder = document.createElement("div")
+    this.imgHolder.style.backgroundColor = "red"
+    this.imgHolder.style.position = "absolute"
+    this.imgHolder.style.zIndex = "0"
+    this.imgHolder.style.width = `${this.width}px`
+    this.imgHolder.style.height = `${this.height}px`
+    this.imgHolder.style.transform = `translate(
         this.x - this.width / 2
-      }px, ${this.y}px)`),
-      canvas.append(this.imgHolder);
+      }px, ${this.y}px)`
+    canvas.append(this.imgHolder);
   }
 
   update(deltaTime) {
@@ -82,34 +84,31 @@ export class Projectile {
     if (this.markedForDeletion) {
       this.imgHolder.remove();
     }
-    this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${
-      this.y
-    }px)`;
+    this.imgHolder.style.transform = `translate(${this.x - this.width / 2}px, ${this.y
+      }px)`;
   }
 }
 
 class Player {
   constructor(game) {
-    (this.game = game),
-      (this.canShoot = true),
-      (this.width = 50),
-      (this.height = 64),
-      (this.x = this.game.width / 2 - this.width / 2),
-      (this.y = this.game.height - this.height - 10),
-      (this.speed = 6),
-      (this.projectiles = []),
-      (this.element = document.createElement("div")),
-      (this.element.style.position = "absolute"),
-      (this.element.style.zIndex = "2"),
-      (this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center no-repeat`),
-      (this.element.style.backgroundSize = "contain"),
-      (this.element.style.backgroundPosition = "center"),
-      (this.element.style.width = `${this.width}px`),
-      (this.element.style.height = `${this.height}px`),
-      // this.element.style.border = 'solid red 1px',
-
-      (this.element.style.transform = `translate(${this.x}px, ${this.y}px)`),
-      canvas.append(this.element);
+    this.game = game
+    this.canShoot = true
+    this.width = 50
+    this.height = 64
+    this.x = this.game.width / 2 - this.width / 2
+    this.y = this.game.height - this.height - 10
+    this.speed = 6
+    this.projectiles = []
+    this.element = document.createElement("div")
+    this.element.style.position = "absolute"
+    this.element.style.zIndex = "1"
+    this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center no-repeat`
+    this.element.style.backgroundSize = "contain"
+    this.element.style.backgroundPosition = "center"
+    this.element.style.width = `${this.width}px`
+    this.element.style.height = `${this.height}px`
+    this.element.style.transform = `translate(${this.x}px, ${this.y}px)`
+    canvas.append(this.element);
   }
 
   update() {
@@ -148,36 +147,36 @@ class Player {
 
 class Game {
   constructor(width, height) {
-    (this.width = width),
-      (this.height = height),
-      (this.input = new UserInput(this)),
-      (this.player = new Player(this)),
-      (this.pausedGame = false),
-      (this.lives = 3),
-      (this.score = 0),
-      (this.timer = 0),
-      (this.lastTime = 0),
-      (this.shootInterval = 3000),
-      (this.keys = []),
-      (this.enemies = []),
-      (this.enemyProjectiles = []),
-      (this.isComplet) = false
-      this.generateEnemies(),
-      (this.menuElement = document.querySelector(".menu")),
-      (this.dangerZoneElement = document.querySelector(".dangerZone")),
-      (this.scoreElement = document.querySelector(".score>span")),
-      (this.timerElement = document.querySelector(".timer>span")),
-      (this.gameStateElement) = document.querySelector(".gameState"),
-      (this.livesElement = document.querySelector(".lives>span"));
+    this.width = width
+    this.height = height
+    this.input = new UserInput(this)
+    this.player = new Player(this)
+    this.pausedGame = false
+    this.lives = 3
+    this.score = 0
+    this.timer = 0
+    this.lastTime = 0
+    this.shootInterval = 3000
+    this.keys = []
+    this.enemies = []
+    this.enemyProjectiles = []
+    this.isComplet = false
+    this.generateEnemies(),
+      this.menuElement = document.querySelector(".menu")
+      this.overLayElement = document.querySelector(".overLay")
+      console.log(this.overLayElement)
+    this.dangerZoneElement = document.querySelector(".dangerZone")
+    this.scoreElement = document.querySelector(".score>span")
+    this.timerElement = document.querySelector(".timer>span")
+    this.gameStateElement = document.querySelector(".gameState")
+    this.livesElement = document.querySelector(".lives>span")
   }
 
   update(deltaTime, timeStamp) {
     if (this.gameComplete()) return;
-
     this.toggleMenu();
     if (this.pausedGame) return;
     this.handleTimer(deltaTime);
-
     // handle enemy wave movement and attack
     this.player.update();
 
@@ -199,7 +198,6 @@ class Game {
       )
     ) {
       ALIENS_SHIPS.forEach((ship) => {
-        
         ship.direction *= -1;
         ship.y += 20;
         ship.speed += 1;
@@ -219,14 +217,11 @@ class Game {
       });
     });
 
-    // check for collision between the enemy shoots and the player
-    // update the lives
-    // console.log('projectiles',this.enemyProjectiles);
     this.handleLives();
   }
 
   toggleMenu() {
-    if (this.pausedGame) this.menuElement.classList.remove("hide")
+    if (this.pausedGame) this.menuElement.classList.remove("hide");
     else this.menuElement.classList.add("hide");
   }
 
@@ -249,9 +244,8 @@ class Game {
     this.timer += deltaTime;
     let seconds = Math.floor(this.timer / 1000) % 60;
     let minutes = Math.floor(this.timer / 60000);
-    this.timerElement.innerHTML = `${minutes < 10 ? "0" + minutes : minutes}:${
-      seconds < 10 ? "0" + seconds : seconds
-    }`;
+    this.timerElement.innerHTML = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds
+      }`;
   }
 
   generateEnemyBullets(ALIENS_SHIPS, deltaTime) {
@@ -273,8 +267,8 @@ class Game {
   generateEnemies() {
     const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 });
     this.enemies.push(torpedo);
-    for (let row = 1; row < 2; row++) {
-      for (let col = 1; col < 2; col++) {
+    for (let row = 1; row < 5; row++) {
+      for (let col = 1; col < 9; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
@@ -317,24 +311,33 @@ class Game {
     this.enemies.forEach((enemy) => {
       enemy.element?.remove();
     });
-    this.gameStateElement.classList.add('hide')
+    this.gameStateElement.classList.add("hide");
+    this.overLayElement.classList.add('hide')
+
 
     this.generateEnemies();
   }
 
   gameComplete() {
-    const enemies = this.enemies.filter(
-      (enemy) => enemy instanceof AlienShip
-    );
-    let isWon = enemies.length === 0 && this.lives > 0 ;
+    const enemies = this.enemies.filter((enemy) => enemy instanceof AlienShip);
+    let overlay = document.getElementById(".overLay")
+    let time = this.timerElement.innerHTML
+    let score = this.scoreElement.innerHTML
+    let isWon = enemies.length === 0 && this.lives > 0;
     let isLost = this.lives === 0;
     if (!isWon && !isLost) return;
-    this.isComplet = true
-    console.log('game is lost. ', isWon, isLost)
-    if (isWon) this.gameStateElement.querySelector('p').innerHTML = 'You Win !!'
-    if (isLost) this.gameStateElement.querySelector('p').innerHTML = 'You Lost !!'
-    this.gameStateElement.classList.remove('hide')
-    return true
+    this.isComplet = true;
+    console.log("game is lost. ", isWon, isLost);
+    this.gameStateElement.querySelector('.gameStats .time>span').innerHTML = time
+    this.gameStateElement.querySelector('.gameStats .score>span').innerHTML = score
+    if (isWon)
+      this.gameStateElement.querySelector("p").innerHTML = "You Win !!";
+    if (isLost)
+      this.gameStateElement.querySelector("p").innerHTML = "You Lost !!";
+      this.gameStateElement.classList.remove("hide");
+      this.overLayElement.classList.remove('hide')
+
+    return true;
   }
 
 }
@@ -348,5 +351,8 @@ function gameLoop(timeStamp) {
   game.update(deltaTime, timeStamp);
   requestAnimationFrame(gameLoop);
 }
+
+
+
 
 gameLoop(0);

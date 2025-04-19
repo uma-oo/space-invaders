@@ -11,25 +11,30 @@
 </head>
 
 <body>
-    <audio src="./game/assets/sounds/2.ogg" id="gameMusic" autoplay loop="true" ></audio>
+    <audio src="https://cdn.jsdelivr.net/gh/DarkMethoss/Game-Assets@main/sounds/2.ogg" id="gameMusic" autoplay loop="true" ></audio>
     <audio src="./game/assets/sounds/bulletSound.mp3" id="lazerBullet"></audio>
-    <div class="menu hide middle">
-        <button class="restart">Restart</button>
-        <button class="continue">Continue</button>
-    </div>
     <div class="gameUi">
         <div class="score">Score: <span>0</span></div>
         <div class="timer">Time: <span>00:00</span></div>
         <div class="lives">Lives: <span>❤️ ❤️ ❤️</span></div>
     </div>
+    <div class="menu hide center">
+        <button class="restart">Restart</button>
+        <button class="continue">Continue</button>
+    </div>
+    <div class="overLay hide"></div>
     <div id="canvas">
         <div class="layer1 layer">
             <img class="img2" src="./game/assets/bg/bg5.png" alt="">
             <img class="img1" src="./game/assets/bg/bg5.png" alt="">
         </div>
     </div>
-    <div class="gameState middle hide" >
+    <div class="gameState center hide" >
         <p class="message"></p>
+        <div class="gameStats">
+            <div class="time">Time: <span></span></div>
+            <div class="score">Score: <span></span></div>
+        </div>
         <button class="restart">Restart</button>
     </div>
 </body>

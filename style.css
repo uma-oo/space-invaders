@@ -17,7 +17,7 @@ body {
     gap: 20px;
     /* background-image:url(./game/assets/bg/bg5.png) ; */
     background-color: black;
-
+    /* position: relative; */
 }
 
 #canvas {
@@ -42,20 +42,46 @@ body {
     margin: auto;
 }
 
-.menu {
-    width: 30%;
-    padding: 25px;
+.center {
+    position: absolute;
+    top: 50% ;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.center::after {
+   
+}
+
+.menu, .gameState {
     background-color: purple;
-    color: white;
-    font-size: 25px;
-    z-index: 1000;
+    padding: 1rem 2rem ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap : 1rem;
 }
 
 button {
     width: fit-content;
     padding: 10px;
     border: 2px black solid;
+    /* z-index: 10000; */
+}
 
+
+.overLay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    backdrop-filter: blur(5px);
+    /* background-color: red; */
+    z-index: 9;
 }
 
 .hide{
@@ -78,14 +104,6 @@ button {
     animation: 5s linear infinite moveDown2 ;
 }
 
-.middle {
-    position: absolute;
-    z-index: 1000;
-}
-
-
-
-
 @keyframes moveDown2 {
     from{
         transform: translateY(-100%) ;
@@ -104,36 +122,8 @@ button {
     }
 }
 
-.popup{
-    background-color: black ;
-    color: white;
-}
-
-
 .enemy {
     position: absolute;
-}
-
-.enemyWave {
-    /* border: solid red 1px; */
-    position: absolute;
-    width: 100%;
-    top: 80px;
-    left: 0px;
-    display: flex;
-    flex-wrap: wrap;
-    z-index: 10;
-    gap: 10px;
-}
-
-.alien {
-    width: calc((100%) / 5);
-    max-width: 42px;
-    height: 42px;
-    border: solid 1px red;
-    background-image: url('./game/assets/Enemy/chips/Frigate.png');
-    background-repeat: no-repeat;
-    background-size: contain;
 }
 
 .gameUi {
@@ -146,9 +136,9 @@ button {
     justify-content: space-between;
 }
 
-.gameState{
-    background-color: purple;
-    /* color: ; */
+
+.gameStats {
+    
 }
 
 
