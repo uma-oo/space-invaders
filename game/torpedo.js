@@ -27,7 +27,6 @@ export class Torpedo extends Enemy {
   }
 
   shoot(){
-    console.log("inside the shoot method.");
     return new Projectile(this.game, this.x + this.width / 2, this.y , 1)
   }
 

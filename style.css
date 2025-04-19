@@ -48,7 +48,7 @@ body {
     background-color: purple;
     color: white;
     font-size: 25px;
-    z-index: 100;
+    z-index: 1000;
 }
 
 button {
@@ -80,6 +80,7 @@ button {
 
 .middle {
     position: absolute;
+    z-index: 1000;
 }
 
 
