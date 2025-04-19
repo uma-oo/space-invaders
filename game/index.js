@@ -45,6 +45,10 @@ class UserInput {
           this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
         }
       });
+
+      document.addEventListener("visibilitychange", () => { 
+        this.game.pausedGame= true; 
+      });
   }
 }
 
@@ -133,7 +137,7 @@ class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
+        // new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
       );
     }
   }
@@ -200,7 +204,7 @@ class Game {
       ALIENS_SHIPS.forEach((ship) => {
         ship.direction *= -1;
         ship.y += 20;
-        ship.speed += 1;
+        ship.speed += 0.4;
       });
     }
 
@@ -344,6 +348,7 @@ class Game {
 
 export let game = new Game(canvasWidth, canvasHeight);
 let lastTime = 0;
+let frameCounter = 0
 
 function gameLoop(timeStamp) {
   let deltaTime = timeStamp - lastTime;

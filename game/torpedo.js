@@ -53,7 +53,6 @@ export class AlienShip extends Enemy {
   }
 
   slide() {
-    const { start, end } = this.moveArea;
     const style = this.element.style;
     const step = this.speed * this.direction
     this.x += step;
