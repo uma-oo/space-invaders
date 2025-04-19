@@ -97,7 +97,7 @@ class Player {
     this.height = 64
     this.x = this.game.width / 2 - this.width / 2
     this.y = this.game.height - this.height - 10
-    this.speed = 6
+    this.speed = 10
     this.projectiles = []
     this.element = document.createElement("div")
     this.element.style.position = "absolute"
@@ -194,7 +194,7 @@ class Game {
       ALIENS_SHIPS.some(
         (ship) =>
           ship instanceof AlienShip &&
-          (ship.x + ship.size.width == this.width || ship.x == 0)
+          (ship.x + ship.size.width >= this.width || ship.x <= 0)
       )
     ) {
       ALIENS_SHIPS.forEach((ship) => {
