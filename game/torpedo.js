@@ -48,7 +48,7 @@ export class AlienShip extends Enemy {
     this.width = size.width,
     this.height = size.height,
     this.score = 150
-    this.speed = 1
+    this.speed = 6
     // this.element.style.border = `solid red 1px`
   }
 

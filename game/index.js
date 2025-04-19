@@ -3,7 +3,7 @@ let layzerBulletSound = document.getElementById("lazerBullet");
 let vid = document.getElementById("gameMusic");
 vid.volume = 0.3;
 let canvas = document.getElementById("canvas");
-let canvasWidth = 1000;
+let canvasWidth = window.innerWidth - window.innerWidth / 5;
 let canvasHeight = 580;
 canvas.style.width = canvasWidth + "px";
 canvas.style.height = canvasHeight + "px";
@@ -46,9 +46,9 @@ class UserInput {
         }
       });
 
-      document.addEventListener("visibilitychange", () => { 
-        this.game.pausedGame= true; 
-      });
+    document.addEventListener("visibilitychange", () => {
+      this.game.pausedGame = true;
+    });
   }
 }
 
@@ -137,7 +137,7 @@ class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        // new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
+        new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
       );
     }
   }
@@ -167,13 +167,20 @@ class Game {
     this.isComplet = false
     this.generateEnemies(),
       this.menuElement = document.querySelector(".menu")
-      this.overLayElement = document.querySelector(".overLay")
-      console.log(this.overLayElement)
+    this.overLayElement = document.querySelector(".overLay")
+    console.log(this.overLayElement)
     this.dangerZoneElement = document.querySelector(".dangerZone")
     this.scoreElement = document.querySelector(".score>span")
     this.timerElement = document.querySelector(".timer>span")
     this.gameStateElement = document.querySelector(".gameState")
     this.livesElement = document.querySelector(".lives>span")
+    const initialWindowWidth = window.innerWidth
+    window.onresize = () => {
+      const diff = initialWindowWidth - window.innerWidth
+      canvas.style.width = canvasWidth - diff + "px";
+      this.enemies.forEach((e) => e.moveArea.end = canvasWidth - diff)
+      this.width = canvasWidth-diff
+    }
   }
 
   update(deltaTime, timeStamp) {
@@ -338,8 +345,8 @@ class Game {
       this.gameStateElement.querySelector("p").innerHTML = "You Win !!";
     if (isLost)
       this.gameStateElement.querySelector("p").innerHTML = "You Lost !!";
-      this.gameStateElement.classList.remove("hide");
-      this.overLayElement.classList.remove('hide')
+    this.gameStateElement.classList.remove("hide");
+    this.overLayElement.classList.remove('hide')
 
     return true;
   }
