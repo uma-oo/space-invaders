@@ -129,10 +129,10 @@ class Player {
   }
 
   shoot() {
-    layzerBulletSound.play();
     if (this.canShoot) {
       this.canShoot = false;
       setTimeout(() => (this.canShoot = true), 600);
+      layzerBulletSound.play();
       this.projectiles.push(
         new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
       );
@@ -199,8 +199,10 @@ class Game {
       )
     ) {
       ALIENS_SHIPS.forEach((ship) => {
+        
         ship.direction *= -1;
         ship.y += 20;
+        ship.speed += 1;
       });
     }
 
@@ -271,8 +273,8 @@ class Game {
   generateEnemies() {
     const torpedo = new Torpedo(50, 0, { start: -50, end: this.width - 50 });
     this.enemies.push(torpedo);
-    for (let row = 1; row < 5; row++) {
-      for (let col = 1; col < 9; col++) {
+    for (let row = 1; row < 2; row++) {
+      for (let col = 1; col < 2; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
@@ -309,6 +311,7 @@ class Game {
     this.enemyProjectiles = [];
     this.lives = 3;
     this.score = 0;
+    this.timer = 0;
     this.pausedGame = false;
     this.scoreElement.innerHTML = 0;
     this.enemies.forEach((enemy) => {
@@ -328,8 +331,8 @@ class Game {
     if (!isWon && !isLost) return;
     this.isComplet = true
     console.log('game is lost. ', isWon, isLost)
-    if (isWon) this.gameStateElement.querySelector('p').innerHTML == 'You Win !!'
-    if (isLost) this.gameStateElement.querySelector('p').innerHTML == 'You Lost !!'
+    if (isWon) this.gameStateElement.querySelector('p').innerHTML = 'You Win !!'
+    if (isLost) this.gameStateElement.querySelector('p').innerHTML = 'You Lost !!'
     this.gameStateElement.classList.remove('hide')
     return true
   }

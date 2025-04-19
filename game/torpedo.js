@@ -60,7 +60,7 @@ export class AlienShip extends Enemy {
   slide() {
     const { start, end } = this.moveArea;
     const style = this.element.style;
-    const step =this.speed * this.direction
+    const step = this.speed * this.direction
 
     if (this.x < start || this.x + parseInt(style.width) > end) {
       this.onEdge(step);

@@ -146,6 +146,11 @@ button {
     justify-content: space-between;
 }
 
+.gameState{
+    background-color: purple;
+    /* color: ; */
+}
+
 
 @media screen and (max-width: 600px) {
     .canvas {
