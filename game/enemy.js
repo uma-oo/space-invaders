@@ -14,7 +14,6 @@ export class Enemy {
     this.moveArea = moveArea;
 
     const div = document.createElement("div");
-    this.element = div;
     div.style.transform = "rotate(180deg)";
     div.style.backgroundImage = `url('${spriteUrl}')`;
     div.style.width = `${this.size.width}px`;
@@ -29,6 +28,7 @@ export class Enemy {
     this.currentFrame = 0;
     this.lastAnimated = 1;
     this.canShoot = false
+    this.element = div;
   }
   onEdge(step) {
     this.direction *= -1;
@@ -83,10 +83,17 @@ export class Enemy {
   }
 
   get destroyed(){
-    if (this.#destroyed) {
-      console.log(this.#destroyed);
-    }
     return this.#destroyed
+  }
+
+  destroy() {
+    if (this.#destroyed) return;
+    this.#destroyed = true;
+    this.element.remove();
+    this.freeze(); 
+    this.slide = () => {};
+    this.animate = () => {}; 
+    this.element = null;
   }
   
 

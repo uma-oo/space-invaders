@@ -68,7 +68,7 @@ export class Game {
 
     // Handle enemies (movement + attack)
     this.generateTorpedo(deltaTime)
-    console.log(this.enemies);
+    // console.log(this.enemies);
     this.enemies.forEach((enemy) => enemy.slide(timeStamp));
     const Torpedo_INSTANCE = this.enemies.filter(
       (enemy) => enemy instanceof Torpedo
@@ -206,10 +206,13 @@ export class Game {
     this.player = new Player(this);
     this.startMin = 0;
     this.startSec = 0;
+    console.log("inside the reset",this.enemies);
     this.enemies.forEach((enemy) => {
-      console.log(enemy);
-      enemy?.element?.remove(); // just in case if the torpedo is gone
+      console.log("enemy" , enemy);
+      console.log("hnayaaaaaaaaaaaaaa");
+      enemy.element.remove(); // just in case if the torpedo is gone
     });
+    delete this.enemies
     this.enemies = [];
     this.keys = [];
     this.enemyProjectiles.forEach((enemyProjectile) => {
@@ -221,9 +224,6 @@ export class Game {
     this.timer = 0;
     this.pausedGame = false;
     this.scoreElement.innerHTML = 0;
-    this.enemies.forEach((enemy) => {
-      enemy?.element?.remove();
-    });
     this.gameStateElement.classList.add("hide");
     this.overLayElement.classList.add('hide')
 
@@ -234,7 +234,7 @@ export class Game {
 
   gameComplete() {
     const enemies = this.enemies.filter((enemy) => enemy instanceof AlienShip);
-    console.log("enemies inside game comp", enemies);
+    // console.log("enemies inside game comp", enemies);
     let time = this.timerElement.innerHTML
     let score = this.scoreElement.innerHTML
     let isWon = enemies.length === 0 && this.lives > 0;

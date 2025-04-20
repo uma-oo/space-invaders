@@ -17,13 +17,13 @@ export class UserInput {
     this.game = game
     this.continue = document.querySelector(".continue")
     this.restarts = document.querySelectorAll(".restart")
-    this.Restart = document.querySelector(".Restart")
     this.continue.addEventListener("click", () => {
       this.game.overLayElement.classList.add('hide')
       this.game.pausedGame = false;
     }),
       this.restarts.forEach((restart) => {
         restart.addEventListener("click", () => {
+          console.log("reset the game");
           this.game.reset();
         });
       });

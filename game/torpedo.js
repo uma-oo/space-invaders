@@ -27,9 +27,10 @@ export class Torpedo extends Enemy {
       return new Projectile(this.game, this.x + this.width / 2, this.y, 1, 4);
   }
   destroy() {
-    this.game.enemies.splice(this.game.enemies.indexOf(this), 1)
-    // if (this.#destroyed) return;
-    // this.#destroyed = true;
+    console.log(this.game.enemies.indexOf(this));
+    if (this.game.enemies.indexOf(this) !==-1){
+      this.game.enemies.splice(this.game.enemies.indexOf(this), 1)
+    }
     this.element.remove();
     this.freeze(); 
     this.slide = () => {};
