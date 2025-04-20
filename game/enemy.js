@@ -20,7 +20,6 @@ export class Enemy {
     div.style.width = `${this.size.width}px`;
     div.style.height = `${this.size.height}px`;
     div.classList.add("enemy");
-
     this.speed = 1;
     this.stepDelay = 300;
     this.animationDelay = 400;
@@ -29,6 +28,7 @@ export class Enemy {
     this.direction = 1;
     this.currentFrame = 0;
     this.lastAnimated = 1;
+    this.canShoot = false
   }
   onEdge(step) {
     this.direction *= -1;
@@ -60,9 +60,14 @@ export class Enemy {
 
       style.backgroundPositionX = `${x}px, ${this.y}px`;
 
-      if (this.currentFrame === this.frames.totalFrames - 1)
+       if (this.currentFrame===4 || this.currentFrame===7 || this.currentFrame ===10) {
+        this.canShoot = true
+       }
+
+      if (this.currentFrame === this.frames.totalFrames - 1)  {
         this.frames.onLastFrame?.();
 
+      }
       this.currentFrame = (this.currentFrame + 1) % this.frames.totalFrames;
     }
   }
@@ -76,19 +81,15 @@ export class Enemy {
   freeze() {
     this.frames.totalFrames = 0;
   }
+
   get destroyed(){
+    if (this.#destroyed) {
+      console.log(this.#destroyed);
+    }
     return this.#destroyed
   }
-  destroy() {
-    if (this.#destroyed) return;
-    this.#destroyed = true;
-    this.element.remove();
-    this.freeze(); 
-    this.slide = () => {};
-    this.animate = () => {}; 
-    this.element = null;
-  }
-  // slide(){}
+  
+
 }
 
 
