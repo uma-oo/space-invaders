@@ -174,15 +174,34 @@ class Game {
     this.timerElement = document.querySelector(".timer>span")
     this.gameStateElement = document.querySelector(".gameState")
     this.livesElement = document.querySelector(".lives>span")
-    const initialWindowWidth = window.innerWidth
-    window.onresize = () => {
-      const diff = initialWindowWidth - window.innerWidth
-      canvas.style.width = canvasWidth - diff + "px";
-      this.enemies.forEach((e) => e.moveArea.end = canvasWidth - diff)
-      this.width = canvasWidth-diff
-    }
-  }
+    this.initialWindowWidth = window.innerWidth
+    this.initialWindowHeight = window.innerHeight
 
+  }
+  resize() {
+    const widthDiff = this.initialWindowWidth - window.innerWidth
+    const heightDiff = this.initialWindowHeight - window.innerHeight
+
+    canvas.style.width = canvasWidth - widthDiff + "px";
+    canvas.style.height = canvasHeight - heightDiff + "px";
+    this.player.y = canvasHeight - heightDiff - this.player.height - 10;
+    this.enemies.forEach((e) => {
+      if (e instanceof AlienShip) {
+        const enemySize = Math.min(((canvasWidth - widthDiff) / 100) * 4, 50)
+        e.moveArea.end = canvasWidth - widthDiff
+        e.size.width = enemySize;
+        e.size.height = enemySize;
+        e.x = (e.size.width + 20) * e.col
+        e.y = (e.size.height + 10) * e.row
+        if (e.element) {
+          e.element.style.width = `${e.size.width}px`;
+          e.element.style.height = `${e.size.height}px`;
+        }
+      }
+
+    })
+    this.width = canvasWidth - widthDiff
+  }
   update(deltaTime, timeStamp) {
     if (this.gameComplete()) return;
     this.toggleMenu();
@@ -327,6 +346,7 @@ class Game {
 
 
     this.generateEnemies();
+    this.resize()
   }
 
   gameComplete() {
@@ -354,6 +374,9 @@ class Game {
 }
 
 export let game = new Game(canvasWidth, canvasHeight);
+window.onresize = () => {
+  game.reset()
+}
 let lastTime = 0;
 let frameCounter = 0
 

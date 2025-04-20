@@ -38,17 +38,19 @@ export class AlienShip extends Enemy {
     };
     const size = { width: 42, height: 42 };
     super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
+    this.row = row
+    this.col = col
     this.game = game
     this.x = (size.width + 20) * col
     this.y = (size.height + 10) * row
-    this.speed = 0.5,
     this.element.style.zIndex = '1'
     this.element.style.transform = `tramslate(${this.x}, ${this.y})`,
     (this.element.style.boxShadow) = '-1px 1px 3px 2px black',
     this.width = size.width,
     this.height = size.height,
     this.score = 150
-    this.speed = 6
+    this.speed = 1
+    this.element.style.backgroundSize = "cover"
     // this.element.style.border = `solid red 1px`
   }
 
