@@ -29,32 +29,40 @@ export class Enemy {
     this.lastAnimated = 1;
     this.canShoot = false
     this.element = div;
+    this.time = 0
   }
   onEdge(step) {
     this.direction *= -1;
     this.x -= step;
   }
-  slide(time) {
-    const { start, end } = this.moveArea;
 
-    const style = this.element.style;
-    const elapsed = time - this.lastSlide;
-    const step =
-      this.speed *
-      this.direction *
-      ((elapsed / this.stepDelay) * this.pxPerStep);
 
-    this.x += step;
-    if (this.x < start || this.x + parseInt(style.width) > end) {
-      this.onEdge(step);
-    }
-    this.lastSlide = time;
-    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
-    this.animate(time);
-  }
-  animate(time) {
-    if (time - this.lastAnimated > this.animationDelay) {
-      this.lastAnimated = time;
+  // slide(time) {
+  //   const { start, end } = this.moveArea;
+
+  //   const style = this.element.style;
+  //   const elapsed = time - this.lastSlide;
+  //   const step =
+  //     this.speed *
+  //     this.direction *
+  //     ((elapsed / this.stepDelay) * this.pxPerStep);
+
+  //   this.x += step;
+  //   if (this.x < start || this.x + parseInt(style.width) > end) {
+  //     this.onEdge(step);
+  //   }
+  //   this.lastSlide = time;
+  //   style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
+  //   this.animate(time);
+
+  // }
+
+  
+
+  animate(deltaTime) {
+    this.time += deltaTime
+    if (this.time - this.lastAnimated > this.animationDelay) {
+      this.lastAnimated = this.time;
       const style = this.element.style;
       const x = -this.frames.frameSize * this.currentFrame;
 
@@ -71,6 +79,7 @@ export class Enemy {
       this.currentFrame = (this.currentFrame + 1) % this.frames.totalFrames;
     }
   }
+  
   hide() {
     this.moveArea.end += this.size.width;
     this.moveArea.start -= this.size.width;

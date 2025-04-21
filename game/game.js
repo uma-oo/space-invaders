@@ -65,11 +65,11 @@ export class Game {
     this.handleTimer(deltaTime);
     // handle enemy wave movement and attack
     this.player.update();
-
+    
     // Handle enemies (movement + attack)
     this.generateTorpedo(deltaTime)
     // console.log(this.enemies);
-    this.enemies.forEach((enemy) => enemy.slide(timeStamp));
+    this.enemies.forEach((enemy) => enemy.slide(deltaTime));
     const Torpedo_INSTANCE = this.enemies.filter(
       (enemy) => enemy instanceof Torpedo
     )[0];
@@ -83,10 +83,8 @@ export class Game {
     );
     this.generateEnemyBullets(ALIENS_SHIPS, deltaTime);
    
-    // console.log("projectiles", this.enemyProjectiles);
     this.enemyProjectiles.forEach((enemyShoot) => {
-      // console.log("ENEMY", enemyShoot);
-      enemyShoot.update();
+      enemyShoot.update(deltaTime);
     });
     // check for collision between the player and the corners of the canvas
     if (
@@ -168,8 +166,8 @@ export class Game {
 
   generateTorpedo(deltaTime){
     this.lastTimeTorpedoGenerated+= deltaTime
-    const torpedo = new Torpedo(this,50, 0, { start: -50, end: this.width - 50 });
-    if (this.lastTimeTorpedoGenerated>=10000) {
+    const torpedo = new Torpedo(this,50, 0, { start: 0, end: this.width - 50 });
+    if (this.lastTimeTorpedoGenerated>=5000 && this.enemies.filter(enemy => enemy instanceof Torpedo).length===0 ) {
       this.enemies.push(torpedo);
       canvas.append(torpedo.element)
       this.lastTimeTorpedoGenerated=0
@@ -206,10 +204,7 @@ export class Game {
     this.player = new Player(this);
     this.startMin = 0;
     this.startSec = 0;
-    console.log("inside the reset",this.enemies);
     this.enemies.forEach((enemy) => {
-      console.log("enemy" , enemy);
-      console.log("hnayaaaaaaaaaaaaaa");
       enemy.element.remove(); // just in case if the torpedo is gone
     });
     delete this.enemies

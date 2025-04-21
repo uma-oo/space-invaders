@@ -1,5 +1,5 @@
 import { Enemy } from "./enemy.js";
-import { Projectile } from "./projectile.js";
+import { Projectile , TorpedoProjectile } from "./projectile.js";
 const TORPEDO_SPRITE =
   "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
 const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/Frigate.png";
@@ -24,19 +24,40 @@ export class Torpedo extends Enemy {
   }
   
   shoot() {
-      return new Projectile(this.game, this.x + this.width / 2, this.y, 1, 4);
+      return new TorpedoProjectile(this.game, this.x + this.width / 2, this.y, 1, 4);
   }
-  destroy() {
-    console.log(this.game.enemies.indexOf(this));
+
+
+
+  slide(deltaTime){
+    const { start, end } = this.moveArea;
+    const style = this.element.style;
+
+    const step = this.currentFrame * this.direction;
+    this.x += step;
+    if (this.currentFrame === this.frames.totalFrames-1){
+        this.destroy()
+    }
+    if (this.x < start || this.x + parseInt(style.width) > end) {
+      this.onEdge(step);
+    }
+
+    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px`;
+    this.animate(deltaTime)
+  }
+
+  destroy(){
     if (this.game.enemies.indexOf(this) !==-1){
       this.game.enemies.splice(this.game.enemies.indexOf(this), 1)
     }
-    this.element.remove();
+    this.element.remove()
     this.freeze(); 
     this.slide = () => {};
     this.animate = () => {}; 
     this.element = null;
+
   }
+ 
 }
 
 export class AlienShip extends Enemy {
@@ -53,7 +74,6 @@ export class AlienShip extends Enemy {
     this.x = (size.width + 20) * col;
     this.y = (size.height + 10) * row;
     this.element.style.zIndex = "1";
-    (this.element.style.transform = `tramslate(${this.x}, ${this.y})`),
       (this.element.style.boxShadow = "-1px 1px 3px 2px black"),
       (this.width = size.width),
       (this.height = size.height),
