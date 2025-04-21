@@ -7,6 +7,7 @@ export class Projectile {
     this.x = x
     this.y = y
     this.direction = direction
+    this.image = ""
     this.height = 12
     this.width = 8
     this.speed = speed
@@ -50,13 +51,14 @@ export class  TorpedoProjectile {
     this.x = x
     this.y = y
     this.direction = direction
-    this.speed = 6
+    this.image = "./game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo_1.png"
+    this.speed = speed
     this.markedForDeletion = false
     this.imgHolder = document.createElement("div")
     this.currentFrame = 0
     this.height = 18,
     this.width = 9
-    this.imgHolder.style.backgroundImage = `url(./game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo_1.png)`
+    this.imgHolder.style.backgroundImage = `url(${this.image})`
     this.imgHolder.style.backgroundPositionX = `calc( ${this.width} * ${this.currentFrame})`
     this.imgHolder.style.width= `${this.width}px`
     this.imgHolder.style.height = `${this.height}px`
@@ -70,21 +72,14 @@ export class  TorpedoProjectile {
   }
    
 
-
-
-
-
   animate(deltaTime){
-    
     this.lastTime+=deltaTime
     if (this.lastTime - this.lastAnimated > this.animationDelay) {
-      console.log("heeereeeee");
       this.lastAnimated = this.lastTime;
       const style = this.imgHolder.style
       const x = - this.currentFrame * this.width
       style.backgroundPositionX= `${x}px, ${this.y}px`
       this.currentFrame = (this.currentFrame + 1) % 3;
-      console.log("frame: ",this.currentFrame);
     }
 
   }
@@ -109,6 +104,14 @@ export class  TorpedoProjectile {
   }
   
 
+}
 
 
+
+
+
+
+export class Bullet  extends Projectile {
+
+  
 }

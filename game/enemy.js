@@ -12,7 +12,6 @@ export class Enemy {
     this.size = size;
     this.frames = frames;
     this.moveArea = moveArea;
-
     const div = document.createElement("div");
     div.style.transform = "rotate(180deg)";
     div.style.backgroundImage = `url('${spriteUrl}')`;
@@ -67,7 +66,6 @@ export class Enemy {
       const x = -this.frames.frameSize * this.currentFrame;
 
       style.backgroundPositionX = `${x}px, ${this.y}px`;
-
        if (this.currentFrame===4 || this.currentFrame===7 || this.currentFrame ===10) {
         this.canShoot = true
        }

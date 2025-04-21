@@ -68,14 +68,15 @@ export class Game {
     
     // Handle enemies (movement + attack)
     this.generateTorpedo(deltaTime)
-    // console.log(this.enemies);
+  
     this.enemies.forEach((enemy) => enemy.slide(deltaTime));
     const Torpedo_INSTANCE = this.enemies.filter(
       (enemy) => enemy instanceof Torpedo
     )[0];
+
     if (Torpedo_INSTANCE?.canShoot) {
       Torpedo_INSTANCE.canShoot= false
-      this.enemyProjectiles.push(Torpedo_INSTANCE.shoot())
+      this.enemyProjectiles.push(...Torpedo_INSTANCE.shoot())
     }
 
     const ALIENS_SHIPS = this.enemies.filter(
@@ -83,6 +84,7 @@ export class Game {
     );
     this.generateEnemyBullets(ALIENS_SHIPS, deltaTime);
    
+  
     this.enemyProjectiles.forEach((enemyShoot) => {
       enemyShoot.update(deltaTime);
     });
@@ -177,8 +179,8 @@ export class Game {
 
 
   generateEnemies() {
-    for (let row = 1; row < 2; row++) {
-      for (let col = 1; col < 2; col++) {
+    for (let row = 1; row < 5; row++) {
+      for (let col = 1; col < 9; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
@@ -229,7 +231,7 @@ export class Game {
 
   gameComplete() {
     const enemies = this.enemies.filter((enemy) => enemy instanceof AlienShip);
-    // console.log("enemies inside game comp", enemies);
+
     let time = this.timerElement.innerHTML
     let score = this.scoreElement.innerHTML
     let isWon = enemies.length === 0 && this.lives > 0;
