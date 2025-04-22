@@ -1,4 +1,4 @@
-import { UserInput, canvas, canvasHeight, canvasWidth } from "./index.js"
+import { UserInput, canvas, defaultCanvasHeight, defaultCanvasWidth, calculateScale } from "./index.js"
 import { Player } from "./player.js"
 import  {Torpedo, AlienShip} from "./torpedo.js"
 
@@ -6,9 +6,10 @@ import  {Torpedo, AlienShip} from "./torpedo.js"
 
 
 export class Game {
-  constructor(width, height) {
-    this.width = width
-    this.height = height
+  constructor(scale) {
+    this.scaleFactor = scale
+    this.width = defaultCanvasWidth * scale
+    this.height = defaultCanvasHeight * scale
     this.input = new UserInput(this)
     this.player = new Player(this)
     this.pausedGame = false
@@ -21,54 +22,29 @@ export class Game {
     this.enemies = []
     this.enemyProjectiles = []
     this.isComplet = false
+    this.dangerZoneHeight = 150 * scale
     this.generateEnemies(),
     this.lastTimeTorpedoGenerated = 0
-      this.menuElement = document.querySelector(".menu")
+    this.menuElement = document.querySelector(".menu")
     this.overLayElement = document.querySelector(".overLay")
+    this.gameStatsElement = document.querySelector(".gameUi")
     this.dangerZoneElement = document.querySelector(".dangerZone")
+    this.dangerZoneElement.style.height = this.dangerZoneHeight + 'px'
     this.scoreElement = document.querySelector(".score>span")
     this.timerElement = document.querySelector(".timer>span")
     this.gameStateElement = document.querySelector(".gameState")
     this.livesElement = document.querySelector(".lives>span")
-    this.initialWindowWidth = window.innerWidth
-    this.initialWindowHeight = window.innerHeight
+    this.scale()
 
   }
-  resize() {
-    const widthDiff = this.initialWindowWidth - window.innerWidth
-    const heightDiff = this.initialWindowHeight - window.innerHeight
 
-    canvas.style.width = canvasWidth - widthDiff + "px";
-    canvas.style.height = canvasHeight - heightDiff + "px";
-    this.player.y = canvasHeight - heightDiff - this.player.height - 10;
-    this.enemies.forEach((e) => {
-      if (e instanceof AlienShip) {
-        const enemySize = Math.min(((canvasWidth - widthDiff) / 100) * 4, 50)
-        e.moveArea.end = canvasWidth - widthDiff
-        e.size.width = enemySize;
-        e.size.height = enemySize;
-        e.x = (e.size.width + 20) * e.col
-        e.y = (e.size.height + 10) * e.row
-        if (e.element) {
-          e.element.style.width = `${e.size.width}px`;
-          e.element.style.height = `${e.size.height}px`;
-        }
-      }
-
-    })
-    this.width = canvasWidth - widthDiff
-  }
-  update(deltaTime, timeStamp) {
+  update(deltaTime) {
     if (this.gameComplete()) return;
     this.toggleMenu();
     if (this.pausedGame) return;
     this.handleTimer(deltaTime);
-    // handle enemy wave movement and attack
     this.player.update(deltaTime);
-    // console.log(this.player.projectiles);
-    // Handle enemies (movement + attack)
     this.generateTorpedo(deltaTime)
-  
     this.enemies.forEach((enemy) => enemy.slide(deltaTime));
     const Torpedo_INSTANCE = this.enemies.filter(
       (enemy) => enemy instanceof Torpedo
@@ -92,18 +68,19 @@ export class Game {
       ALIENS_SHIPS.some(
         (ship) =>
           ship instanceof AlienShip &&
-          (ship.x + ship.size.width >= this.width || ship.x <= 0)
+          (ship.x + ship.defaultSize.width >= this.width || ship.x <= 0)
       )
     ) {
       ALIENS_SHIPS.forEach((ship) => {
         ship.direction *= -1;
-        ship.y += 20;
-        ship.speed += 0.4;
+        ship.y += 20 * this.scaleFactor;
+        ship.speed += 0.5 * this.scaleFactor;
       });
     }
 
     // check for collision between the player bullets and the enemies
     this.enemies.forEach((enemy, index) => {
+      if (enemy.y + enemy.height > this.height - this.dangerZoneHeight) this.lives = 0;
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(enemy, projectile)) {
           this.enemies.splice(index, 1);
@@ -115,8 +92,32 @@ export class Game {
       });
     });
 
+
+    canvas.classList.remove("fliker");
+    if (
+      ALIENS_SHIPS.some(
+        (ship) =>
+          ship instanceof AlienShip &&
+          ship.y + ship.height >= (this.height * 60) / 100
+      )
+    ) {
+      console.log('near danger zone')
+      canvas.classList.add("fliker")
+    }
+
     this.handleLives();
   }
+
+  scale() {
+    console.log(calculateScale())
+    console.log(window.innerWidth,innerHeight)
+    this.width = defaultCanvasWidth * this.scaleFactor
+    this.height = defaultCanvasHeight * this.scaleFactor
+    canvas.style.width = this.width + 'px'
+    canvas.style.height = this.height + 'px'
+    this.gameStatsElement.style.fontSize = this.scaleFactor * 16 + "px"
+  }
+
 
   toggleMenu() {
     if (this.pausedGame) this.menuElement.classList.remove("hide");
@@ -128,12 +129,12 @@ export class Game {
       if (enemyProjectile.markedForDeletion) {
         this.enemyProjectiles.splice(index, 1);
       }
+
       if (this.checkCollision(enemyProjectile, this.player)) {
-        // enemyProjectile.imgHolder.remove()
         enemyProjectile.imgHolder.remove();
         this.enemyProjectiles.splice(index, 1);
         this.lives -= 1;
-        this.livesElement.innerText = `❤️`.repeat(this.lives);
+        this.livesElement.innerText = `💜`.repeat(this.lives);
       }
     });
   }
@@ -147,7 +148,6 @@ export class Game {
   }
 
   generateEnemyBullets(ALIENS_SHIPS, deltaTime) {
-
     this.lastTime += deltaTime;
     if (this.lastTime >= this.shootInterval) {
       let shoots = new Set(
@@ -178,7 +178,7 @@ export class Game {
 
 
   generateEnemies() {
-    for (let row = 1; row < 5; row++) {
+    for (let row = 3; row < 6; row++) {
       for (let col = 1; col < 9; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
@@ -208,7 +208,6 @@ export class Game {
     this.enemies.forEach((enemy) => {
       enemy.element.remove(); // just in case if the torpedo is gone
     });
-    delete this.enemies
     this.enemies = [];
     this.keys = [];
     this.enemyProjectiles.forEach((enemyProjectile) => {
@@ -222,15 +221,12 @@ export class Game {
     this.scoreElement.innerHTML = 0;
     this.gameStateElement.classList.add("hide");
     this.overLayElement.classList.add('hide')
-
-
     this.generateEnemies();
-    this.resize()
   }
 
   gameComplete() {
     const enemies = this.enemies.filter((enemy) => enemy instanceof AlienShip);
-
+    let overlay = document.getElementById(".overLay")
     let time = this.timerElement.innerHTML
     let score = this.scoreElement.innerHTML
     let isWon = enemies.length === 0 && this.lives > 0;
@@ -245,8 +241,8 @@ export class Game {
       this.gameStateElement.querySelector("p").innerHTML = "You Lost !!";
     this.gameStateElement.classList.remove("hide");
     this.overLayElement.classList.remove('hide')
-
     return true;
   }
+
 
 }

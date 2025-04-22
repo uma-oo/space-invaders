@@ -10,23 +10,21 @@ export class Projectile {
     this.x = x;
     this.y = y;
     this.direction = direction;
-    this.speed = speed;
-    this.height = 18;
-    this.width = 18;
+    this.speed = speed * this.game.scaleFactor;
+    this.height = 18 * this.game.scaleFactor;
+    this.width = 18 * this.game.scaleFactor;
     this.currentFrame = 0;
-    this.totalFrames = 5;
     this.markedForDeletion = false;
+    this.totalFrames = 5;
     this.imgHolder = document.createElement("div");
     this.imgHolder.style.backgroundImage = `url(${this.image})`;
     this.imgHolder.style.backgroundPositionX = `calc( ${this.width} * ${this.currentFrame})`;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
     this.imgHolder.style.position = "absolute";
-    // this.imgHolder.style.zIndex = "0"
     this.lastTime = 0;
     this.lastAnimated = 1;
     this.animationDelay = 50;
-    // console.log("inside parent: ",this.imgHolder.style.backgroundImage);
     canvas.append(this.imgHolder);
   }
 
@@ -64,7 +62,8 @@ export class Projectile {
 export class TorpedoProjectile extends Projectile {
   constructor(image, game, x, y, direction, speed) {
     super(image, game, x, y, direction, speed);
-    (this.height = 18), (this.width = 9);
+    this.height = 18*this.game.scaleFactor; 
+    this.width = 9*this.game.scaleFactor;
     this.animationDelay = 100;
     this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
     this.imgHolder.style.width = `${this.width}px`;
@@ -85,8 +84,8 @@ export class TorpedoProjectile extends Projectile {
 export class Bullet extends Projectile {
   constructor(image, game, x, y, direction, speed) {
     super(image, game, x, y, direction, speed);
-    this.width = 19.5;
-    this.height = 38;
+    this.width = 19.5*this.game.scaleFactor;
+    this.height = 38*this.game.scaleFactor;
     this.animationDelay = 100;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;

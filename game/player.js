@@ -10,11 +10,13 @@ export class Player {
   constructor(game) {
     this.game = game
     this.canShoot = true
-    this.width = 50
-    this.height = 64
+    this.defaultWidth = 50
+    this.defaultheight = 64
+    this.width = this.defaultWidth  * this.game.scaleFactor
+    this.height = this.defaultheight * this.game.scaleFactor
     this.x = this.game.width / 2 - this.width / 2
     this.y = this.game.height - this.height - 10
-    this.speed = 10
+    this.speed = 7 * this.game.scaleFactor
     this.projectiles = []
     this.element = document.createElement("div")
     this.element.style.position = "absolute"
@@ -51,7 +53,7 @@ export class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        new Bullet(BULLET,this.game, this.x + (this.width - BULLET_WIDTH)/ 2, this.y, -1, 1)
+        new Bullet(BULLET,this.game, this.x + (this.width - BULLET_WIDTH)/ 2, this.y, -1,12 )
       );
     }
   }

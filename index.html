@@ -13,21 +13,26 @@
 <body>
     <audio src="https://cdn.jsdelivr.net/gh/DarkMethoss/Game-Assets@main/sounds/2.ogg" id="gameMusic" autoplay loop="true" ></audio>
     <audio src="./game/assets/sounds/bulletSound.mp3" id="lazerBullet"></audio>
-    <div class="gameUi">
-        <div class="score">Score: <span>0</span></div>
-        <div class="timer">Time: <span>00:00</span></div>
-        <div class="lives">Lives: <span>❤️ ❤️ ❤️</span></div>
-    </div>
-    <div class="menu hide center">
+    <div class="menu hide center fliker">
         <button class="restart">Restart</button>
         <button class="continue">Continue</button>
     </div>
     <div class="overLay hide"></div>
-    <div id="canvas">
-        <div class="layer1 layer">
-            <img class="img2" src="./game/assets/bg/bg5.png" alt="">
-            <img class="img1" src="./game/assets/bg/bg5.png" alt="">
+    <div id="canvas" class="fliker">
+        <div class="gameUi">
+            <div class="score">Score: <span>0</span></div>
+            <div class="timer">Time: <span>00:00</span></div>
+            <div class="lives">Lives: <span>💜💜💜</span></div>
         </div>
+        <div class="layer1 layer">
+            <img class="img1" src="./game/assets/bg/Frame8.png" alt="">
+            <img class="img2" src="./game/assets/bg/Frame9.png" alt="">
+        </div>
+        <div class="layer2 layer">
+            <img class="img2" src="./game/assets/bg/starts.png" alt="">
+            <img class="img1" src="./game/assets/bg/starts.png" alt="">
+        </div>
+        <div class="dangerZone"></div>
     </div>
     <div class="gameState center hide" >
         <p class="message"></p>

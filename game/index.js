@@ -5,7 +5,8 @@ export let canvas = document.getElementById("canvas");
 export let canvasWidth = window.innerWidth - window.innerWidth / 5;
 export let canvasHeight = 580;
 
-
+export let defaultCanvasWidth = 1000;
+export let defaultCanvasHeight = 850;
 
 canvas.style.width = canvasWidth + "px";
 canvas.style.height = canvasHeight + "px";
@@ -52,25 +53,40 @@ export class UserInput {
         }
       });
 
-    document.addEventListener("visibilitychange", () => {
-      this.game.pausedGame = true;
-    });
+      addEventListener("visibilitychange", () => {
+        this.game.pausedGame = true;
+      });
+      addEventListener("resize", () => {
+        this.game.scaleFactor = calculateScale()
+        this.game.scale()
+        this.game.reset()
+      })
   }
 }
 
-
-export let game = new Game(canvasWidth, canvasHeight);
-window.onresize = () => {
-  game.reset()
+export function calculateScale() {
+  if (window.innerWidth >= 1000 && window.innerHeight >= 850) {
+    return 1;
+  }
+  const scaleX = window.innerWidth / 1000;  // Original width = 1000px
+  const scaleY = window.innerHeight / 850;  // Original height = 850px
+  let scale = Math.min(scaleX, scaleY)
+  return scale
 }
+
+export let game = new Game(calculateScale());
+
+
 let lastTime = 0;
 function gameLoop(timeStamp) {
   let deltaTime = timeStamp - lastTime;
   lastTime = timeStamp;
-  game.update(deltaTime, timeStamp);
+  // console.log(innerWidth,innerHeight) 
+  let gameScaleFactor = calculateScale()
+  canvas.style.width = defaultCanvasWidth * gameScaleFactor + 'px'
+  canvas.style.height = defaultCanvasHeight * gameScaleFactor + 'px'
+  game.update(deltaTime, gameScaleFactor);
   requestAnimationFrame(gameLoop);
 }
-
-
 
 gameLoop(0);

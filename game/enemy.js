@@ -8,16 +8,14 @@ export class Enemy {
    */
 
   #destroyed = false;
-  constructor(spriteUrl, frames, size, moveArea) {
-    this.size = size;
+  constructor(spriteUrl, frames, defaultSize, moveArea) {
+    this.defaultSize = defaultSize;
     this.frames = frames;
     this.moveArea = moveArea;
-    const div = document.createElement("div");
-    div.style.transform = "rotate(180deg)";
-    div.style.backgroundImage = `url('${spriteUrl}')`;
-    div.style.width = `${this.size.width}px`;
-    div.style.height = `${this.size.height}px`;
-    div.classList.add("enemy");
+    this.element = document.createElement("div");
+    this.element.style.transform = "rotate(180deg)";
+    this.element.style.backgroundImage = `url('${spriteUrl}')`;
+    this.element.classList.add("enemy");
     this.speed = 1;
     this.stepDelay = 300;
     this.animationDelay = 400;
@@ -27,7 +25,6 @@ export class Enemy {
     this.currentFrame = 0;
     this.lastAnimated = 1;
     this.canShoot = false
-    this.element = div;
     this.time = 0
   }
   onEdge(step) {
@@ -35,28 +32,6 @@ export class Enemy {
     this.x -= step;
   }
 
-
-  // slide(time) {
-  //   const { start, end } = this.moveArea;
-
-  //   const style = this.element.style;
-  //   const elapsed = time - this.lastSlide;
-  //   const step =
-  //     this.speed *
-  //     this.direction *
-  //     ((elapsed / this.stepDelay) * this.pxPerStep);
-
-  //   this.x += step;
-  //   if (this.x < start || this.x + parseInt(style.width) > end) {
-  //     this.onEdge(step);
-  //   }
-  //   this.lastSlide = time;
-  //   style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px)`;
-  //   this.animate(time);
-
-  // }
-
-  
 
   animate(deltaTime) {
     this.time += deltaTime

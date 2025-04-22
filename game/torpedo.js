@@ -21,12 +21,16 @@ export class Torpedo extends Enemy {
     const size = { width: 58.5, height: 47 };
     super(TORPEDO_SPRITE, frames, size, moveArea);
     this.x = x;
-    this.y = y;
+    this.y = y + 50;
     this.game = game;
     this.offsetShoot = 1;
-    this.width = size.width;
-    this.height = size.height;
+    this.width = size.width * this.game.scaleFactor;
+    this.height = size.height * this.game.scaleFactor;
     this.score = 500;
+    this.element.style.border = 'solid 1px red'
+    this.element.style.width = `${this.width}px` 
+    this.element.style.height = `${this.height}px` 
+    // this.ele
   }
 
 
@@ -95,20 +99,20 @@ export class AlienShip extends Enemy {
       totalFrames: 1,
       frameSize: 42,
     };
-    const size = { width: 42, height: 42 };
-    super(ALIEN_SHIP_SPRITE, frames, size, moveArea);
-    this.row = row;
-    this.col = col;
+    const defaultSize = { width: 42, height: 42 };
+    super(ALIEN_SHIP_SPRITE, frames, defaultSize, moveArea);
     this.game = game;
-    this.x = (size.width + 20) * col;
-    this.y = (size.height + 10) * row;
-    this.element.style.zIndex = "1";
-    this.element.style.boxShadow = "-1px 1px 3px 2px black";
-    this.width = size.width;
-    this.height = size.height;
+    this.width = defaultSize.width * this.game.scaleFactor
+    this.height = defaultSize.height * this.game.scaleFactor
+    this.x = (this.width + 20 * this.game.scaleFactor ) * col 
+    this.y = (this.height + 10 * this.game.scaleFactor) * row 
     this.score = 150;
     this.speed = 1;
-    this.element.style.backgroundSize = "cover";
+    this.element.style.width = this.width + 'px'
+    this.element.style.height = this.height + 'px'
+    this.element.style.zIndex = '1'
+    this.element.style.backgroundSize = 'contain'
+    this.element.style.transform = `rotate(180deg) translate(${this.x}px,${-this.y}px`;
 
   }
 
