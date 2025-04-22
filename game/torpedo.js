@@ -3,6 +3,9 @@ import { Projectile, TorpedoProjectile } from "./projectile.js";
 const TORPEDO_SPRITE =
   "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
 const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/Frigate.png";
+const TORPEDO_PROJECTILE = "game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo_1.png"
+const PROJECTILE ="game/assets/Enemy/WeaponEffectsProjectiles/18px.png" 
+
 
 export class Torpedo extends Enemy {
   constructor(game, x, y, moveArea) {
@@ -58,8 +61,8 @@ export class Torpedo extends Enemy {
 
 
   shoot() {
-    console.log(this.offsetShoot);
       let shoot1 = new TorpedoProjectile(
+        TORPEDO_PROJECTILE,
         this.game,
         this.x + this.width / 2 - this.offsetShoot * 9,
         this.y,
@@ -67,6 +70,7 @@ export class Torpedo extends Enemy {
         4
       );
       let shoot2 = new TorpedoProjectile(
+        TORPEDO_PROJECTILE,
         this.game,
         this.x + this.width / 2 + this.offsetShoot * 9,
         this.y,
@@ -78,6 +82,12 @@ export class Torpedo extends Enemy {
   }
 
 }
+
+
+
+
+// aliens class 
+
 
 export class AlienShip extends Enemy {
   constructor(row, col, moveArea, game) {
@@ -111,6 +121,6 @@ export class AlienShip extends Enemy {
 
 
   shoot() {
-    return new Projectile(this.game, this.x + this.width / 2, this.y, 1, 5);
+    return new Projectile(PROJECTILE,this.game, this.x + this.width / 2, this.y, 1, 5);
   }
 }

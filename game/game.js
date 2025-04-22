@@ -64,8 +64,8 @@ export class Game {
     if (this.pausedGame) return;
     this.handleTimer(deltaTime);
     // handle enemy wave movement and attack
-    this.player.update();
-    
+    this.player.update(deltaTime);
+    // console.log(this.player.projectiles);
     // Handle enemies (movement + attack)
     this.generateTorpedo(deltaTime)
   
@@ -84,7 +84,6 @@ export class Game {
     );
     this.generateEnemyBullets(ALIENS_SHIPS, deltaTime);
    
-  
     this.enemyProjectiles.forEach((enemyShoot) => {
       enemyShoot.update(deltaTime);
     });

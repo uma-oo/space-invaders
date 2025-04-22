@@ -1,9 +1,9 @@
-import { Projectile } from "./projectile.js";
+import { Bullet } from "./projectile.js";
 
 
-const PLAYER_SHIP_IMAGE = "./game/assets/Enemy/chips/Dreadnought.png";
+const PLAYER_SHIP_IMAGE = "game/assets/Enemy/chips/Dreadnought.png";
 const layzerBulletSound = document.getElementById("lazerBullet");
-
+const BULLET ="game/assets/Player/Weapon EffectsProjectiles/Nautolan - Bullet.png"
 
 
 export class Player {
@@ -29,7 +29,7 @@ export class Player {
   }
   
   
-  update() {
+  update(deltaTime) {
     if (this.game.keys.includes("ArrowRight")) this.x += this.speed;
     if (this.game.keys.includes("ArrowLeft") && this.x > 0)
       this.x -= this.speed;
@@ -37,7 +37,7 @@ export class Player {
     if (this.x + this.width >= this.game.width)
       this.x = this.game.width - this.width;
     this.projectiles.forEach((projectile) => {
-      projectile.update();
+      projectile.update(deltaTime);
     });
     this.projectiles = this.projectiles.filter(
       (projectile) => !projectile.markedForDeletion
@@ -51,7 +51,7 @@ export class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        new Projectile(this.game, this.x + this.width / 2, this.y, -1, 10)
+        new Bullet(BULLET,this.game, this.x + this.width / 2, this.y, -1, 3)
       );
     }
   }
