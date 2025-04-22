@@ -63,7 +63,7 @@ export class Projectile {
 
 export class TorpedoProjectile extends Projectile {
   constructor(image, game, x, y, direction, speed) {
-    super("game/assets/Player/Weapon EffectsProjectiles/Ray.png", game, x, y, direction, speed);
+    super(image, game, x, y, direction, speed);
     (this.height = 18), (this.width = 9);
     this.animationDelay = 100;
     this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
@@ -87,13 +87,11 @@ export class Bullet extends Projectile {
     super(image, game, x, y, direction, speed);
     this.width = 19.5;
     this.height = 38;
-    this.animationDelay = 50;
+    this.animationDelay = 100;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
-    this.imgHolder.style.backgroundPositionX = `calc(-19.5 * 2)`;
+    this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
     this.totalFrames = 4;
-    this.imgHolder.style.zIndex = "10";
-    this.imgHolder.style.border = "solid 1px yellow";
     canvas.append(this.imgHolder);
   }
 
