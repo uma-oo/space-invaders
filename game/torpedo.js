@@ -1,11 +1,15 @@
+// imports 
+
 import { Enemy } from "./enemy.js";
-import { Projectile, TorpedoProjectile } from "./projectile.js";
-import { PLAYER_SHIP_IMAGE } from "./player.js";
-const TORPEDO_SPRITE =
-  "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
-const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png";
-const TORPEDO_PROJECTILE = "game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo_1.png"
-const PROJECTILE ="game/assets/Enemy/WeaponEffectsProjectiles/Ray2.png" 
+import { canvas } from "./index.js";
+import { Projectile } from "./alien.js";
+
+
+// setting the state of the torpedo
+
+const TORPEDO_SPRITE ="game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
+const TORPEDO_PROJECTILE = "game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo.png";
+
 
 
 export class Torpedo extends Enemy {
@@ -91,43 +95,28 @@ export class Torpedo extends Enemy {
 
 
 
-// aliens class 
-
-
-export class AlienShip extends Enemy {
-  constructor(row, col, moveArea, game) {
-    const frames = {
-      totalFrames: 1,
-      // frameSize: 50,
-    };
-    const defaultSize = { width: 34, height: 50 };
-    super(ALIEN_SHIP_SPRITE, frames, defaultSize, moveArea);
-    this.game = game;
-    this.width = defaultSize.width * this.game.scaleFactor
-    this.height = defaultSize.height * this.game.scaleFactor
-    this.x = (this.width + 30 * this.game.scaleFactor ) * col 
-    this.y = (this.height + 10 * this.game.scaleFactor) * row 
-    this.score = 150;
-    this.speed = 1;
-    this.element.style.width = this.width + 'px'
-    this.element.style.background = `url(${ALIEN_SHIP_SPRITE}) center no-repeat`
-    this.element.style.height = this.height + 'px'
-    this.element.style.zIndex = '1'
-    this.element.style.backgroundPosition = "center"
-    this.element.style.backgroundSize = 'contain'
-    this.element.style.transform = `rotate(180deg) translate(${this.x}px,${-this.y}px`;
-
+export class TorpedoProjectile extends Projectile {
+  constructor(image, game, x, y, direction, speed) {
+    super(image, game, x, y, direction, speed);
+    this.height = 24*this.game.scaleFactor; 
+    this.width = 9*this.game.scaleFactor;
+    this.animationDelay = 100;
+    this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
+    this.imgHolder.style.width = `${this.width}px`;
+    this.imgHolder.style.height = `${this.height}px`;
+    this.totalFrames = 4;
+    canvas.append(this.imgHolder);
   }
 
-  slide() {
-    const style = this.element.style;
-    const step = this.speed * this.direction;
-    this.x += step;
-    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px`;
-  }
-
-
-  shoot() {
-    return new Projectile(PROJECTILE,this.game, this.x + this.width / 2, this.y, 1, 5);
+  update(deltaTime) {
+    // wow js zwiiin
+    super.update(deltaTime);
+    this.imgHolder.style.transform = `rotate(180deg) translate(${-this
+      .x}px,${-this.y}px`;
+    super.animate(deltaTime);
   }
 }
+
+
+
+

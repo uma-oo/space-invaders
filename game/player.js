@@ -1,9 +1,11 @@
-import { Bullet } from "./projectile.js";
+
+import { canvas } from "./index.js";
+import { Projectile } from "./alien.js";
 
 
-export const PLAYER_SHIP_IMAGE = "game/assets/ShipsPNG/ship6.png";
+const PLAYER_SHIP_IMAGE = "game/assets/ShipsPNG/ship6.png";
 const layzerBulletSound = document.getElementById("lazerBullet");
-const BULLET ="game/assets/bullets/Wave.png"
+const BULLET ="game/assets/bullets/Wave_1.png"
 
 export class Player {
   constructor(game) {
@@ -62,5 +64,29 @@ export class Player {
     this.element.remove();
     this.projectiles.forEach((projectile) => projectile.imgHolder.remove());
     this.projectiles = [];
+  }
+}
+
+
+
+class Bullet extends Projectile {
+  constructor(image, game, x, y, direction, speed) {
+    super(image, game, x, y, direction, speed);
+    this.width = 64*this.game.scaleFactor;
+    this.height = 17*this.game.scaleFactor;
+    this.x -= this.width/2
+    this.animationDelay = 200;
+    this.imgHolder.style.width = `${this.width}px`;
+    this.imgHolder.style.height = `${this.height}px`;
+    console.log(this.imgHolder.style.width)
+    this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
+    this.totalFrames = 6;
+    canvas.append(this.imgHolder);
+  }
+
+  update(deltaTime) {
+    super.update(deltaTime);
+    this.imgHolder.style.transform = `translate(${this.x}px,${this.y}px`;
+    super.animate(deltaTime);
   }
 }

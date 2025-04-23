@@ -1,6 +1,7 @@
 import { UserInput, canvas, defaultCanvasHeight, defaultCanvasWidth, calculateScale } from "./index.js"
 import { Player } from "./player.js"
-import  {Torpedo, AlienShip} from "./torpedo.js"
+import  {Torpedo} from "./torpedo.js"
+import { AlienShip } from "./alien.js"
 
 
 
