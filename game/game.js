@@ -93,7 +93,7 @@ export class Game {
     });
 
 
-    canvas.classList.remove("fliker");
+    this.dangerZoneElement.classList.remove("fliker");
     if (
       ALIENS_SHIPS.some(
         (ship) =>
@@ -102,15 +102,13 @@ export class Game {
       )
     ) {
       console.log('near danger zone')
-      canvas.classList.add("fliker")
+      this.dangerZoneElement.classList.add("fliker")
     }
 
     this.handleLives();
   }
 
   scale() {
-    console.log(calculateScale())
-    console.log(window.innerWidth,innerHeight)
     this.width = defaultCanvasWidth * this.scaleFactor
     this.height = defaultCanvasHeight * this.scaleFactor
     canvas.style.width = this.width + 'px'
@@ -152,7 +150,7 @@ export class Game {
     if (this.lastTime >= this.shootInterval) {
       let shoots = new Set(
         Array.from(
-          { length: ALIENS_SHIPS.length > 4 ? 4 : ALIENS_SHIPS.length },
+          { length: ALIENS_SHIPS.length > 3 ? 3 : ALIENS_SHIPS.length },
           () => Math.floor(Math.random() * ALIENS_SHIPS.length)
         )
       );
@@ -178,8 +176,8 @@ export class Game {
 
 
   generateEnemies() {
-    for (let row = 3; row < 6; row++) {
-      for (let col = 1; col < 9; col++) {
+    for (let row = 2; row < 5; row++) {
+      for (let col = 1; col < 8; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );

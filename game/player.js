@@ -1,17 +1,16 @@
 import { Bullet } from "./projectile.js";
 
 
-const PLAYER_SHIP_IMAGE = "game/assets/Enemy/chips/Dreadnought.png";
+export const PLAYER_SHIP_IMAGE = "game/assets/ShipsPNG/ship6.png";
 const layzerBulletSound = document.getElementById("lazerBullet");
-const BULLET ="game/assets/Player/WeaponEffectsProjectiles/Ray.png"
-const BULLET_WIDTH = 19.5
+const BULLET ="game/assets/bullets/Wave.png"
 
 export class Player {
   constructor(game) {
     this.game = game
     this.canShoot = true
-    this.defaultWidth = 50
-    this.defaultheight = 64
+    this.defaultWidth = 64
+    this.defaultheight = 52
     this.width = this.defaultWidth  * this.game.scaleFactor
     this.height = this.defaultheight * this.game.scaleFactor
     this.x = this.game.width / 2 - this.width / 2
@@ -27,6 +26,7 @@ export class Player {
     this.element.style.width = `${this.width}px`
     this.element.style.height = `${this.height}px`
     this.element.style.transform = `translate(${this.x}px, ${this.y}px)`
+    // this.element.style.border = "solid 2px red"
     canvas.append(this.element);
   }
   
@@ -53,7 +53,7 @@ export class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        new Bullet(BULLET,this.game, this.x + (this.width - BULLET_WIDTH)/ 2, this.y, -1,12 )
+        new Bullet(BULLET,this.game, this.x + this.width/2  , this.y, -1,12 )
       );
     }
   }

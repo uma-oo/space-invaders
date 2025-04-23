@@ -11,13 +11,13 @@ export class Projectile {
     this.y = y;
     this.direction = direction;
     this.speed = speed * this.game.scaleFactor;
-    this.height = 18 * this.game.scaleFactor;
-    this.width = 18 * this.game.scaleFactor;
+    this.width = 19.5*this.game.scaleFactor;
+    this.height = 38*this.game.scaleFactor;
     this.currentFrame = 0;
     this.markedForDeletion = false;
-    this.totalFrames = 5;
+    this.totalFrames = 4;
     this.imgHolder = document.createElement("div");
-    this.imgHolder.style.backgroundImage = `url(${this.image})`;
+    this.imgHolder.style.background = `url(${this.image})` ;
     this.imgHolder.style.backgroundPositionX = `calc( ${this.width} * ${this.currentFrame})`;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
@@ -42,8 +42,8 @@ export class Projectile {
     if (this.markedForDeletion) {
       this.imgHolder.remove();
     }
-    this.imgHolder.style.transform = `rotate(180deg) translate(${-this
-      .x}px,${-this.y}px`;
+    this.imgHolder.style.transform = `translate(${this
+      .x}px,${this.y}px`;
     this.animate(deltaTime);
   }
 
@@ -62,13 +62,13 @@ export class Projectile {
 export class TorpedoProjectile extends Projectile {
   constructor(image, game, x, y, direction, speed) {
     super(image, game, x, y, direction, speed);
-    this.height = 18*this.game.scaleFactor; 
-    this.width = 9*this.game.scaleFactor;
+    this.height = 38*this.game.scaleFactor; 
+    this.width = 18*this.game.scaleFactor;
     this.animationDelay = 100;
     this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
-    this.totalFrames = 3;
+    this.totalFrames = 4;
     canvas.append(this.imgHolder);
   }
 
@@ -84,13 +84,15 @@ export class TorpedoProjectile extends Projectile {
 export class Bullet extends Projectile {
   constructor(image, game, x, y, direction, speed) {
     super(image, game, x, y, direction, speed);
-    this.width = 19.5*this.game.scaleFactor;
-    this.height = 38*this.game.scaleFactor;
-    this.animationDelay = 100;
+    this.width = 64*this.game.scaleFactor;
+    this.height = 64*this.game.scaleFactor;
+    this.x -= this.width/2
+    this.animationDelay = 200;
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
+    console.log(this.imgHolder.style.width)
     this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
-    this.totalFrames = 4;
+    this.totalFrames = 6;
     canvas.append(this.imgHolder);
   }
 

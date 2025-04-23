@@ -1,10 +1,11 @@
 import { Enemy } from "./enemy.js";
 import { Projectile, TorpedoProjectile } from "./projectile.js";
+import { PLAYER_SHIP_IMAGE } from "./player.js";
 const TORPEDO_SPRITE =
   "game/assets/Enemy/Weapons/PNGs/Nairan - Torpedo Ship - Weapons.png";
-const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/Frigate.png";
+const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png";
 const TORPEDO_PROJECTILE = "game/assets/Enemy/WeaponEffectsProjectiles/NairanTorpedo_1.png"
-const PROJECTILE ="game/assets/Enemy/WeaponEffectsProjectiles/18px.png" 
+const PROJECTILE ="game/assets/Enemy/WeaponEffectsProjectiles/Ray2.png" 
 
 
 export class Torpedo extends Enemy {
@@ -27,7 +28,7 @@ export class Torpedo extends Enemy {
     this.width = size.width * this.game.scaleFactor;
     this.height = size.height * this.game.scaleFactor;
     this.score = 500;
-    this.element.style.border = 'solid 1px red'
+    // this.element.style.border = 'solid 1px red'
     this.element.style.width = `${this.width}px` 
     this.element.style.height = `${this.height}px` 
     // this.ele
@@ -97,20 +98,22 @@ export class AlienShip extends Enemy {
   constructor(row, col, moveArea, game) {
     const frames = {
       totalFrames: 1,
-      frameSize: 42,
+      // frameSize: 50,
     };
-    const defaultSize = { width: 42, height: 42 };
+    const defaultSize = { width: 34, height: 50 };
     super(ALIEN_SHIP_SPRITE, frames, defaultSize, moveArea);
     this.game = game;
     this.width = defaultSize.width * this.game.scaleFactor
     this.height = defaultSize.height * this.game.scaleFactor
-    this.x = (this.width + 20 * this.game.scaleFactor ) * col 
+    this.x = (this.width + 30 * this.game.scaleFactor ) * col 
     this.y = (this.height + 10 * this.game.scaleFactor) * row 
     this.score = 150;
     this.speed = 1;
     this.element.style.width = this.width + 'px'
+    this.element.style.background = `url(${ALIEN_SHIP_SPRITE}) center no-repeat`
     this.element.style.height = this.height + 'px'
     this.element.style.zIndex = '1'
+    this.element.style.backgroundPosition = "center"
     this.element.style.backgroundSize = 'contain'
     this.element.style.transform = `rotate(180deg) translate(${this.x}px,${-this.y}px`;
 
