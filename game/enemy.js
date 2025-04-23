@@ -41,9 +41,9 @@ export class Enemy {
       const x = -this.frames.frameSize * this.currentFrame;
 
       style.backgroundPositionX = `${x}px, ${this.y}px`;
-       if (this.currentFrame===4 || this.currentFrame===7 || this.currentFrame ===10) {
+      if (this.currentFrame===4 || this.currentFrame===7 || this.currentFrame ===10) {
         this.canShoot = true
-       }
+      }
 
       if (this.currentFrame === this.frames.totalFrames - 1)  {
         this.frames.onLastFrame?.();

@@ -6,11 +6,19 @@
     <title>Document</title>
     <style>
         div {
-            width: 19.5px;
-            height:38px;
+            /* overflow: hidden; */
+            width: fit-content ;
+            height: fit-content;
+            /* display: inline-block; */
+
+            border: 1px yellow solid;
+            /* position: relative; */
+            /* background-image: url("./game/assets/Player/Weapon EffectsProjectiles/Ray.png"); */
+        }
+        img{
+            --frame : 1;
+            /* position: absolute; */
             border: 1px red solid;
-            background-position-x: calc(19.5 * 2) ;
-            background-image: url("./game/assets/Player/Weapon EffectsProjectiles/Ray.png");
         }
         body {
             background-color: black;
@@ -18,6 +26,39 @@
     </style>
 </head>
 <body>
-    <div></div>
+    <div>
+        <img src="./game/assets/bullets/Wave_1.png" alt="" >
+    </div>
+
 </body>
+    <script>
+
+    addEventListener("resize", () => {
+        let scale = calculateScale()
+        img.style.width = `${384*scale}px`
+        img.style.height = `${17*scale}px`
+        // div.style.width = `${64*scale}px`
+        // div.style.height = `${17*scale}px`
+        console.log(img.style.width)
+    })
+
+    function calculateScale() {
+    let initial_width = 384
+    let width =  document.documentElement.clientWidth
+    let height = document.documentElement.clientHeight
+
+    if (width >= 1000 && height >= 850) {
+    return 1;
+    }
+    const scaleX = width / 1000;  // Original width = 1000px
+    const scaleY = height / 850;  // Original height = 850px
+    let scale = Math.min(scaleX, scaleY)
+    return scale
+    }
+
+
+    let div = document.querySelector('div')
+    let img = document.querySelector('img')
+ 
+    </script>
 </html>

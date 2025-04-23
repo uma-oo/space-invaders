@@ -20,6 +20,16 @@ body {
     /* position: relative; */
 }
 
+.bullet{
+    border: solid red 1px;
+    position: relative;
+    /* overflow: hidden; */
+}
+.bullet img {
+        border: solid yellow 1px;
+    position: absolute;
+}
+
 #canvas {
     width: 1000px;
     height: 850px;
@@ -161,6 +171,9 @@ button {
     }
 }
 
+.recoil{
+    animation: recoil .5s;
+}
 
 @keyframes moveDown2 {
     from{
@@ -193,13 +206,23 @@ button {
     font-size: 14px;
     gap: 50px;
     justify-content: space-between;
-    z-index: 10;
 }
 
-
-.gameStats {
-    
+.gameState {
+    width: max-content;
 }
+
+.gameState .message {
+    color: black;
+    font-size: 150%;
+}
+
+/* .gameStats {
+    color: rgb(0, 0, 122);
+    span {
+        color: rgb(151, 151, 151);
+    }
+} */
 
 
 @media screen and (max-width: 600px) {

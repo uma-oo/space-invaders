@@ -22,8 +22,8 @@ export class AlienShip extends Enemy {
       this.height = defaultSize.height * this.game.scaleFactor
       this.x = (this.width + 30 * this.game.scaleFactor ) * col 
       this.y = (this.height + 10 * this.game.scaleFactor) * row 
-      this.score = 150;
-      this.speed = 1;
+      this.score = 150
+      this.speed = 1
       this.element.style.width = this.width + 'px'
       this.element.style.background = `url(${ALIEN_SHIP_SPRITE}) center no-repeat`
       this.element.style.height = this.height + 'px'
@@ -31,7 +31,8 @@ export class AlienShip extends Enemy {
       this.element.style.backgroundPosition = "center"
       this.element.style.backgroundSize = 'contain'
       this.element.style.transform = `rotate(180deg) translate(${this.x}px,${-this.y}px`;
-  
+      
+
     }
   
     slide() {
@@ -51,26 +52,34 @@ export class AlienShip extends Enemy {
 
   export class Projectile {
     constructor(image, game, x, y, direction, speed) {
+      this.spriteWidth = 72 
+      this.spriteHeight = 38
       this.image = image;
       this.game = game;
       this.x = x;
       this.y = y;
       this.direction = direction;
-      this.speed = speed * this.game.scaleFactor;
-      this.width = 18 *this.game.scaleFactor;
-      this.height = 27*this.game.scaleFactor;
+      this.speed = speed * this.game.scaleFactor * 0.1;
+      this.totalFrames = 4;
+      this.frameWidth = 18 * this.game.scaleFactor;
+      this.frameHeight = 27 * this.game.scaleFactor;
       this.currentFrame = 0;
       this.markedForDeletion = false;
-      this.totalFrames = 4;
       this.imgHolder = document.createElement("div");
-      this.imgHolder.style.background = `url(${this.image})` ;
-      this.imgHolder.style.backgroundPositionX = `calc( ${this.width} * ${this.currentFrame})`;
-      this.imgHolder.style.width = `${this.width}px`;
-      this.imgHolder.style.height = `${this.height}px`;
+      this.imgHolder.classList.add('bullet')
+      this.imgHolder.style.width = `${this.frameWidth}px`
+      this.imgHolder.style.height = `${this.frameHeight}px`
+      this.img = document.createElement("img")
+      this.img.src = PROJECTILE
+      this.img.style.width = this.spriteWidth * this.game.scaleFactor
+      this.img.style.height = this.spriteHeight * this.game.scaleFactor
+      console.log("here :",this.frameWidth , this.spriteWidth * this.game.scaleFactor)
+      // this.imgHolder.style.border = 'solid red 1px'
       this.imgHolder.style.position = "absolute";
       this.lastTime = 0;
       this.lastAnimated = 1;
-      this.animationDelay = 100;
+      this.animationDelay = 1000;
+      this.imgHolder.append(this.img)
       canvas.append(this.imgHolder);
     }
   
@@ -90,6 +99,10 @@ export class AlienShip extends Enemy {
       }
       this.imgHolder.style.transform = `translate(${this
         .x}px,${this.y}px`;
+
+      // console.log(this.currentFrame)
+      
+      
       this.animate(deltaTime);
     }
   
@@ -97,9 +110,8 @@ export class AlienShip extends Enemy {
       this.lastTime += deltaTime;
       if (this.lastTime - this.lastAnimated > this.animationDelay) {
         this.lastAnimated = this.lastTime;
-        const style = this.imgHolder.style;
-        const x = -this.currentFrame * this.direction * this.width;
-        style.backgroundPositionX = `${x}px, ${this.y}px`;
+        const x = -this.currentFrame * this.frameWidth;
+        this.img.style.transform = `translateX(${x}px)`;
         this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
       }
     }

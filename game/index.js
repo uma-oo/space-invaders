@@ -65,11 +65,15 @@ export class UserInput {
 }
 
 export function calculateScale() {
-  if (window.innerWidth >= 1000 && window.innerHeight >= 850) {
+  
+    let width =  document.documentElement.clientWidth
+    let height = document.documentElement.clientHeight
+  
+  if (width >= 1000 && height >= 850) {
     return 1;
   }
-  const scaleX = window.innerWidth / 1000;  // Original width = 1000px
-  const scaleY = window.innerHeight / 850;  // Original height = 850px
+  const scaleX = width / 1000;  // Original width = 1000px
+  const scaleY = height / 850;  // Original height = 850px
   let scale = Math.min(scaleX, scaleY)
   return scale
 }

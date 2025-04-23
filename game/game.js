@@ -14,7 +14,7 @@ export class Game {
     this.input = new UserInput(this)
     this.player = new Player(this)
     this.pausedGame = false
-    this.lives = 3
+    this.lives = 1
     this.score = 0
     this.timer = 0
     this.lastTime = 0
@@ -178,7 +178,7 @@ export class Game {
 
   generateEnemies() {
     for (let row = 2; row < 5; row++) {
-      for (let col = 1; col < 6; col++) {
+      for (let col = 1; col < 9; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );

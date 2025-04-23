@@ -2,7 +2,6 @@
 import { canvas } from "./index.js";
 import { Projectile } from "./alien.js";
 
-
 const PLAYER_SHIP_IMAGE = "game/assets/ShipsPNG/ship6.png";
 const layzerBulletSound = document.getElementById("lazerBullet");
 const BULLET ="game/assets/bullets/Wave_1.png"
@@ -34,6 +33,7 @@ export class Player {
   
   
   update(deltaTime) {
+    //  this.y -= 5
     if (this.game.keys.includes("ArrowRight")) this.x += this.speed;
     if (this.game.keys.includes("ArrowLeft") && this.x > 0)
       this.x -= this.speed;
@@ -66,8 +66,6 @@ export class Player {
     this.projectiles = [];
   }
 }
-
-
 
 class Bullet extends Projectile {
   constructor(image, game, x, y, direction, speed) {
