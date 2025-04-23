@@ -43,7 +43,7 @@ export class AlienShip extends Enemy {
   
   
     shoot() {
-      return new Projectile(PROJECTILE,this.game, this.x + this.width / 2, this.y, 1, 5);
+      return new Projectile(PROJECTILE,this.game, this.x + this.width / 2, this.y, 1, 8);
     }
   }
   
@@ -70,7 +70,7 @@ export class AlienShip extends Enemy {
       this.imgHolder.style.position = "absolute";
       this.lastTime = 0;
       this.lastAnimated = 1;
-      this.animationDelay = 50;
+      this.animationDelay = 100;
       canvas.append(this.imgHolder);
     }
   

@@ -151,7 +151,7 @@ export class Game {
     if (this.lastTime >= this.shootInterval) {
       let shoots = new Set(
         Array.from(
-          { length: ALIENS_SHIPS.length > 3 ? 3 : ALIENS_SHIPS.length },
+          { length: ALIENS_SHIPS.length > 4 ? 4 : ALIENS_SHIPS.length },
           () => Math.floor(Math.random() * ALIENS_SHIPS.length)
         )
       );
@@ -178,7 +178,7 @@ export class Game {
 
   generateEnemies() {
     for (let row = 2; row < 5; row++) {
-      for (let col = 1; col < 8; col++) {
+      for (let col = 1; col < 6; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
