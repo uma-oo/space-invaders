@@ -18,15 +18,15 @@ export class AlienShip extends Enemy {
       const defaultSize = { width: 34, height: 50 };
       super(ALIEN_SHIP_SPRITE, frames, defaultSize, moveArea);
       this.game = game;
-      this.width = defaultSize.width * this.game.scaleFactor
-      this.height = defaultSize.height * this.game.scaleFactor
-      this.x = (this.width + 30 * this.game.scaleFactor ) * col 
-      this.y = (this.height + 10 * this.game.scaleFactor) * row 
+      this.frameWidth = defaultSize.width * this.game.scaleFactor
+      this.frameHeight = defaultSize.height * this.game.scaleFactor
+      this.x = (this.frameWidth + 30 * this.game.scaleFactor ) * col 
+      this.y = (this.frameHeight + 10 * this.game.scaleFactor) * row 
       this.score = 150
       this.speed = 1
-      this.element.style.width = this.width + 'px'
+      this.element.style.width = this.frameWidth + 'px'
       this.element.style.background = `url(${ALIEN_SHIP_SPRITE}) center no-repeat`
-      this.element.style.height = this.height + 'px'
+      this.element.style.height = this.frameHeight + 'px'
       this.element.style.zIndex = '1'
       this.element.style.backgroundPosition = "center"
       this.element.style.backgroundSize = 'contain'
@@ -44,7 +44,7 @@ export class AlienShip extends Enemy {
   
   
     shoot() {
-      return new Projectile(PROJECTILE,this.game, this.x + this.width / 2, this.y, 1, 8);
+      return new Projectile(PROJECTILE,this.game, this.x + this.frameWidth / 2, this.y, 1, 8);
     }
   }
   
@@ -73,15 +73,17 @@ export class AlienShip extends Enemy {
       this.img.src = PROJECTILE
       this.img.style.width = this.spriteWidth * this.game.scaleFactor + 'px'
       this.img.style.height = this.spriteHeight * this.game.scaleFactor + 'px'
-      this.imgHolder.style.position = "absolute";
       this.lastTime = 0;
       this.lastAnimated = 1;
-      this.animationDelay = 1000;
+      this.animationDelay = 200;
       this.imgHolder.append(this.img)
       canvas.append(this.imgHolder);
     }
   
     update(deltaTime) {
+      if (this.markedForDeletion) {
+        this.imgHolder.remove();
+      }
       if (this.direction === -1) {
         if (this.y < 0) {
           this.markedForDeletion = true;
@@ -92,12 +94,9 @@ export class AlienShip extends Enemy {
         }
       }
       this.y += this.speed * this.direction;
-      if (this.markedForDeletion) {
-        this.imgHolder.remove();
-      }
       this.imgHolder.style.transform = `translate(${this
         .x}px,${this.y}px`;
-      // console.log(this.currentFrame)
+      
       this.animate(deltaTime);
     }
   

@@ -1,3 +1,5 @@
+import { canvas } from "./index.js";
+
 export class Enemy {
   /**
    * @param {string} spriteUrl
@@ -7,10 +9,9 @@ export class Enemy {
    */
 
   #destroyed = false;
-  constructor(spriteUrl, frames, defaultSize, moveArea) {
+  constructor(spriteUrl, frames, defaultSize) {
     this.defaultSize = defaultSize
     this.frames = frames
-    this.moveArea = moveArea
     this.element = document.createElement("div")
     this.element.style.transform = "rotate(180deg)"
     this.element.style.backgroundImage = `url('${spriteUrl}')`
@@ -25,12 +26,10 @@ export class Enemy {
     this.lastAnimated = 1
     this.canShoot = false
     this.time = 0
+    canvas.append(this.element)
   }
 
-  onEdge(step) {
-    this.direction *= -1
-    this.x -= step
-  }
+  
 
 
   animate(deltaTime) {

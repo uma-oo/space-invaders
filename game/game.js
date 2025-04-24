@@ -1,4 +1,4 @@
-import { UserInput, canvas, defaultCanvasHeight, defaultCanvasWidth, calculateScale } from "./index.js"
+import { UserInput, canvas, DEFAULT_CANVAS_HEIGHT, DEFAULT_CANVAS_WIDTH, calculateScale } from "./index.js"
 import { Player } from "./player.js"
 import  {Torpedo} from "./torpedo.js"
 import { AlienShip } from "./alien.js"
@@ -9,8 +9,8 @@ import { AlienShip } from "./alien.js"
 export class Game {
   constructor(scale) {
     this.scaleFactor = scale
-    this.width = defaultCanvasWidth * scale
-    this.height = defaultCanvasHeight * scale
+    this.width = DEFAULT_CANVAS_WIDTH * scale
+    this.height = DEFAULT_CANVAS_HEIGHT * scale
     this.input = new UserInput(this)
     this.player = new Player(this)
     this.pausedGame = false
@@ -108,8 +108,8 @@ export class Game {
   }
 
   scale() {
-    this.width = defaultCanvasWidth * this.scaleFactor
-    this.height = defaultCanvasHeight * this.scaleFactor
+    this.width = DEFAULT_CANVAS_WIDTH * this.scaleFactor
+    this.height = DEFAULT_CANVAS_HEIGHT * this.scaleFactor
     canvas.style.width = this.width + 'px'
     canvas.style.height = this.height + 'px'
     this.gameStatsElement.style.fontSize = this.scaleFactor * 16 + "px"
@@ -164,10 +164,8 @@ export class Game {
 
   generateTorpedo(deltaTime){
     this.lastTimeTorpedoGenerated+= deltaTime
-    const torpedo = new Torpedo(this,50, 0, { start: 0, end: this.width - 50 });
-    if (this.lastTimeTorpedoGenerated>=5000 && this.enemies.filter(enemy => enemy instanceof Torpedo).length===0 ) {
-      this.enemies.push(torpedo);
-      canvas.append(torpedo.element)
+    if (this.lastTimeTorpedoGenerated>=10000 && this.enemies.filter(enemy => enemy instanceof Torpedo).length===0 ) {
+      this.enemies.push(new Torpedo(this,0, 0));
       this.lastTimeTorpedoGenerated=0
     }
   }
@@ -184,10 +182,6 @@ export class Game {
   }
 
   checkCollision(rect1, rect2) {
-    console.log(
-      rect1,rect2
-    )
-
     return (
       rect1.x < rect2.x + rect2.frameWidth &&
       rect1.x + rect1.frameWidth > rect2.x &&

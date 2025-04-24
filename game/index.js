@@ -2,14 +2,9 @@
 import {Game}  from "./game.js"
 
 export let canvas = document.getElementById("canvas");
-export let canvasWidth = window.innerWidth - window.innerWidth / 5;
-export let canvasHeight = 580;
 
-export let defaultCanvasWidth = 1000;
-export let defaultCanvasHeight = 850;
-
-canvas.style.width = canvasWidth + "px";
-canvas.style.height = canvasHeight + "px";
+export let DEFAULT_CANVAS_WIDTH = 1000;
+export let DEFAULT_CANVAS_HEIGHT = 850;
 
 
 export class UserInput {
@@ -85,8 +80,8 @@ function gameLoop(timeStamp) {
   lastTime = timeStamp;
   // console.log(innerWidth,innerHeight) 
   let gameScaleFactor = calculateScale()
-  canvas.style.width = defaultCanvasWidth * gameScaleFactor + 'px'
-  canvas.style.height = defaultCanvasHeight * gameScaleFactor + 'px'
+  canvas.style.width = DEFAULT_CANVAS_WIDTH * gameScaleFactor + 'px'
+  canvas.style.height = DEFAULT_CANVAS_HEIGHT * gameScaleFactor + 'px'
   game.update(deltaTime, gameScaleFactor);
   requestAnimationFrame(gameLoop);
 }

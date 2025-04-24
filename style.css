@@ -22,7 +22,7 @@ body {
 
 .bullet{
     /* border: solid red 1px; */
-    position: relative;
+    position: absolute;
     overflow: hidden;
 }
 .bullet img {

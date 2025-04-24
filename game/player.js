@@ -12,10 +12,10 @@ export class Player {
     this.canShoot = true
     this.defaultWidth = 64
     this.defaultheight = 52
-    this.width = this.defaultWidth  * this.game.scaleFactor
-    this.height = this.defaultheight * this.game.scaleFactor
-    this.x = this.game.width / 2 - this.width / 2
-    this.y = this.game.height - this.height - 10
+    this.frameWidth = this.defaultWidth  * this.game.scaleFactor
+    this.frameHeight = this.defaultheight * this.game.scaleFactor
+    this.x = this.game.width / 2 - this.frameWidth / 2
+    this.y = this.game.height - this.frameHeight - 10
     this.speed = 7 * this.game.scaleFactor
     this.projectiles = []
     this.element = document.createElement("div")
@@ -24,8 +24,8 @@ export class Player {
     this.element.style.background = `url(${PLAYER_SHIP_IMAGE}) center no-repeat`
     this.element.style.backgroundSize = "contain"
     this.element.style.backgroundPosition = "center"
-    this.element.style.width = `${this.width}px`
-    this.element.style.height = `${this.height}px`
+    this.element.style.width = `${this.frameWidth}px`
+    this.element.style.height = `${this.frameHeight}px`
     this.element.style.transform = `translate(${this.x}px, ${this.y}px)`
     // this.element.style.border = "solid 2px red"
     canvas.append(this.element);
@@ -38,8 +38,8 @@ export class Player {
     if (this.game.keys.includes("ArrowLeft") && this.x > 0)
       this.x -= this.speed;
     if (this.game.keys.includes(" ")) this.shoot();
-    if (this.x + this.width >= this.game.width)
-      this.x = this.game.width - this.width;
+    if (this.x + this.frameWidth >= this.game.width)
+      this.x = this.game.width - this.frameWidth;
     this.projectiles.forEach((projectile) => {
       projectile.update(deltaTime);
     });
@@ -55,7 +55,7 @@ export class Player {
       setTimeout(() => (this.canShoot = true), 600);
       layzerBulletSound.play();
       this.projectiles.push(
-        new Bullet(BULLET,this.game, this.x + this.width/2  , this.y, -1,12 )
+        new Bullet(BULLET,this.game, this.x + this.frameWidth/2  , this.y, -1,12 )
       );
     }
   }
@@ -74,20 +74,18 @@ class Bullet extends Projectile {
     this.spriteHeight = 17
     this.frameWidth = 64*this.game.scaleFactor;
     this.frameHeight = 17*this.game.scaleFactor;
+    this.totalFrames = 6;
     this.animationDelay = 200;
     this.x -= this.frameWidth /2
-    this.img = document.createElement("img")
-    this.img.src = image
-    this.img.style.width = this.spriteWidth * this.game.scaleFactor + 'px'
-    this.img.style.height = this.spriteHeight * this.game.scaleFactor + 'px'
     this.imgHolder.style.width = `${this.frameWidth}px`;
     this.imgHolder.style.height = `${this.frameHeight}px`;
-    this.totalFrames = 6;
+    this.img = document.createElement('img')
+    this.img.style.width = this.spriteWidth * this.game.scaleFactor + 'px'
+    this.img.style.height = this.spriteHeight * this.game.scaleFactor + 'px'
+    this.img.src = image
     this.imgHolder.innerHTML = ''
-    console.log(this.img)
     this.imgHolder.append(this.img)
-    console.log(this.imgHolder)
-    this.imgHolder.style.border = 'solid red 1px'
+    canvas.append(this.imgHolder);
   }
 
   update(deltaTime) {
