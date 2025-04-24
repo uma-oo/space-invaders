@@ -11,14 +11,22 @@
 </head>
 
 <body>
-    <audio src="https://cdn.jsdelivr.net/gh/DarkMethoss/Game-Assets@main/sounds/2.ogg" id="gameMusic" autoplay loop="true" ></audio>
-    <audio src="./game/assets/sounds/bulletSound.mp3" id="lazerBullet"></audio>
-    <div class="menu hide center fliker">
-        <button class="restart">Restart</button>
-        <button class="continue">Continue</button>
+
+    <div class="menu hide center">
+        <h2>
+            <img class="gameIcon" src="./game/assets/favicon.png" alt="">
+            <span> Space<br>Invaders. </span>
+        </h2>
+
+
+        <div>
+            <button class="restart">Restart</button>
+            <button class="continue">Continue</button>
+        </div>
     </div>
-    <div class="overLay hide"></div>
-    <div id="canvas" >
+    
+    
+    <div id="canvas">
         <div class="gameUi">
             <div class="score">Score: <span>0</span></div>
             <div class="timer">Time: <span>00:00</span></div>
@@ -34,7 +42,8 @@
         </div>
         <div class="dangerZone"></div>
     </div>
-    <div class="gameState center hide" >
+    
+    <div class="gameState center hide">
         <p class="message"></p>
         <div class="gameStats">
             <div class="time">Time: <span></span></div>
@@ -42,6 +51,12 @@
         </div>
         <button class="restart">Play Again</button>
     </div>
+    <div class="overLay hide"></div>
+    
+    <!-- audios -->
+    <audio src="https://cdn.jsdelivr.net/gh/DarkMethoss/Game-Assets@main/sounds/2.ogg" id="gameMusic" autoplay
+        loop="true"></audio>
+    <audio src="./game/assets/sounds/bulletSound.mp3" id="lazerBullet"></audio>
 </body>
 
 </html>
