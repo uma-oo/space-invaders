@@ -102,6 +102,7 @@ export class TorpedoProjectile extends Projectile {
     this.width = 9*this.game.scaleFactor;
     this.animationDelay = 100;
     this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
+    this.img = document.createElement('img');
     this.imgHolder.style.width = `${this.width}px`;
     this.imgHolder.style.height = `${this.height}px`;
     this.totalFrames = 4;

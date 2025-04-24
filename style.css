@@ -21,12 +21,12 @@ body {
 }
 
 .bullet{
-    border: solid red 1px;
+    /* border: solid red 1px; */
     position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 .bullet img {
-        border: solid yellow 1px;
+        /* border: solid yellow 1px; */
     position: absolute;
 }
 

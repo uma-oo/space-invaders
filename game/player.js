@@ -70,16 +70,24 @@ export class Player {
 class Bullet extends Projectile {
   constructor(image, game, x, y, direction, speed) {
     super(image, game, x, y, direction, speed);
-    this.width = 64*this.game.scaleFactor;
-    this.height = 17*this.game.scaleFactor;
-    this.x -= this.width/2
+    this.spriteWidth = 384
+    this.spriteHeight = 17
+    this.frameWidth = 64*this.game.scaleFactor;
+    this.frameHeight = 17*this.game.scaleFactor;
     this.animationDelay = 200;
-    this.imgHolder.style.width = `${this.width}px`;
-    this.imgHolder.style.height = `${this.height}px`;
-    console.log(this.imgHolder.style.width)
-    this.imgHolder.style.backgroundPositionX = `calc(${this.width} * ${this.currentFrame})`;
+    this.x -= this.frameWidth /2
+    this.img = document.createElement("img")
+    this.img.src = image
+    this.img.style.width = this.spriteWidth * this.game.scaleFactor + 'px'
+    this.img.style.height = this.spriteHeight * this.game.scaleFactor + 'px'
+    this.imgHolder.style.width = `${this.frameWidth}px`;
+    this.imgHolder.style.height = `${this.frameHeight}px`;
     this.totalFrames = 6;
-    canvas.append(this.imgHolder);
+    this.imgHolder.innerHTML = ''
+    console.log(this.img)
+    this.imgHolder.append(this.img)
+    console.log(this.imgHolder)
+    this.imgHolder.style.border = 'solid red 1px'
   }
 
   update(deltaTime) {

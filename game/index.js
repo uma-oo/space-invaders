@@ -12,7 +12,6 @@ canvas.style.width = canvasWidth + "px";
 canvas.style.height = canvasHeight + "px";
 
 
-
 export class UserInput {
   constructor(game) {
     this.game = game
@@ -25,7 +24,6 @@ export class UserInput {
       this.game.overLayElement.classList.add('hide')
       this.game.pausedGame = false;
     }),
-
 
     // restarts options
     

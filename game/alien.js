@@ -1,7 +1,7 @@
 import { Enemy } from "./enemy.js";
 import { canvas } from "./index.js";
 
-const PROJECTILE ="game/assets/bullets/Ray.png" 
+const PROJECTILE = "game/assets/bullets/Ray.png" 
 const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png";
 
 
@@ -59,7 +59,7 @@ export class AlienShip extends Enemy {
       this.x = x;
       this.y = y;
       this.direction = direction;
-      this.speed = speed * this.game.scaleFactor * 0.1;
+      this.speed = speed * this.game.scaleFactor ;
       this.totalFrames = 4;
       this.frameWidth = 18 * this.game.scaleFactor;
       this.frameHeight = 27 * this.game.scaleFactor;
@@ -71,10 +71,8 @@ export class AlienShip extends Enemy {
       this.imgHolder.style.height = `${this.frameHeight}px`
       this.img = document.createElement("img")
       this.img.src = PROJECTILE
-      this.img.style.width = this.spriteWidth * this.game.scaleFactor
-      this.img.style.height = this.spriteHeight * this.game.scaleFactor
-      console.log("here :",this.frameWidth , this.spriteWidth * this.game.scaleFactor)
-      // this.imgHolder.style.border = 'solid red 1px'
+      this.img.style.width = this.spriteWidth * this.game.scaleFactor + 'px'
+      this.img.style.height = this.spriteHeight * this.game.scaleFactor + 'px'
       this.imgHolder.style.position = "absolute";
       this.lastTime = 0;
       this.lastAnimated = 1;
@@ -99,10 +97,7 @@ export class AlienShip extends Enemy {
       }
       this.imgHolder.style.transform = `translate(${this
         .x}px,${this.y}px`;
-
       // console.log(this.currentFrame)
-      
-      
       this.animate(deltaTime);
     }
   

@@ -18,7 +18,7 @@ export class Game {
     this.score = 0
     this.timer = 0
     this.lastTime = 0
-    this.shootInterval = 3000
+    this.shootInterval = 5000
     this.keys = []
     this.enemies = []
     this.enemyProjectiles = []
@@ -60,7 +60,6 @@ export class Game {
       (enemy) => enemy instanceof AlienShip
     );
     this.generateEnemyBullets(ALIENS_SHIPS, deltaTime);
-   
     this.enemyProjectiles.forEach((enemyShoot) => {
       enemyShoot.update(deltaTime);
     });
@@ -102,7 +101,6 @@ export class Game {
           ship.y + ship.height >= (this.height * 60) / 100
       )
     ) {
-      console.log('near danger zone')
       this.dangerZoneElement.classList.add("fliker")
     }
 
@@ -172,13 +170,11 @@ export class Game {
       canvas.append(torpedo.element)
       this.lastTimeTorpedoGenerated=0
     }
-   
   }
-
 
   generateEnemies() {
     for (let row = 2; row < 5; row++) {
-      for (let col = 1; col < 9; col++) {
+      for (let col = 1; col < 8; col++) {
         this.enemies.push(
           new AlienShip(row, col, { start: 0, end: this.width }, this)
         );
@@ -188,11 +184,15 @@ export class Game {
   }
 
   checkCollision(rect1, rect2) {
+    console.log(
+      rect1,rect2
+    )
+
     return (
-      rect1.x < rect2.x + rect2.width &&
-      rect1.x + rect1.width > rect2.x &&
-      rect1.y < rect2.y + rect2.height &&
-      rect1.height + rect1.y > rect2.y
+      rect1.x < rect2.x + rect2.frameWidth &&
+      rect1.x + rect1.frameWidth > rect2.x &&
+      rect1.y < rect2.y + rect2.frameHeight &&
+      rect1.frameHeight + rect1.y > rect2.y
     );
   }
 
