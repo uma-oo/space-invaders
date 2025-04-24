@@ -56,6 +56,7 @@ export class Enemy {
       this.destroy();
     };
   }
+
   freeze() {
     this.frames.totalFrames = 0;
   }

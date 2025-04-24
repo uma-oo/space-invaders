@@ -7,7 +7,7 @@ import { Projectile } from "./alien.js";
 
 // setting the state of the torpedo
 
-const TORPEDO_SPRITE = "game/assets/Enemy/Weapons/Nairan - Torpedo Ship - Weapons.png";
+const TORPEDO_SPRITE = "game/assets/Enemy/chips/newTorpedo.png";
 const TORPEDO_PROJECTILE = "game/assets/bullets/NairanTorpedo1.png";
 
 
@@ -15,7 +15,7 @@ const TORPEDO_PROJECTILE = "game/assets/bullets/NairanTorpedo1.png";
 export class Torpedo extends Enemy {
   constructor(game, x, y) {
     const frames = {
-      totalFrames: 12,
+      totalFrames: 1,
       frameSize: 64,
       onLastFrame: () => {
         this.hide();
@@ -23,7 +23,7 @@ export class Torpedo extends Enemy {
       },
     };
 
-    const size = { width: 58.5, height: 47 };
+    const size = { width: 64, height: 52 };
     super(TORPEDO_SPRITE, frames, size);
     this.x = x;
     this.y = y + 50;
@@ -32,10 +32,10 @@ export class Torpedo extends Enemy {
     this.frameWidth = size.width * this.game.scaleFactor;
     this.frameHeight = size.height * this.game.scaleFactor;
     this.score = 500;
-    this.speed = 8 * this.game.scaleFactor
+    this.speed = 5 * this.game.scaleFactor
     this.element.style.width = `${this.frameWidth}px` 
     this.element.style.height = `${this.frameHeight}px` 
-    this.element.style.border = 'solid 1px red '
+    // this.element.style.border = 'solid 1px red '
     this.element.style.position = 'absolute'
   }
 
@@ -49,14 +49,14 @@ export class Torpedo extends Enemy {
     const style = this.element.style;
     const step = this.speed * this.direction;
     this.x += step;
-    if (this.currentFrame === this.frames.totalFrames - 1) {
-      this.destroy();
-    }
+    // if (this.currentFrame === this.frames.totalFrames - 1) {
+    //   this.destroy();
+    // }
     if (this.x < 0 || this.x + this.frameWidth > this.game.width) {
       this.onEdge(step);
     }
-    style.transform = `rotate(180deg) translate(${-this.x}px,${-this.y}px`;
-    this.animate(deltaTime);
+    style.transform = `translate(${this.x}px,${this.y}px`;
+    // this.animate(deltaTime);
   }
 
   destroy() {

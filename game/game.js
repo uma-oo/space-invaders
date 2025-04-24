@@ -80,7 +80,7 @@ export class Game {
 
     // check for collision between the player bullets and the enemies
     this.enemies.forEach((enemy, index) => {
-      if (enemy.y + enemy.height > this.height - this.dangerZoneHeight) this.lives = 0;
+      if (enemy.y + enemy.frameHeight > this.height - this.dangerZoneHeight) this.lives = 0;
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(enemy, projectile)) {
           this.enemies.splice(index, 1);
