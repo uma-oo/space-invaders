@@ -8,7 +8,7 @@ export let DEFAULT_CANVAS_HEIGHT = 850;
 export let game;
 
 
-addEventListener
+// addEventListener
 
 document.querySelector('#startGameBtn').onclick = () => countDown(3)
 
@@ -37,7 +37,6 @@ export function calculateScale() {
 }
 
 function countDown(time) {
-  console.log('start countDown')
   document.querySelector(".gameStartMenu").classList.add('hide')
   if (time >= 0) {
     document.querySelector('.counterDown').innerHTML = time === 0 ? "Go!!" : time

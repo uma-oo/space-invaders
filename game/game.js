@@ -16,7 +16,7 @@ export class Game {
     this.input = new UserInput(this);
     this.player = new Player(this);
     this.pausedGame = false;
-    this.lives = 1;
+    this.lives = 3;
     this.score = 0;
     this.timer = 0;
     this.lastTime = 0;
@@ -85,13 +85,13 @@ export class Game {
         this.lives = 0;
       this.player.projectiles.forEach((projectile) => {
         if (this.checkCollision(enemy, projectile)) {
-          this.enemies.splice(index, 1);
           this.score += enemy.score;
           this.scoreElement.innerHTML = `${this.score}`;
           projectile.markedForDeletion = true;
           if (enemy instanceof Torpedo) {
             this.lastTimeTorpedoGenerated=0
           }
+          this.enemies.splice(index, 1);
           enemy.destroy();
         }
       });
@@ -127,13 +127,14 @@ export class Game {
 
   handleLives() {
     this.enemyProjectiles.forEach((enemyProjectile, index) => {
-      if (enemyProjectile.markedForDeletion) {
-        this.enemyProjectiles.splice(index, 1);
-      }
+      // if (enemyProjectile.markedForDeletion) {
+        
+      // }
 
       if (this.checkCollision(enemyProjectile, this.player)) {
-        enemyProjectile.imgHolder.remove();
-        this.enemyProjectiles.splice(index, 1);
+        // enemyProjectile.imgHolder.remove();
+        // this.enemyProjectiles.splice(index, 1);
+        enemyProjectile.markedForDeletion = true
         this.lives -= 1;
         if (this.lives >= 0) {
           this.livesElement.innerText = `💜`.repeat(this.lives);

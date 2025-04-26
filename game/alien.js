@@ -1,5 +1,6 @@
 import { Enemy } from "./enemy.js";
 import { canvas } from "./index.js";
+// import { TorpedoProjectile } from "./torpedo.js";
 
 const PROJECTILE = "game/assets/bullets/Ray.png" 
 const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png";
@@ -81,9 +82,6 @@ export class AlienShip extends Enemy {
     }
   
     update(deltaTime) {
-      if (this.markedForDeletion) {
-        this.imgHolder.remove();
-      }
       if (this.direction === -1) {
         if (this.y < 0) {
           this.markedForDeletion = true;
@@ -93,11 +91,16 @@ export class AlienShip extends Enemy {
           this.markedForDeletion = true;
         }
       }
+      if (this.markedForDeletion) {
+        let index = this.game.enemyProjectiles.indexOf(this)
+        if (index !== -1 ) this.game.enemyProjectiles.splice(index, 1);
+        this.imgHolder.remove();
+      }
+
       this.y += this.speed * this.direction;
-      this.imgHolder.style.transform = `translate(${this
-        .x}px,${this.y}px`;
-      
-      this.animate(deltaTime);
+      this.imgHolder.style.transform = `translate(${this.x}px,${this.y}px`
+      this.animate(deltaTime)
+
     }
   
     animate(deltaTime) {
