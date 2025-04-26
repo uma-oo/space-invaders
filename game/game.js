@@ -1,9 +1,9 @@
 import {
-  UserInput,
   canvas,
   DEFAULT_CANVAS_HEIGHT,
   DEFAULT_CANVAS_WIDTH,
 } from "./index.js";
+import { UserInput } from "./playerInput.js";
 import { Player } from "./player.js";
 import { Torpedo } from "./torpedo.js";
 import { AlienShip } from "./alien.js";

@@ -1,67 +1,32 @@
 
-import {Game}  from "./game.js"
+import { Game } from "./game.js"
 
 export let canvas = document.getElementById("canvas");
-
 export let DEFAULT_CANVAS_WIDTH = 1000;
 export let DEFAULT_CANVAS_HEIGHT = 850;
 
+export let game;
 
-export class UserInput {
-  constructor(game) {
-    this.game = game
-    this.continue = document.querySelector(".continue")
-    this.restarts = document.querySelectorAll(".restart")
 
-    // event listeners 
-    // continue button 
-    this.continue.addEventListener("click", () => {
-      this.game.overLayElement.classList.add('hide')
-      this.game.pausedGame = false;
-    }),
+addEventListener
 
-    // restarts options
-    
-      this.restarts.forEach((restart) => {
-        restart.addEventListener("click", () => {
-          this.game.reset();
-        });
-      });
+document.querySelector('#startGameBtn').onclick = () => countDown(3)
 
-    addEventListener("keydown", (e) => {
-      if (
-        (e.key === "ArrowRight" || e.key === "ArrowLeft" || e.key === " ") &&
-        this.game.keys.indexOf(e.key) === -1
-      ) {
-        this.game.keys.push(e.key);
-      }
-      if (e.key === "Escape") {
-        this.game.overLayElement.classList.remove('hide')
-        this.game.pausedGame = true;
-      }
-    }),
-      addEventListener("keyup", (e) => {
-        if (this.game.keys.indexOf(e.key) > -1) {
-          this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
-        }
-      });
-
-      addEventListener("visibilitychange", () => {
-        this.game.pausedGame = true;
-      });
-      addEventListener("resize", () => {
-        this.game.scaleFactor = calculateScale()
-        this.game.scale()
-        this.game.reset()
-      })
-  }
+let lastTime = 0;
+function gameLoop(timeStamp) {
+  let deltaTime = timeStamp - lastTime;
+  lastTime = timeStamp;
+  let gameScaleFactor = calculateScale()
+  canvas.style.width = DEFAULT_CANVAS_WIDTH * gameScaleFactor + 'px'
+  canvas.style.height = DEFAULT_CANVAS_HEIGHT * gameScaleFactor + 'px'
+  game.update(deltaTime, gameScaleFactor);
+  requestAnimationFrame(gameLoop);
 }
 
 export function calculateScale() {
-  
-    let width =  document.documentElement.clientWidth
-    let height = document.documentElement.clientHeight
-  
+  let width = document.documentElement.clientWidth
+  let height = document.documentElement.clientHeight
+
   if (width >= 1000 && height >= 850) {
     return 1;
   }
@@ -71,19 +36,16 @@ export function calculateScale() {
   return scale
 }
 
-export let game = new Game(calculateScale());
-
-
-let lastTime = 0;
-function gameLoop(timeStamp) {
-  let deltaTime = timeStamp - lastTime;
-  lastTime = timeStamp;
-  // console.log(innerWidth,innerHeight) 
-  let gameScaleFactor = calculateScale()
-  canvas.style.width = DEFAULT_CANVAS_WIDTH * gameScaleFactor + 'px'
-  canvas.style.height = DEFAULT_CANVAS_HEIGHT * gameScaleFactor + 'px'
-  game.update(deltaTime, gameScaleFactor);
-  requestAnimationFrame(gameLoop);
+function countDown(time) {
+  console.log('start countDown')
+  document.querySelector(".gameStartMenu").classList.add('hide')
+  if (time >= 0) {
+    document.querySelector('.counterDown').innerHTML = time === 0 ? "Go!!" : time
+    setTimeout(function () { countDown(time - 1) }, 1000);
+  } else {
+    document.querySelector(".overLay").classList.add('hide')
+    document.querySelector(".counterDown").classList.add('hide')
+    game = new Game(calculateScale())
+    gameLoop(0);
+  };
 }
-
-gameLoop(0);

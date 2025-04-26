@@ -3,7 +3,6 @@ import { canvas } from "./index.js";
 import { Projectile } from "./alien.js";
 
 const PLAYER_SHIP_IMAGE = "game/assets/ShipsPNG/ship6.png";
-const layzerBulletSound = document.getElementById("lazerBullet");
 const BULLET ="game/assets/bullets/Wave_1.png"
 
 export class Player {
@@ -53,7 +52,6 @@ export class Player {
     if (this.canShoot) {
       this.canShoot = false;
       setTimeout(() => (this.canShoot = true), 600);
-      layzerBulletSound.play();
       this.projectiles.push(
         new Bullet(BULLET,this.game, this.x + this.frameWidth/2  , this.y, -1,12 )
       );
