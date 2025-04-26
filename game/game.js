@@ -28,7 +28,7 @@ export class Game {
     this.dangerZoneHeight = 150 * scale;
     this.lastTorpedoShooted = 0;
     this.generateEnemies(), (this.lastTimeTorpedoGenerated = 0);
-    this.menuElement = document.querySelector(".menu");
+    this.pauseMenuElement = document.querySelector(".pauseMenu");
     this.overLayElement = document.querySelector(".overLay");
     this.gameStatsElement = document.querySelector(".gameUi");
     this.dangerZoneElement = document.querySelector(".dangerZone");
@@ -120,8 +120,8 @@ export class Game {
   }
 
   toggleMenu() {
-    if (this.pausedGame) this.menuElement.classList.remove("hide");
-    else this.menuElement.classList.add("hide");
+    if (this.pausedGame) this.pauseMenuElement.classList.remove("hide");
+    else this.pauseMenuElement.classList.add("hide");
   }
 
 
@@ -246,7 +246,6 @@ export class Game {
     let isWon = enemies.length === 0 && this.lives > 0;
     let isLost = this.lives === 0;
     if (!isWon && !isLost) return;
-    this.isComplet = true;
     this.gameStateElement.querySelector(".gameStats .time>span").innerHTML =
       time;
     this.gameStateElement.querySelector(".gameStats .score>span").innerHTML =
