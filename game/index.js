@@ -39,7 +39,7 @@ export function calculateScale() {
 function countDown(time) {
   document.querySelector(".gameStartMenu").classList.add('hide')
   if (time >= 0) {
-    document.querySelector('.counterDown').innerHTML = time === 0 ? "Go!!" : time
+    document.querySelector('.counterDown').innerHTML = time === 0 ? "Go!" : time
     setTimeout(function () { countDown(time - 1) }, 1000);
   } else {
     document.querySelector(".overLay").classList.add('hide')
