@@ -24,7 +24,6 @@ export class Game {
     this.keys = [];
     this.enemies = [];
     this.enemyProjectiles = [];
-    this.isComplet = false;
     this.dangerZoneHeight = 150 * scale;
     this.lastTorpedoShooted = 0;
     this.generateEnemies(), (this.lastTimeTorpedoGenerated = 0);
@@ -41,6 +40,7 @@ export class Game {
   }
 
   update(deltaTime) {
+    console.log(this.timer)
     if (this.gameComplete()) return;
     this.toggleMenu();
     if (this.pausedGame) return;
@@ -127,13 +127,7 @@ export class Game {
 
   handleLives() {
     this.enemyProjectiles.forEach((enemyProjectile, index) => {
-      // if (enemyProjectile.markedForDeletion) {
-        
-      // }
-
       if (this.checkCollision(enemyProjectile, this.player)) {
-        // enemyProjectile.imgHolder.remove();
-        // this.enemyProjectiles.splice(index, 1);
         enemyProjectile.markedForDeletion = true
         this.lives -= 1;
         if (this.lives >= 0) {
@@ -193,7 +187,7 @@ export class Game {
     for (let row = 2; row < 5; row++) {
       for (let col = 1; col < 8; col++) {
         this.enemies.push(
-          new AlienShip(row, col, { start: 0, end: this.width }, this)
+          new AlienShip(row, col, this)
         );
       }
     }
@@ -209,16 +203,11 @@ export class Game {
     );
   }
 
-  // reset the game to the default state !!
-  // there is a problem with the torpedo
-
   reset() {
     this.player.reset();
     this.player = new Player(this);
-    this.startMin = 0;
-    this.startSec = 0;
     this.enemies.forEach((enemy) => {
-      enemy.element.remove(); // just in case if the torpedo is gone
+      enemy.element.remove(); 
     });
     this.enemies = [];
     this.keys = [];
@@ -240,7 +229,6 @@ export class Game {
 
   gameComplete() {
     const enemies = this.enemies.filter((enemy) => enemy instanceof AlienShip);
-    let overlay = document.getElementById(".overLay");
     let time = this.timerElement.innerHTML;
     let score = this.scoreElement.innerHTML;
     let isWon = enemies.length === 0 && this.lives > 0;

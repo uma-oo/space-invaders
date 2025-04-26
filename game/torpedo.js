@@ -14,7 +14,6 @@ const TORPEDO_PROJECTILE = "game/assets/bullets/Torpedo.png";
 
 export class Torpedo extends Enemy {
   constructor(game, x, y) {
-
     const size = { width: 64, height: 52 };
     super(TORPEDO_SPRITE,size);
     this.game = game;
@@ -29,8 +28,7 @@ export class Torpedo extends Enemy {
     this.element.style.position = 'absolute'
   }
 
-
-  slide(deltaTime) {
+  slide() {
     const style = this.element.style;
     const step = this.speed * this.direction;
     this.x += step;
@@ -39,7 +37,6 @@ export class Torpedo extends Enemy {
       this.x -= step
     }
     style.transform = `translate(${this.x}px,${this.y}px`;
-
   }
 
   destroy() {
@@ -55,7 +52,7 @@ export class Torpedo extends Enemy {
     let shoot1 = new TorpedoProjectile(
       TORPEDO_PROJECTILE,
       this.game,
-      this.x + (this.frameWidth / 2 - 23),
+      this.x + (this.frameWidth / 2 - 23)*this.game.scaleFactor,
       this.y+10,
       1,
       3
@@ -63,7 +60,7 @@ export class Torpedo extends Enemy {
     let shoot2 = new TorpedoProjectile(
       TORPEDO_PROJECTILE,
       this.game,
-      this.x + (this.frameWidth / 2 + 17),
+      this.x + (this.frameWidth / 2 + 17)*this.game.scaleFactor,
       this.y+10,
       1,
       3

@@ -1,3 +1,5 @@
+import { calculateScale } from "./index.js";
+
 export class UserInput {
     constructor(game) {
         this.game = game
@@ -31,11 +33,11 @@ export class UserInput {
                 this.game.pausedGame = true;
             }
         }),
-            addEventListener("keyup", (e) => {
-                if (this.game.keys.indexOf(e.key) > -1) {
-                    this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
-                }
-            });
+        addEventListener("keyup", (e) => {
+            if (this.game.keys.indexOf(e.key) > -1) {
+                this.game.keys.splice(this.game.keys.indexOf(e.key), 1);
+            }
+        });
 
         addEventListener("visibilitychange", () => {
             this.game.pausedGame = true;

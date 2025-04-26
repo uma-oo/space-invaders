@@ -1,4 +1,3 @@
-
 import { Game } from "./game.js"
 
 export let canvas = document.getElementById("canvas");

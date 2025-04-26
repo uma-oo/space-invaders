@@ -1,23 +1,13 @@
 import { Enemy } from "./enemy.js";
 import { canvas } from "./index.js";
-// import { TorpedoProjectile } from "./torpedo.js";
 
 const PROJECTILE = "game/assets/bullets/Ray.png" 
-const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png";
-
-
-
-// aliens class 
-
+const ALIEN_SHIP_SPRITE = "game/assets/Enemy/chips/enemy2.png"
 
 export class AlienShip extends Enemy {
-    constructor(row, col, moveArea, game) {
-      const frames = {
-        totalFrames: 1,
-        // frameSize: 50,
-      };
+    constructor(row, col, game) {
       const defaultSize = { width: 34, height: 50 };
-      super(ALIEN_SHIP_SPRITE, frames, defaultSize, moveArea);
+      super(ALIEN_SHIP_SPRITE, defaultSize);
       this.game = game;
       this.frameWidth = defaultSize.width * this.game.scaleFactor
       this.frameHeight = defaultSize.height * this.game.scaleFactor
@@ -26,7 +16,6 @@ export class AlienShip extends Enemy {
       this.score = 150
       this.speed = 1
       this.element.style.width = this.frameWidth + 'px'
-      this.element.style.background = `url(${ALIEN_SHIP_SPRITE}) center no-repeat`
       this.element.style.height = this.frameHeight + 'px'
       this.element.style.zIndex = '1'
       this.element.style.backgroundPosition = "center"
