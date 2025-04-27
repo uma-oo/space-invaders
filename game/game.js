@@ -26,7 +26,8 @@ export class Game {
     this.enemyProjectiles = [];
     this.dangerZoneHeight = 150 * scale;
     this.lastTorpedoShooted = 0;
-    this.generateEnemies(), (this.lastTimeTorpedoGenerated = 0);
+    this.generateEnemies();
+    this.lastTimeTorpedoGenerated = 0
     this.pauseMenuElement = document.querySelector(".pauseMenu");
     this.overLayElement = document.querySelector(".overLay");
     this.gameStatsElement = document.querySelector(".gameUi");
@@ -40,7 +41,7 @@ export class Game {
   }
 
   update(deltaTime) {
-    console.log(this.timer)
+    console.log('1233')
     if (this.gameComplete()) return;
     this.toggleMenu();
     if (this.pausedGame) return;
@@ -62,7 +63,7 @@ export class Game {
     this.enemyProjectiles.forEach((enemyShoot) => {
       enemyShoot.update(deltaTime);
     });
-    // check for collision between the player and the corners of the canvas
+
     if (
       ALIENS_SHIPS.some(
         (ship) =>
@@ -77,8 +78,6 @@ export class Game {
       });
     }
 
-
-
     // check for collision between the player bullets and the enemies
     this.enemies.forEach((enemy, index) => {
       if (enemy.y + enemy.frameHeight > this.height - this.dangerZoneHeight)
@@ -89,7 +88,7 @@ export class Game {
           this.scoreElement.innerHTML = `${this.score}`;
           projectile.markedForDeletion = true;
           if (enemy instanceof Torpedo) {
-            this.lastTimeTorpedoGenerated=0
+            this.lastTimeTorpedoGenerated = 0
           }
           this.enemies.splice(index, 1);
           enemy.destroy();
@@ -126,7 +125,7 @@ export class Game {
 
 
   handleLives() {
-    this.enemyProjectiles.forEach((enemyProjectile, index) => {
+    this.enemyProjectiles.forEach((enemyProjectile) => {
       if (this.checkCollision(enemyProjectile, this.player)) {
         enemyProjectile.markedForDeletion = true
         this.lives -= 1;
@@ -139,11 +138,11 @@ export class Game {
 
   handleTimer(deltaTime) {
     this.timer += deltaTime;
+    console.log(deltaTime)
     let seconds = Math.floor(this.timer / 1000) % 60;
     let minutes = Math.floor(this.timer / 60000);
-    this.timerElement.innerHTML = `${minutes < 10 ? "0" + minutes : minutes}:${
-      seconds < 10 ? "0" + seconds : seconds
-    }`;
+    this.timerElement.innerHTML = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds
+      }`;
   }
 
   generateEnemyBullets(ALIENS_SHIPS, deltaTime) {
@@ -207,7 +206,7 @@ export class Game {
     this.player.reset();
     this.player = new Player(this);
     this.enemies.forEach((enemy) => {
-      enemy.element.remove(); 
+      enemy.element.remove();
     });
     this.enemies = [];
     this.keys = [];
