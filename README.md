@@ -38,7 +38,7 @@ This project is a **Space Invaders** clone created using **plain JavaScript**, *
 - **CSS**: Styling for the game layout and elements.
 
 ## Where to play ???
-- [uma-oo.github.io/space-invaders/](uma-oo.github.io/space-invaders/)
+- [https://uma-oo.github.io/space-invaders/](https://uma-oo.github.io/space-invaders/)
 
 ## Credits 
 - Collaborators : [DarkMethoss](https://github.com/DarkMethoss) and [srm](https://github.com/xySaad)
