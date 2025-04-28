@@ -14,7 +14,7 @@ export class Player {
     this.frameWidth = this.defaultWidth  * this.game.scaleFactor
     this.frameHeight = this.defaultheight * this.game.scaleFactor
     this.x = this.game.width / 2 - this.frameWidth / 2
-    this.y = this.game.height - this.frameHeight - 10
+    this.y = this.game.height - this.frameHeight - 10*this.game.scaleFactor
     this.speed = 7 * this.game.scaleFactor
     this.projectiles = []
     this.element = document.createElement("div")

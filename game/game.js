@@ -38,10 +38,10 @@ export class Game {
     this.gameStateElement = document.querySelector(".gameState");
     this.livesElement = document.querySelector(".lives>span");
     this.scale();
+    this.reset();
   }
 
   update(deltaTime) {
-    console.log('1233')
     if (this.gameComplete()) return;
     this.toggleMenu();
     if (this.pausedGame) return;
@@ -67,7 +67,6 @@ export class Game {
     if (
       ALIENS_SHIPS.some(
         (ship) =>
-          ship instanceof AlienShip &&
           (ship.x + ship.frameWidth >= this.width || ship.x <= 0)
       )
     ) {
@@ -111,10 +110,12 @@ export class Game {
   }
 
   scale() {
+    this.dangerZoneHeight = 150 * this.scaleFactor
     this.width = DEFAULT_CANVAS_WIDTH * this.scaleFactor;
     this.height = DEFAULT_CANVAS_HEIGHT * this.scaleFactor;
     canvas.style.width = this.width + "px";
     canvas.style.height = this.height + "px";
+    this.dangerZoneElement.style.height = this.dangerZoneHeight+"px";
     this.gameStatsElement.style.fontSize = this.scaleFactor * 16 + "px";
   }
 
@@ -138,7 +139,6 @@ export class Game {
 
   handleTimer(deltaTime) {
     this.timer += deltaTime;
-    console.log(deltaTime)
     let seconds = Math.floor(this.timer / 1000) % 60;
     let minutes = Math.floor(this.timer / 60000);
     this.timerElement.innerHTML = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds
@@ -188,6 +188,7 @@ export class Game {
         this.enemies.push(
           new AlienShip(row, col, this)
         );
+
       }
     }
     this.enemies.forEach((enemy) => canvas.append(enemy.element));

@@ -6,13 +6,16 @@ export let DEFAULT_CANVAS_HEIGHT = 850;
 
 export let game;
 
-
-// addEventListener
-
 document.querySelector('#startGameBtn').onclick = () => countDown(3)
 
-let lastTime = 0;
+let lastTime = null;
+
 function gameLoop(timeStamp) {
+  if (lastTime === null) {
+    lastTime = timeStamp
+    requestAnimationFrame(gameLoop)
+    return
+  }
   let deltaTime = timeStamp - lastTime;
   lastTime = timeStamp;
   let gameScaleFactor = calculateScale()
@@ -44,6 +47,6 @@ function countDown(time) {
     document.querySelector(".overLay").classList.add('hide')
     document.querySelector(".counterDown").classList.add('hide')
     game = new Game(calculateScale())
-    gameLoop(0);
+    gameLoop(performance.now());
   };
 }

@@ -32,6 +32,7 @@ export class Torpedo extends Enemy {
     const style = this.element.style;
     const step = this.speed * this.direction;
     this.x += step;
+
     if (this.x < 0 || this.x + this.frameWidth > this.game.width) {
       this.direction *= -1
       this.x -= step
@@ -52,7 +53,7 @@ export class Torpedo extends Enemy {
     let shoot1 = new TorpedoProjectile(
       TORPEDO_PROJECTILE,
       this.game,
-      this.x + (this.frameWidth / 2 - 23)*this.game.scaleFactor,
+      this.x + (this.frameWidth / 2 - 23*this.game.scaleFactor),
       this.y+10,
       1,
       3
@@ -60,8 +61,8 @@ export class Torpedo extends Enemy {
     let shoot2 = new TorpedoProjectile(
       TORPEDO_PROJECTILE,
       this.game,
-      this.x + (this.frameWidth / 2 + 17)*this.game.scaleFactor,
-      this.y+10,
+      this.x + (this.frameWidth / 2 + 17*this.game.scaleFactor),
+      this.y+10*this.game.scaleFactor,
       1,
       3
     );
@@ -97,7 +98,6 @@ export class TorpedoProjectile extends Projectile {
     super.update(deltaTime);
     this.imgHolder.style.transform = `rotate(180deg) translate(${-this
       .x}px,${-this.y}px`;
-    super.animate(deltaTime);
   }
 }
 
