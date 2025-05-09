@@ -14,7 +14,7 @@ export class AlienShip extends Enemy {
       this.x = (this.frameWidth + 30 * this.game.scaleFactor ) * col 
       this.y = (this.frameHeight + 10 * this.game.scaleFactor) * row 
       this.score = 150
-      this.speed = 1
+      this.speed = 3
       this.element.style.width = this.frameWidth + 'px'
       this.element.style.height = this.frameHeight + 'px'
       this.element.style.zIndex = '1'
